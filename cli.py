@@ -1,5 +1,5 @@
 import click
-from heideltime import heideltime
+from py_heideltime.heideltime import heideltime
 @click.command()
 @click.option("-t", '--text', help='insert text', required=False)
 @click.option("-i", '--input_file', help='input text file', required=False)
