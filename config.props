@@ -1,16 +1,4 @@
-import os
-from dateutil.parser import parse
-import xml.etree.ElementTree as ET
-from langdetect import detect
-from lang import languages
-import codecs
-import platform
 
-if __name__ == "__main__":
-
-    check_os = platform.system()
-
-    text = '''
 ################################
 ##           MAIN             ##
 ################################
@@ -34,7 +22,7 @@ considerTemponym = false
 # Path to TreeTagger home directory
 ###################################
 # Ensure there is no white space in path (try to escape white spaces)
-treeTaggerHome = HeidelTime/TreeTagger'''+check_os+'''
+treeTaggerHome = py_heideltime/HeidelTime/TreeTagger
 # This one is only necessary if you want to process chinese documents.
 chineseTokenizerPath = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/treetagger/chinese-tokenizer)
 
@@ -90,9 +78,3 @@ uimaVarTemponym = Temponym
 # ...for type to process
 uimaVarTypeToProcess = Type
 
-'''
-
-    f = codecs.open("config.props", "w+", "utf-8")
-    f.truncate()
-    f.write(text)
-    f.close()
