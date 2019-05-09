@@ -1,0 +1,2 @@
+include py_heideltime/Heideltime/*
+include src/Potato/*.txt
