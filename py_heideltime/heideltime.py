@@ -2,7 +2,7 @@ import os
 from dateutil.parser import parse
 import xml.etree.ElementTree as ET
 from langdetect import detect
-from lang import languages
+from py_heideltime.lang import languages
 import codecs
 import imp
 import platform
