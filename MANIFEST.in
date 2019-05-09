@@ -1,4 +1,7 @@
 include py_heideltime/HeidelTime/*
-include py_heideltime/HeidelTime/TreeTagger/bin/*
-include py_heideltime/HeidelTime/TreeTagger/cmd/*
-include py_heideltime/HeidelTime/TreeTagger/lib/*
+include py_heideltime/HeidelTime/TreeTaggerLinux/bin/*
+include py_heideltime/HeidelTime/TreeTaggerLinux/cmd/*
+include py_heideltime/HeidelTime/TreeTaggerLinux/lib/*
+include py_heideltime/HeidelTime/TreeTaggerWindows/bin/*
+include py_heideltime/HeidelTime/TreeTaggerWindows/cmd/*
+include py_heideltime/HeidelTime/TreeTaggerWindows/lib/*
