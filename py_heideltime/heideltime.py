@@ -120,7 +120,7 @@ uimaVarTypeToProcess = Type
 
     # run java heideltime standalone version to get all dates
     myCmd = os.popen(
-        'java -jar '+path+'\HeidelTime\de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt').read()
+        'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt').read()
 
     # parsing the xml to get only the date value and the expression that originate the date
     root = ET.fromstring(myCmd)
