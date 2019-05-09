@@ -1,2 +1,2 @@
 langdetect
-sutime
+python-dateutil

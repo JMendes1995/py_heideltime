@@ -5,7 +5,7 @@ setup(name='py_heideltime',
       author='Jorge Alexandre Rocha Mendes',
       author_email='mendesjorge49@gmail.com',
       url='https://github.com/JMendes1995/py_heideltime.git',
-      packages=find_packages(include=['py_heideltime']),
+      packages=find_packages(include=['py_heideltime', 'langdetect', 'python-dateutil']),
       # trying to add files...
       include_package_data=True,
       py_modules=['py_heideltime']

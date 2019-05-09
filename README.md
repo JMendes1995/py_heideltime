@@ -6,9 +6,7 @@ The project are based in Java standalone Heideltime (https://github.com/HeidelTi
 ## How install py_heideltime
 To use this module you must have java and perl installed.
 ```bash
-git clone https://github.com/JMendes1995/py_heideltime.git
-cd py_heideltime
-pip install -r requirements.txt
+pip install git+https://github.com/JMendes1995/py_heideltime.git
 ```
 
 ## How to use py_heideltime
