@@ -5,10 +5,20 @@ from langdetect import detect
 from py_heideltime.lang import languages
 import codecs
 import imp
+import platform
+import importlib.util
+
 
 def heideltime(text):
-    path = imp.find_module('py_heideltime')[1]
-    print(path)
+    full_path = ''
+    if platform.system() == 'Linux' or platform.system() == 'Darwin':
+        path = imp.find_module('py_heideltime')[1]
+        full_path = path + "/HeidelTime/TreeTagger"
+
+    else:
+        path = imp.find_module('py_heideltime')[1]
+        pp = path.replace('\\', '''\\\\''')
+        full_path = str(pp) + '''\\\HeidelTime\\\TreeTagger'''
     conf = '''
 ################################
 ##           MAIN             ##
@@ -33,7 +43,7 @@ considerTemponym = false
 # Path to TreeTagger home directory
 ###################################
 # Ensure there is no white space in path (try to escape white spaces)
-treeTaggerHome = '''+path+'''/HeidelTime/TreeTagger
+treeTaggerHome = '''+full_path+'''
 # This one is only necessary if you want to process chinese documents.
 chineseTokenizerPath = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/treetagger/chinese-tokenizer)
 
@@ -110,7 +120,7 @@ uimaVarTypeToProcess = Type
 
     # run java heideltime standalone version to get all dates
     myCmd = os.popen(
-        'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt').read()
+        'java -jar '+path+'\HeidelTime\de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt').read()
 
     # parsing the xml to get only the date value and the expression that originate the date
     root = ET.fromstring(myCmd)
@@ -120,8 +130,15 @@ uimaVarTypeToProcess = Type
             # verify if the value is a date
             parse(root[i].attrib['value'])
             # insert in list the date value and the expression that originate the date
-            list_dates[count] = [root[i].attrib['value'], root[i].text]
+            list_dates[count] = [{'Date': root[i].attrib['value'], 'Expression' :root[i].text}]
             count += 1
         except:
             pass
     return list_dates
+
+if __name__ == '__main__':
+    text = '''
+    The coup had two secret signals. The first was the airing at 10:55 p.m. of Paulo de Carvalho's "E Depois do Adeus" (Portugal's entry in the 1974 Eurovision Song Contest) on Emissores Associados de Lisboa, which alerted the rebel captains and soldiers to begin the coup. The second signal came on 25 April 1974 at 12:20 a.m., when Rádio Renascença broadcast "Grândola, Vila Morena" (a song by Zeca Afonso, an influential political folk musician and singer who was banned from Portuguese radio at the time). The MFA gave the signals to take over strategic points of power in the country.
+    '''
+    output = heideltime(text)
+    print(output)
