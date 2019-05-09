@@ -13,12 +13,12 @@ def heideltime(text):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
-        full_path = path + "/HeidelTime/TreeTagger"
+        full_path = path + "/HeidelTime/TreeTaggerLinux"
 
     else:
         path = imp.find_module('py_heideltime')[1]
         pp = path.replace('\\', '''\\\\''')
-        full_path = str(pp) + '''\\\HeidelTime\\\TreeTagger'''
+        full_path = str(pp) + '''\\\HeidelTime\\\TreeTaggerWindows'''
     conf = '''
 ################################
 ##           MAIN             ##
@@ -40,7 +40,7 @@ considerTime = true
 considerTemponym = false
 
 ###################################
-# Path to TreeTagger home directory
+# Path to TreeTaggerLinux home directory
 ###################################
 # Ensure there is no white space in path (try to escape white spaces)
 treeTaggerHome = '''+full_path+'''
