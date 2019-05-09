@@ -2,7 +2,7 @@ import os
 from dateutil.parser import parse
 import xml.etree.ElementTree as ET
 from langdetect import detect
-from py_heideltime.lang import languages
+from lang import languages
 import codecs
 import imp
 import platform
@@ -135,10 +135,3 @@ uimaVarTypeToProcess = Type
         except:
             pass
     return list_dates
-
-if __name__ == '__main__':
-    text = '''
-    The coup had two secret signals. The first was the airing at 10:55 p.m. of Paulo de Carvalho's "E Depois do Adeus" (Portugal's entry in the 1974 Eurovision Song Contest) on Emissores Associados de Lisboa, which alerted the rebel captains and soldiers to begin the coup. The second signal came on 25 April 1974 at 12:20 a.m., when Rádio Renascença broadcast "Grândola, Vila Morena" (a song by Zeca Afonso, an influential political folk musician and singer who was banned from Portuguese radio at the time). The MFA gave the signals to take over strategic points of power in the country.
-    '''
-    output = heideltime(text)
-    print(output)
