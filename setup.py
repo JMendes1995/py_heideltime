@@ -8,9 +8,6 @@ setup(name='py_heideltime',
       packages=find_packages(include=['py_heideltime']),
       # trying to add files...
       include_package_data=True,
-      package_data={
-            'Heideltime': ['*'],
-      },
       py_modules=['py_heideltime']
 )
 
