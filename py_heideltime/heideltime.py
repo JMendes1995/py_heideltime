@@ -121,8 +121,12 @@ uimaVarTypeToProcess = Type
             lang_name = languages[n_list_of_lang][1]
 
     # run java heideltime standalone version to get all dates
-    myCmd = subprocess.check_output(
-        'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt')
+    if platform.system() == 'Windows':
+        myCmd = subprocess.check_output(
+            'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt')
+    else:
+        myCmd = os.popen(
+            'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt').read()    
 
     # parsing the xml to get only the date value and the expression that originate the date
     root = ET.fromstring(myCmd)
