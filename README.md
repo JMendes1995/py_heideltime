@@ -19,7 +19,7 @@ The coup had two secret signals. The first was the airing at 10:55 p.m. of Paulo
 output = heideltime(text)
 print(output)
 #output
-{0: ['1974', '1974'], 1: ['1974-04-25', '25 April 1974'], 2: ['1974-04-25T12:20', '12:20 a.m.']}
+{0: [{'Date': '1974', 'Expression': '1974'}], 1: [{'Date': '1974-04-25', 'Expression': '25 April 1974'}], 2: [{'Date': '1974-04-25T12:20', 'Expression': '12:20 a.m.'}]}
 ```
 
 ### Python CLI -  Command Line Interface
