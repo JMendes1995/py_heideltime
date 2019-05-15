@@ -14,9 +14,6 @@ def heideltime(text):
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
         full_path = path + "/HeidelTime/TreeTaggerLinux"
-        ch_permitions = 'chmod u+x '+full_path + '/bin/*'
-        os.system(ch_permitions)
-
     else:
         path = imp.find_module('py_heideltime')[1]
         pp = path.replace('\\', '''\\\\''')
