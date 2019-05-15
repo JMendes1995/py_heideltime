@@ -8,6 +8,12 @@ To use this module you must have java and perl installed.
 ```bash
 pip install git+https://github.com/JMendes1995/py_heideltime.git
 ```
+##### Recomendations
+    In order to use py_heideltime you must have installed java jdk and perl in your machine for heideltime dependencies. 
+    
+    (Linux) if your user had not execution permitions on python lib folder, you should execute the following command:
+    sudo chmod 111 /usr/local/lib/<YOUR PYTHON VERSION>/dist-packages/py_heideltime/HeidelTime/TreeTaggerLinux/bin/*
+    
 
 ## How to use py_heideltime
 ```bash
