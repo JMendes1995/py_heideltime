@@ -1,7 +1,7 @@
 # py_heideltime
 This module has the intention to easily get dates for python.
 
-The project are based in Java standalone Heideltime (https://github.com/HeidelTime/heideltime).
+The project are based in Heideltime Java standalone version (https://github.com/HeidelTime/heideltime).
 
 ## How install py_heideltime
 To use this module you must have java and perl installed.
