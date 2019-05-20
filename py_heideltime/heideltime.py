@@ -1,5 +1,4 @@
 import os
-from dateutil.parser import parse
 import xml.etree.ElementTree as ET
 from langdetect import detect
 from py_heideltime.lang import languages
@@ -98,7 +97,7 @@ uimaVarTemponym = Temponym
 # ...for type to process
 uimaVarTypeToProcess = Type
 '''
-    list_dates = {}
+    list_dates = []
     f = codecs.open("config.props", "w+", "utf-8")
     f.truncate()
     f.write(conf)
@@ -123,18 +122,14 @@ uimaVarTypeToProcess = Type
             'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt')
     else:
         myCmd = os.popen(
-            'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt').read()    
-
+            'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt').read()
     # parsing the xml to get only the date value and the expression that originate the date
     root = ET.fromstring(myCmd)
     count = 0
     for i in range(len(root)):
-        try:
-            # verify if the value is a date
-            parse(root[i].attrib['value'])
-            # insert in list the date value and the expression that originate the date
-            list_dates[count] = [{'Date': root[i].attrib['value'], 'Expression' :root[i].text}]
-            count += 1
-        except:
-            pass
+        # verify if the value is a date
+        # insert in list the date value and the expression that originate the date
+        list_dates.append({root[i].attrib['value'], root[i].text})
+        count += 1
+
     return list_dates

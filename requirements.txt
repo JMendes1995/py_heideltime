@@ -1,2 +1,2 @@
 langdetect
-python-dateutil
+
