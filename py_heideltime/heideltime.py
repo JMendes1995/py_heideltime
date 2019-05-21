@@ -125,11 +125,7 @@ uimaVarTypeToProcess = Type
             'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt').read()
     # parsing the xml to get only the date value and the expression that originate the date
     root = ET.fromstring(myCmd)
-    count = 0
     for i in range(len(root)):
-        # verify if the value is a date
         # insert in list the date value and the expression that originate the date
-        list_dates.append({root[i].attrib['value'], root[i].text})
-        count += 1
-
+        list_dates.append([root[i].attrib['value'], root[i].text])
     return list_dates
