@@ -32,7 +32,7 @@ The coup had two secret signals. The first was the airing at 10:55 p.m. of Paulo
 '''
 heideltime(text)
 #output
-[['XXXX-XX-XXT22:55', '10:55 p.m.'], ['1974', '1974'], ['1974-04-25', '25 April 1974'], ['1974-04-25T12:20', '12:20 a.m.']]
+[('XXXX-XX-XXT22:55', '10:55 p.m.'), ('1974', '1974'), ('1974-04-25', '25 April 1974'), ('1974-04-25T12:20', '12:20 a.m.')]
 ```
 Output are composed by a list of tuples. The First value of tuple is the date in TIME-ML format and the second is the text expression.
 In cases that the date are equals to the expression only wil appears on time at the list.
