@@ -127,5 +127,5 @@ uimaVarTypeToProcess = Type
     root = ET.fromstring(myCmd)
     for i in range(len(root)):
         # insert in list the date value and the expression that originate the date
-        list_dates.append([root[i].attrib['value'], root[i].text])
+        list_dates.append((root[i].attrib['value'], root[i].text))
     return list_dates
