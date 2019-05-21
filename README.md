@@ -60,7 +60,6 @@ In case that you want to use more languages you must:
 
 
 ## Publications 
-Publications
 
 If you use HeidelTime (either through this package or another one) please cite the appropriate paper. In general, this would be:
 
