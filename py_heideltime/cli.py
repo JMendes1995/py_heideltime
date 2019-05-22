@@ -1,5 +1,5 @@
 import click
-from heideltime import heideltime
+from py_heideltime.heideltime import heideltime
 @click.command()
 @click.option("-txt", '--text', help='insert text', required=False)
 @click.option("-t", '--document_type', help='Type of the document specified by <file> (options: News, Narrative, Colloquial, Scientific).', default='News', required=False)
