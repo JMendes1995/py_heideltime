@@ -6,9 +6,10 @@ import codecs
 import imp
 import platform
 import subprocess
+import re
 
 
-def heideltime(text):
+def heideltime(text, document_type='news', document_creation_time=''):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
@@ -116,16 +117,24 @@ uimaVarTypeToProcess = Type
         if lang_code in languages[n_list_of_lang]:
             lang_name = languages[n_list_of_lang][1]
 
-    # run java heideltime standalone version to get all dates
-    if platform.system() == 'Windows':
-        myCmd = subprocess.check_output(
-            'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt')
+    # search in document_creation_time to find if is good format
+    match = re.findall('\d{4}[-]\d{2}[-]\d{2}', document_creation_time)
+
+    if match == [] and document_creation_time != '':
+        print('Bad document_creation_time format you must specify da date in YYYY-MM-DD format.')
     else:
-        myCmd = os.popen(
-            'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar news -l ' + lang_name + ' text.txt').read()
-    # parsing the xml to get only the date value and the expression that originate the date
-    root = ET.fromstring(myCmd)
-    for i in range(len(root)):
-        # insert in list the date value and the expression that originate the date
-        list_dates.append((root[i].attrib['value'], root[i].text))
+        if document_creation_time == '':
+            java_command = 'java -jar ' +path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  '+document_type+' -l ' + lang_name + ' text.txt'
+        else:
+            java_command = 'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + lang_name + ' text.txt'
+        # run java heideltime standalone version to get all dates
+        if platform.system() == 'Windows':
+            myCmd = subprocess.check_output(java_command)
+        else:
+            myCmd = os.popen(java_command).read()
+        # parsing the xml to get only the date value and the expression that originate the date
+        root = ET.fromstring(myCmd)
+        for i in range(len(root)):
+            # insert in list the date value and the expression that originate the date
+            list_dates.append((root[i].attrib['value'], root[i].text))
     return list_dates

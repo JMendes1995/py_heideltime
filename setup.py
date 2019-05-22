@@ -15,8 +15,13 @@ setup(name='py_heideltime',
       url='https://github.com/JMendes1995/py_heideltime.git',
       packages=find_packages(),
       include_package_data=True,
-      install_requires=install_requires
-)
+      install_requires=install_requires,
+      entry_points={
+            'console_scripts': [
+                  'py_heideltime=py_heideltime.cli:main'
+            ]
+      }
+      )
 
 
 
