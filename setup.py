@@ -18,9 +18,9 @@ setup(name='py_heideltime',
       install_requires=install_requires,
       entry_points={
             'console_scripts': [
-                  'py_heideltime=py_heideltime.cli:main'
+                  'py_heideltime=py_heideltime.cli:heideltime'
             ]
-      }
+      },
       )
 
 
