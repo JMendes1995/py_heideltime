@@ -13,7 +13,7 @@ def heideltime(text, document_type='news', document_creation_time=''):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
-        full_path = path + "/Heideltime/TreeTaggerLinux"
+        full_path = path + "/HeidelTime/TreeTaggerLinux"
     else:
         path = imp.find_module('py_heideltime')[1]
         pp = path.replace('\\', '''\\\\''')
@@ -25,19 +25,14 @@ def heideltime(text, document_type='news', document_creation_time=''):
 # Consideration of different timex3-types
 # Date
 considerDate = true
-
 # Duration
 considerDuration = true
-
 # Set
 considerSet = true
-
 # Time
 considerTime = true
-
 # Temponyms (make sure you know what you do if you set this to "true")
 considerTemponym = false
-
 ###################################
 # Path to TreeTaggerLinux home directory
 ###################################
@@ -45,56 +40,42 @@ considerTemponym = false
 treeTaggerHome = '''+full_path+'''
 # This one is only necessary if you want to process chinese documents.
 chineseTokenizerPath = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/treetagger/chinese-tokenizer)
-
 ##################################
 # paths to JVnTextPro model paths:
 ##################################
 sent_model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/jvntextpro/models/jvnsensegmenter)
 word_model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/jvntextpro/models/jvnsegmenter)
 pos_model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/jvntextpro/models/jvnpostag/maxent)
-
 #####################################################
 # paths to Stanford POS Tagger model or config files:
 #####################################################
 model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/stanford-postagger-full-2014-01-04/models/arabic.tagger)
 # leave this unset if you do not need one (e.g., /home/jannik/stanford-postagger-full-2014-01-04/tagger.config)
 config_path = 
-
 ########################################
 ## paths to hunpos and its tagger files:
 ########################################
 hunpos_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/hunpos)
 hunpos_model_name = SET ME IN CONFIG.PROPS! (e.g., model.hunpos.mte5.defnpout)
-
-
-
 # DO NOT CHANGE THE FOLLOWING
 ################################
-# Relative path of type system in Heideltime home directory
+# Relative path of type system in HeidelTime home directory
 typeSystemHome = desc/type/HeidelTime_TypeSystem.xml
-
-# Relative path of dkpro type system in Heideltime home directory
+# Relative path of dkpro type system in HeidelTime home directory
 typeSystemHome_DKPro = desc/type/DKPro_TypeSystem.xml
-
 # Name of uima-context variables...
 # ...for date-consideration
 uimaVarDate = Date
-
 # ...for duration-consideration
 uimaVarDuration = Duration
-
 # ...for language
 uimaVarLanguage = Language
-
 # ...for set-consideration
 uimaVarSet = Set
-
 # ...for time-consideration
 uimaVarTime = Time
-
 # ...for temponym-consideration
 uimaVarTemponym = Temponym
-
 # ...for type to process
 uimaVarTypeToProcess = Type
 '''
@@ -124,10 +105,10 @@ uimaVarTypeToProcess = Type
         print('Bad document_creation_time format you must specify da date in YYYY-MM-DD format.')
     else:
         if document_creation_time == '':
-            java_command = 'java -jar ' +path+'/Heideltime/de.unihd.dbs.py_heideltime.standalone.jar  '+document_type+' -l ' + lang_name + ' text.txt'
+            java_command = 'java -jar ' +path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  '+document_type+' -l ' + lang_name + ' text.txt'
         else:
-            java_command = 'java -jar '+path+'/Heideltime/de.unihd.dbs.py_heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + lang_name + ' text.txt'
-        # run java py_heideltime standalone version to get all dates
+            java_command = 'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + lang_name + ' text.txt'
+        # run java heideltime standalone version to get all dates
         if platform.system() == 'Windows':
             myCmd = subprocess.check_output(java_command)
         else:
