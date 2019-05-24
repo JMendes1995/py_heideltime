@@ -7,7 +7,7 @@ if os.path.isfile(requirementPath):
       with open(requirementPath) as f:
             install_requires = f.read().splitlines()
 
-setup(name='heideltime',
+setup(name='py_heideltime',
       version='1.0',
       description='module in python using java standalone Heideltime from https://github.com/HeidelTime/heideltime',
       author='Jorge Alexandre Rocha Mendes',
@@ -18,7 +18,7 @@ setup(name='heideltime',
       install_requires=install_requires,
       entry_points={
             'console_scripts': [
-                  'heideltime=heideltime.cli:dates'
+                  'py_heideltime=py_heideltime.cli:dates'
             ]
       },
       )

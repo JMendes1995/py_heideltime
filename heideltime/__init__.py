@@ -1,1 +1,0 @@
-from heideltime.heideltime import heideltime

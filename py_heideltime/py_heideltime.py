@@ -1,7 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
 from langdetect import detect
-from heideltime.lang import languages
+from py_heideltime.lang import languages
 import codecs
 import imp
 import platform
@@ -12,10 +12,10 @@ import re
 def heideltime(text, document_type='news', document_creation_time=''):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
-        path = imp.find_module('heideltime')[1]
-        full_path = path + "/HeidelTime/TreeTaggerLinux"
+        path = imp.find_module('py_heideltime')[1]
+        full_path = path + "/Heideltime/TreeTaggerLinux"
     else:
-        path = imp.find_module('heideltime')[1]
+        path = imp.find_module('py_heideltime')[1]
         pp = path.replace('\\', '''\\\\''')
         full_path = str(pp) + '''\\\HeidelTime\\\TreeTaggerWindows'''
     conf = '''
@@ -70,10 +70,10 @@ hunpos_model_name = SET ME IN CONFIG.PROPS! (e.g., model.hunpos.mte5.defnpout)
 
 # DO NOT CHANGE THE FOLLOWING
 ################################
-# Relative path of type system in HeidelTime home directory
+# Relative path of type system in Heideltime home directory
 typeSystemHome = desc/type/HeidelTime_TypeSystem.xml
 
-# Relative path of dkpro type system in HeidelTime home directory
+# Relative path of dkpro type system in Heideltime home directory
 typeSystemHome_DKPro = desc/type/DKPro_TypeSystem.xml
 
 # Name of uima-context variables...
@@ -124,10 +124,10 @@ uimaVarTypeToProcess = Type
         print('Bad document_creation_time format you must specify da date in YYYY-MM-DD format.')
     else:
         if document_creation_time == '':
-            java_command = 'java -jar ' +path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  '+document_type+' -l ' + lang_name + ' text.txt'
+            java_command = 'java -jar ' +path+'/Heideltime/de.unihd.dbs.py_heideltime.standalone.jar  '+document_type+' -l ' + lang_name + ' text.txt'
         else:
-            java_command = 'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + lang_name + ' text.txt'
-        # run java heideltime standalone version to get all dates
+            java_command = 'java -jar '+path+'/Heideltime/de.unihd.dbs.py_heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + lang_name + ' text.txt'
+        # run java py_heideltime standalone version to get all dates
         if platform.system() == 'Windows':
             myCmd = subprocess.check_output(java_command)
         else:
