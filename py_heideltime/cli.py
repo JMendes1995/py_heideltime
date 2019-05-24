@@ -5,8 +5,8 @@ from py_heideltime.heideltime import heideltime
 @click.option("-td", '--document_type', help='Type of the document specified by <file> (options: News, Narrative, Colloquial, Scientific).', default='News', required=False)
 @click.option("-dct", '--document_creation_time', help='Creation date of document only valid format (YYYY-MM-DD).only will be considered if document type are News or colloquial.', default="", required=False)
 @click.option("-i", '--input_file', help='input text file', required=False)
-def heideltime(text, input_file, document_type, document_creation_time):
-    def run_py_heideltime(text_content, document_type, document_creation_time):
+def dates(text, input_file, document_type, document_creation_time):
+    def run_py_heideltime(text_content):
             output = heideltime(text_content, document_type, document_creation_time)
             print(output)
     if text and input_file:
@@ -26,4 +26,4 @@ def heideltime(text, input_file, document_type, document_creation_time):
 
 
 if __name__ == "__main__":
-    heideltime()
+    dates()
