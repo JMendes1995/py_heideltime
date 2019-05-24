@@ -1,7 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
 from langdetect import detect
-from py_heideltime.lang import languages
+from heideltime.lang import languages
 import codecs
 import imp
 import platform
@@ -12,10 +12,10 @@ import re
 def heideltime(text, document_type='news', document_creation_time=''):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
-        path = imp.find_module('py_heideltime')[1]
+        path = imp.find_module('heideltime')[1]
         full_path = path + "/HeidelTime/TreeTaggerLinux"
     else:
-        path = imp.find_module('py_heideltime')[1]
+        path = imp.find_module('heideltime')[1]
         pp = path.replace('\\', '''\\\\''')
         full_path = str(pp) + '''\\\HeidelTime\\\TreeTaggerWindows'''
     conf = '''
