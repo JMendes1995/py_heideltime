@@ -1,7 +1,5 @@
 import os
 import xml.etree.ElementTree as ET
-from langdetect import detect
-from py_heideltime.lang import languages
 import codecs
 import imp
 import platform
@@ -9,7 +7,7 @@ import subprocess
 import re
 
 
-def heideltime(text, document_type='news', document_creation_time=''):
+def heideltime(text, language, document_type='news', document_creation_time=''):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
@@ -89,14 +87,6 @@ uimaVarTypeToProcess = Type
     text_file.truncate()
     text_file.write(text)
     text_file.close()
-    # language code detection
-    lang_code = detect(text)
-
-    # find in list of languages (from lang import languages) in order to get the language full name
-    lang_name = 'English'
-    for n_list_of_lang in range(len(languages)):
-        if lang_code in languages[n_list_of_lang]:
-            lang_name = languages[n_list_of_lang][1]
 
     # search in document_creation_time to find if is good format
     match = re.findall('\d{4}[-]\d{2}[-]\d{2}', document_creation_time)
@@ -105,9 +95,9 @@ uimaVarTypeToProcess = Type
         print('Bad document_creation_time format you must specify da date in YYYY-MM-DD format.')
     else:
         if document_creation_time == '':
-            java_command = 'java -jar ' +path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  '+document_type+' -l ' + lang_name + ' text.txt'
+            java_command = 'java -jar ' +path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  '+document_type+' -l ' + language + ' text.txt'
         else:
-            java_command = 'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + lang_name + ' text.txt'
+            java_command = 'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + language + ' text.txt'
         # run java heideltime standalone version to get all dates
         if platform.system() == 'Windows':
             myCmd = subprocess.check_output(java_command)
@@ -118,4 +108,14 @@ uimaVarTypeToProcess = Type
         for i in range(len(root)):
             # insert in list the date value and the expression that originate the date
             list_dates.append((root[i].attrib['value'], root[i].text))
+
+        # write error message for linux users to advertise that should give execute java heideltime
+        if list_dates == [] and platform.system() == 'Linux':
+            print('Sorry, maybe something went wrong.')
+            print('Please check if the format of values of variables are like the documentation or')
+            print('run this command to give execution privileges to execute java heideltime')
+            print('sudo chmod 111 '+full_path+'/bin/*')
+
     return list_dates
+
+
