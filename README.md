@@ -3,14 +3,13 @@ py_heideltime is a python wrapper for the multilingual temporal tagger HeidelTim
 
 For more information about this temporal tagger, please visit the Heideltime Java standalone version: https://github.com/HeidelTime/heideltime
 
-This wrapper has been developed by Jorge Mendes under the supervision of [Professor Ricardo Campos](http://www.ccc.ipt.pt/~ricardo/) in the scope of the Final Project of the Computer Science degree of the [Polytechnic Institute of Tomar](http://portal2.ipt.pt/), Portugal.
+This wrapper has been developed by Jorge Mendes under the supervision of [Professor Ricardo Campos](http://www.ccc.ipt.pt/~ricardo/) in the scope of the Final Project of the Computer Science degree at the [Polytechnic Institute of Tomar](http://portal2.ipt.pt/), Portugal.
 
-“Although there already exist some python models for Heideltime (in particular https://github.com/amineabdaoui/python-heideltime) all of them require a considerable intervention from the user side. In this project, we aim to overcome some of these limitations. Our aim was four-fold:”
+Although there already exist some python models for Heideltime (in particular https://github.com/amineabdaoui/python-heideltime) all of them require a considerable intervention from the user side. In this project, we aim to overcome some of these limitations. Our aim was four-fold:
 
  - To provide a multi-platform (windows, Linux, Mac Os);
  - To make it user friendly not only in terms of installation but also in its usage;
  - To make it lightweight without compromising its behavior;
- - To be as independent as possible from the user intervention (e.g., the text language is automatically detect by using a langdetect module).
 
 ## How to install py_heideltime
 In order to use py_heideltime you must have [java JDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) and [perl](https://www.perl.org/get.html) installed in your machine for heideltime dependencies.
@@ -18,7 +17,7 @@ In order to use py_heideltime you must have [java JDK](https://www.oracle.com/te
 pip install git+https://github.com/JMendes1995/py_heideltime.git
 ```
 ##### Linux users
-    If your user had not execution permitions on python lib folder, you should execute the following command:
+    If your user doesn’t has execution permitions on python lib folder, you should execute the following command:
     sudo chmod 111 /usr/local/lib/<YOUR PYTHON VERSION>/dist-packages/py_heideltime/HeidelTime/TreeTaggerLinux/bin/*
     
 ## How to use py_heideltime
@@ -31,10 +30,10 @@ The coup had two secret signals. The first was the airing at 10:55 p.m. of Paulo
 # assuming default parameters
 heideltime(text, language='English')
 
-# with all parameters
+# with all the parameters
 heideltime(text, language='English', document_type='news', document_creation_time='2019-05-24')
 ```
-
+## Output
 ````bash
 [('XXXX-XX-XXT22:55', '10:55 p.m.'), ('1974', '1974'), ('1974-04-25', '25 April 1974'), ('1974-04-25T12:20', '12:20 a.m.')]  
 ````
@@ -58,15 +57,14 @@ Options:
 
 ## Supported languages
 
-This module is prepared to work with the following languages (which are automatically detected by the system): English, Portuguese, Spanish, Germany, Dutch, Italian, French.
+This module is prepared to work with the following languages: English, Portuguese, Spanish, Germany, Dutch, Italian, French.
 
-In case that you want to use more languages you must:
+To use py_heideltime with other languages proceed as follows:
   
   - Download from [TreeTagger](https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/) the parameter files
   - gunzip < Downloaded file >
   - Copy the extracted file to the module folder /py_heideltime/HeidelTime/TreeTagger< your system >/lib/
 
-py_heideltime can also be used to detect dates from other languages than the ones here referred. Yet in that case, only dates (that is years) will be recognized
 
 ## Publications 
 

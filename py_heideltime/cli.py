@@ -1,10 +1,10 @@
 import click
 from py_heideltime import heideltime
 @click.command()
-@click.option("-t", '--text', help='insert text', required=False)
-@click.option("-l", '--language', help='insert language name', required=True)
+@click.option("-t", '--text', help='insert text, under quotes ""', required=False)
+@click.option("-l", '--language', help='Select on of the following languages under quotes "": English, Portuguese, Spanish, Germany, Dutch, Italian, French.', required=True)
 @click.option("-td", '--document_type', help='Type of the document specified by <file> (options: News, Narrative, Colloquial, Scientific).', default='News', required=False)
-@click.option("-dct", '--document_creation_time', help='Creation date of document only valid format (YYYY-MM-DD).only will be considered if document type are News or colloquial.', default="", required=False)
+@click.option("-dct", '--document_creation_time', help='Document creation date in the format (YYYY-MM-DD). Note that this date will only be taken into account when News or Colloquial texts are specified.', default="", required=False)
 @click.option("-i", '--input_file', help='input text file', required=False)
 def dates(text, language, input_file, document_type, document_creation_time):
     def run_py_heideltime(text_content):
