@@ -25,32 +25,47 @@ pip install git+https://github.com/JMendes1995/py_heideltime.git
 from py_heideltime import heideltime
 
 text = '''
-The coup had two secret signals. The first was the airing at 10:55 p.m. of Paulo de Carvalho's "E Depois do Adeus" (Portugal's entry in the 1974 Eurovision Song Contest) on Emissores Associados de Lisboa, which alerted the rebel captains and soldiers to begin the coup. The second signal came on 25 April 1974 at 12:20 a.m., when Rádio Renascença broadcast "Grândola, Vila Morena" (a song by Zeca Afonso, an influential political folk musician and singer who was banned from Portuguese radio at the time). The MFA gave the signals to take over strategic points of power in the country.
+Thurs August 31st - News today that they are beginning to evacuate the London children tomorrow. Percy is a billeting officer. I can't see that they will be much safer here.
 '''
-# assuming default parameters
-heideltime(text, language='English')
-
-# with all the parameters
-heideltime(text, language='English', document_type='news', document_creation_time='2019-05-24')
 ```
-## Output
-````bash
-[('XXXX-XX-XXT22:55', '10:55 p.m.'), ('1974', '1974'), ('1974-04-25', '25 April 1974'), ('1974-04-25T12:20', '12:20 a.m.')]  
+
+#### With default parameters.
+```` bash
+heideltime(text, language='English')
 ````
+
+##### Output
+```` bash
+[('XXXX-08-31', 'August 31st'), ('PRESENT_REF', 'today'), ('XXXX-XX-XX', 'tomorrow')]
+````
+
+#### With all the parameters.
+```` bash
+heideltime(text, language='English', document_type='news', document_creation_time='1939-08-31')
+````
+##### Output
+```` bash
+[('1939-08-31', 'August 31st'), ('1939-08-31', 'today'), ('1939-09-01', 'tomorrow')] 
+````
+
+
 ### Python CLI -  Command Line Interface
 ``` bash
 py_heideltime --help
 
 Options:
-  -t, --text TEXT                 insert text
-  -l, --language TEXT             insert language name  [required]
+  -t, --text TEXT                 insert text, under quotes ""
+  -l, --language TEXT             Select on of the following languages under
+                                  quotes "": English, Portuguese, Spanish,
+                                  Germany, Dutch, Italian, French.  [required]
   -td, --document_type TEXT       Type of the document specified by <file>
                                   (options: News, Narrative, Colloquial,
                                   Scientific).
   -dct, --document_creation_time TEXT
-                                  Creation date of document only valid format
-                                  (YYYY-MM-DD).only will be considered if
-                                  document type are News or colloquial.
+                                  Document creation date in the format (YYYY-
+                                  MM-DD). Note that this date will only be
+                                  taken into account when News or Colloquial
+                                  texts are specified.
   -i, --input_file TEXT           input text file
   --help                          Show this message and exit.
 ```
