@@ -95,7 +95,7 @@ uimaVarTypeToProcess = Type
         print('Bad document_creation_time format you must specify da date in YYYY-MM-DD format.')
     else:
         if document_creation_time == '':
-            java_command = 'java -jar ' +path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  '+document_type+' -l ' + language + ' text.txt'
+            java_command = 'java -jar ' +path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  -t '+document_type+' -l ' + language + ' text.txt'
         else:
             java_command = 'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + language + ' text.txt'
         # run java heideltime standalone version to get all dates
