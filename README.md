@@ -17,7 +17,7 @@ In order to use py_heideltime you must have [java JDK](https://www.oracle.com/te
 pip install git+https://github.com/JMendes1995/py_heideltime.git
 ```
 ##### Linux users
-    If your user doesn’t has execution permitions on python lib folder, you should execute the following command:
+    If your user does not have permission executions on python lib folder, you should execute the following command:
     sudo chmod 111 /usr/local/lib/<YOUR PYTHON VERSION>/dist-packages/py_heideltime/HeidelTime/TreeTaggerLinux/bin/*
     
 ## How to use py_heideltime
