@@ -6,9 +6,9 @@ setup(name='py_heideltime',
       author='Jorge Alexandre Rocha Mendes',
       author_email='mendesjorge49@gmail.com',
       url='https://github.com/JMendes1995/py_heideltime.git',
-      packages=find_packages(include=['py_heideltime', 'click']),
-      # trying to add files...
+      packages=find_packages(),
       include_package_data=True,
+      install_requires=['click'],
       py_modules=['py_heideltime']
 )
 
