@@ -7,10 +7,11 @@ from py_heideltime import heideltime
 @click.option("-dct", '--document_creation_time', help=' Document creation date in the format YYYY-MM-DD should be surrounded by quotes (e.g., “2019-05-30”). Note that this date will only be taken into account when News or Colloquial texts are specified.', default="", required=False)
 @click.option("-i", '--input_file', help=' text path should be surrounded by quotes (e.g., “text.txt”)', required=False)
 def dates(text, language, input_file, document_type, document_creation_time):
-   '''Usage_examples:
-py_heideltime -t "August 31st" -l "English
-py_heideltime -t "August 31st" -l "English" -td "News" -dct "1939-08-31"
-   '''
+   """Usage_examples:"""
+   """py_heideltime -t "August 31st" -l "English"
+   """
+   """py_heideltime -t "August 31st" -l "English" -td "News" -dct "1939-08-31"
+   """
     def run_py_heideltime(text_content):
             output = heideltime(text_content, language, document_type, document_creation_time)
             print(output)
