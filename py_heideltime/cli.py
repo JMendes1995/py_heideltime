@@ -12,7 +12,7 @@ def dates(text, language, input_file, document_type, document_creation_time):
    """
    """py_heideltime -t "August 31st" -l "English" -td "News" -dct "1939-08-31"
    """
-    def run_py_heideltime(text_content):
+   def run_py_heideltime(text_content):
             output = heideltime(text_content, language, document_type, document_creation_time)
             print(output)
     if text and input_file:
