@@ -11,11 +11,11 @@ def heideltime(text, language, document_type='news', document_creation_time=''):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
-        full_path = path + "/HeidelTime/TreeTaggerLinux"
+        full_path = path + "/Heideltime/TreeTaggerLinux"
     else:
         path = imp.find_module('py_heideltime')[1]
         pp = path.replace('\\', '''\\\\''')
-        full_path = str(pp) + '''\\\HeidelTime\\\TreeTaggerWindows'''
+        full_path = str(pp) + '''\\\Heideltime\\\TreeTaggerWindows'''
     conf = '''
 ################################
 ##           MAIN             ##
@@ -95,9 +95,9 @@ uimaVarTypeToProcess = Type
         print('Bad document_creation_time format you must specify da date in YYYY-MM-DD format.')
     else:
         if document_creation_time == '':
-            java_command = 'java -jar ' +path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  '+document_type+' -l ' + language + ' text.txt'
+            java_command = 'java -jar ' +path+'/Heideltime/de.unihd.dbs.heideltime.standalone.jar  '+document_type+' -l ' + language + ' text.txt'
         else:
-            java_command = 'java -jar '+path+'/HeidelTime/de.unihd.dbs.heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + language + ' text.txt'
+            java_command = 'java -jar '+path+'/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + language + ' text.txt'
         # run java heideltime standalone version to get all dates
         if platform.system() == 'Windows':
             myCmd = subprocess.check_output(java_command)
