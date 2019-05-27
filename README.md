@@ -53,20 +53,30 @@ heideltime(text, language='English', document_type='news', document_creation_tim
 ``` bash
 py_heideltime --help
 
+
+  Usage_examples: py_heideltime -t "August 31st" -l "English" or
+  py_heideltime -t "August 31st" -l "English" -td "News" -dct "1939-08-31"
+
 Options:
-  -t, --text TEXT                 insert text, under quotes ""
-  -l, --language TEXT             Select on of the following languages under
-                                  quotes "": English, Portuguese, Spanish,
-                                  Germany, Dutch, Italian, French.  [required]
-  -td, --document_type TEXT       Type of the document specified by <file>
-                                  (options: News, Narrative, Colloquial,
-                                  Scientific).
+  -t, --text TEXT                 insert text, text should be surrounded by
+                                  quotes “” (e.g., “Thurs August 31st”)
+  -l, --language TEXT             [required] Language text is required and
+                                  should be surrounded by quotes “”. Options:
+                                  English, Portuguese, Spanish, Germany,
+                                  Dutch, Italian, French (e.g., “English”).
+                                  [required]
+  -dt, --document_type TEXT       Type of the document text should be
+                                  surrounded by quotes “”. Options: News,
+                                  Narrative, Colloquial, Scientific (e.g.,
+                                  “News”).
   -dct, --document_creation_time TEXT
-                                  Document creation date in the format (YYYY-
-                                  MM-DD). Note that this date will only be
-                                  taken into account when News or Colloquial
-                                  texts are specified.
-  -i, --input_file TEXT           input text file
+                                  Document creation date in the format YYYY-
+                                  MM-DD should be surrounded by quotes (e.g.,
+                                  “2019-05-30”). Note that this date will only
+                                  be taken into account when News or
+                                  Colloquial texts are specified.
+  -i, --input_file TEXT           text path should be surrounded by quotes
+                                  (e.g., “text.txt”)
   --help                          Show this message and exit.
 ```
 
