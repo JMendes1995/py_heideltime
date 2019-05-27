@@ -15,8 +15,5 @@ setup(name='py_heideltime',
                   'py_heideltime=py_heideltime.cli:dates'
             ]
       },
-      )
-
-
 )
 
