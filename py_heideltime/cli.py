@@ -2,10 +2,12 @@ import click
 from py_heideltime import heideltime
 @click.command()
 @click.option("-t", '--text', help='insert text, text should be surrounded by quotes “” (e.g., “Thurs August 31st”)', required=False)
-@click.option("-l", '--language', help='Select one of the following languages surrounded by quotes "": English, Portuguese, Spanish, Germany, Dutch, Italian, French.', required=True)
-@click.option("-td", '--document_type', help='Type of the document specified by <file> (options: News, Narrative, Colloquial, Scientific).', default='News', required=False)
-@click.option("-dct", '--document_creation_time', help='Document creation date in the format (YYYY-MM-DD). Note that this date will only be taken into account when News or Colloquial texts are specified.', default="", required=False)
-@click.option("-i", '--input_file', help='input text file', required=False)
+@click.option("-l", '--language', help='[required] Language text is required and should be surrounded by quotes “”. Options: English, Portuguese, Spanish, Germany, Dutch, Italian, French (e.g., “English”).', required=True)
+@click.option("-dt", '--document_type', help='Type of the document text should be surrounded by quotes “”. Options: News, Narrative, Colloquial, Scientific (e.g., “News”).', default='News', required=False)
+@click.option("-dct", '--document_creation_time', help=' Document creation date in the format YYYY-MM-DD should be surrounded by quotes (e.g., “2019-05-30”). Note that this date will only be taken into account when News or Colloquial texts are specified.', default="", required=False)
+@click.option("-i", '--input_file', help=' text path should be surrounded by quotes (e.g., “text.txt”)', required=False)
+@click.option("-h", '--help', help=' py_heideltime -t "August 31st" -l "English"' 
+              'py_heideltime -t "August 31st" -l "English" -td "News" -dct "1939-08-31"', required=False)
 def dates(text, language, input_file, document_type, document_creation_time):
     def run_py_heideltime(text_content):
             output = heideltime(text_content, language, document_type, document_creation_time)
