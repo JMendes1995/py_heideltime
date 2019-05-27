@@ -1,8 +1,8 @@
 import click
 from py_heideltime import heideltime
 @click.command()
-@click.option("-t", '--text', help='insert text, under quotes ""', required=False)
-@click.option("-l", '--language', help='Select on of the following languages under quotes "": English, Portuguese, Spanish, Germany, Dutch, Italian, French.', required=True)
+@click.option("-t", '--text', help='insert text, text should be surrounded by quotes “” (e.g., “Thurs August 31st”)', required=False)
+@click.option("-l", '--language', help='Select one of the following languages surrounded by quotes "": English, Portuguese, Spanish, Germany, Dutch, Italian, French.', required=True)
 @click.option("-td", '--document_type', help='Type of the document specified by <file> (options: News, Narrative, Colloquial, Scientific).', default='News', required=False)
 @click.option("-dct", '--document_creation_time', help='Document creation date in the format (YYYY-MM-DD). Note that this date will only be taken into account when News or Colloquial texts are specified.', default="", required=False)
 @click.option("-i", '--input_file', help='input text file', required=False)
