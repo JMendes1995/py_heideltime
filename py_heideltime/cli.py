@@ -3,7 +3,7 @@ from py_heideltime import heideltime
 @click.command()
 @click.option("-t", '--text', help='insert text, text should be surrounded by quotes “” (e.g., “Thurs August 31st”)', required=False)
 @click.option("-l", '--language', help='[required] Language text is required and should be surrounded by quotes “”. Options: English, Portuguese, Spanish, Germany, Dutch, Italian, French (e.g., “English”).', required=True)
-@click.option("-dg", '--date_granularity', help='Value of granularity should be surrounded by quotes “”. Options: Year, Month, day (e.g., “Year”).', required=False)
+@click.option("-dg", '--date_granularity', help='Value of granularity should be surrounded by quotes “”. Options: Year, Month, day (e.g., “Year”).', default="", required=False)
 @click.option("-dt", '--document_type', help='Type of the document text should be surrounded by quotes “”. Options: “News” : news-style documents; “Narrative” : narrative-style documents (e.g., Wikipedia articles); “Colloquial” : English colloquial (e.g., Tweets and SMS);  “Scientific” : scientific articles (e.g., clinical trails)', default='News', required=False)
 @click.option("-dct", '--document_creation_time', help='Document creation date in the format YYYY-MM-DD should be surrounded by quotes (e.g., “2019-05-30”). Note that this date will only be taken into account when News or Colloquial texts are specified.', default="", required=False)
 @click.option("-i", '--input_file', help=' text path should be surrounded by quotes (e.g., “text.txt”)', required=False)
