@@ -14,7 +14,7 @@ def dates(text, language, date_granularity, input_file, document_type, document_
     py_heideltime -t "August 31st" -l "English" -td "News" -dct "1939-08-31"
     '''
     def run_py_heideltime(text_content):
-            output = heideltime(text_content, language, date_granularity, document_type, document_creation_time)
+            output = heideltime(text_content, language, document_type, document_creation_time, date_granularity)
             print(output)
     if text and input_file:
         print('Select only text or file to be analysed')
