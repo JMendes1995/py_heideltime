@@ -7,7 +7,7 @@ import subprocess
 import re
 
 
-def heideltime(text, language, document_type='news', document_creation_time=''):
+def heideltime(text, language, document_type='news', document_creation_time='', date_granularity=''):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
@@ -105,9 +105,22 @@ uimaVarTypeToProcess = Type
             myCmd = os.popen(java_command).read()
         # parsing the xml to get only the date value and the expression that originate the date
         root = ET.fromstring(myCmd)
+
         for i in range(len(root)):
             # insert in list the date value and the expression that originate the date
-            list_dates.append((root[i].attrib['value'], root[i].text))
+            if date_granularity != '':
+                if re.match('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value']):
+                    if date_granularity.lower() == 'year':
+                        years = re.findall('\w{4}', root[i].attrib['value'])
+                        list_dates.append((years[0], root[i].text))
+                    elif date_granularity.lower() == 'month':
+                        months = re.findall('\w{4}[-]\w{2}', root[i].attrib['value'])
+                        list_dates.append((months[0], root[i].text))
+                    elif date_granularity.lower() == 'day':
+                        days = re.findall('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value'])
+                        list_dates.append((days[0], root[i].text))
+            else:
+                list_dates.append((root[i].attrib['value'], root[i].text))
 
         # write error message for linux users to advertise that should give execute java heideltime
         if list_dates == [] and platform.system() == 'Linux':

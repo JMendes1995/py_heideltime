@@ -10,6 +10,7 @@ Although there already exist some python models for Heideltime (in particular ht
  - To provide a multi-platform (windows, Linux, Mac Os);
  - To make it user friendly not only in terms of installation but also in its usage;
  - To make it lightweight without compromising its behavior;
+ - To give the possibility to choose the granularity of extracted dates.
 
 ## How to install py_heideltime
 In order to use py_heideltime you must have [java JDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) and [perl](https://www.perl.org/get.html) installed in your machine for heideltime dependencies.
@@ -53,7 +54,6 @@ heideltime(text, language='English', document_type='news', document_creation_tim
 ``` bash
 py_heideltime --help
 
-
   Usage_examples: py_heideltime -t "August 31st" -l "English" or
   py_heideltime -t "August 31st" -l "English" -td "News" -dct "1939-08-31"
 
@@ -65,10 +65,16 @@ Options:
                                   English, Portuguese, Spanish, Germany,
                                   Dutch, Italian, French (e.g., “English”).
                                   [required]
+  -dg, --date_granularity TEXT    Value of granularity should be surrounded by
+                                  quotes “”. Options: Year, Month, day (e.g.,
+                                  “Year”).
   -dt, --document_type TEXT       Type of the document text should be
-                                  surrounded by quotes “”. Options: News,
-                                  Narrative, Colloquial, Scientific (e.g.,
-                                  “News”).
+                                  surrounded by quotes “”. Options: “News” :
+                                  news-style documents; “Narrative” :
+                                  narrative-style documents (e.g., Wikipedia
+                                  articles); “Colloquial” : English colloquial
+                                  (e.g., Tweets and SMS);  “Scientific” :
+                                  scientific articles (e.g., clinical trails)
   -dct, --document_creation_time TEXT
                                   Document creation date in the format YYYY-
                                   MM-DD should be surrounded by quotes (e.g.,
@@ -78,6 +84,7 @@ Options:
   -i, --input_file TEXT           text path should be surrounded by quotes
                                   (e.g., “text.txt”)
   --help                          Show this message and exit.
+
 ```
 
 ## Supported languages
