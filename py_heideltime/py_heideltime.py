@@ -103,9 +103,12 @@ uimaVarTypeToProcess = Type
             myCmd = subprocess.check_output(java_command)
         else:
             myCmd = os.popen(java_command).read()
-        # parsing the xml to get only the date value and the expression that originate the date
-        root = ET.fromstring(myCmd)
 
+        # parsing the xml to get only the date value and the expression that originate the date
+
+        from lxml import etree
+        parser = etree.XMLParser(recover=True)
+        root = etree.fromstring(myCmd, parser=parser)
         for i in range(len(root)):
             # insert in list the date value and the expression that originate the date
             if date_granularity != '':
