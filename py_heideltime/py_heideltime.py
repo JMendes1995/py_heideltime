@@ -6,6 +6,8 @@ import platform
 import subprocess
 import re
 
+import time
+import multiprocessing
 
 def heideltime(text, language, document_type='news', document_creation_time='', date_granularity=''):
     full_path = ''
@@ -77,58 +79,80 @@ uimaVarTemponym = Temponym
 # ...for type to process
 uimaVarTypeToProcess = Type
 '''
-    list_dates = []
+
     f = codecs.open("config.props", "w+", "utf-8")
     f.truncate()
     f.write(conf)
     f.close()
+    num_files = create_txt_files(text)
+    list_dates = exec_java_heideltime(num_files, path, full_path, language, document_type, document_creation_time, date_granularity)
+    return list_dates
 
-    text_file = codecs.open("text.txt", "w+", "utf-8")
-    text_file.truncate()
-    text_file.write(text)
-    text_file.close()
 
-    # search in document_creation_time to find if is good format
+def create_txt_files(text):
+    tests = text.split(". ")
+    n = max(1, 100)
+    merge_sentenses = [tests[i:i + n] for i in range(0, len(tests), n)]
+    print(merge_sentenses)
+    num_files = 0
+    for i in range(len(merge_sentenses)):
+        te = " ".join(merge_sentenses[i])
+        text_file = codecs.open('text'+str(i)+'.txt', "w+", "utf-8")
+        text_file.truncate()
+        text_file.write(te)
+        text_file.close()
+        num_files = i
+
+    print(num_files)
+    return num_files
+
+
+def exec_java_heideltime(file_number, path, full_path,language, document_type, document_creation_time, date_granularity):
+    list_dates=[]
     match = re.findall('\d{4}[-]\d{2}[-]\d{2}', document_creation_time)
 
     if match == [] and document_creation_time != '':
         print('Bad document_creation_time format you must specify da date in YYYY-MM-DD format.')
     else:
-        if document_creation_time == '':
-            java_command = 'java -jar ' +path+'/Heideltime/de.unihd.dbs.heideltime.standalone.jar  '+document_type+' -l ' + language + ' text.txt'
-        else:
-            java_command = 'java -jar '+path+'/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct '+document_creation_time+' -t '+document_type+' -l ' + language + ' text.txt'
-        # run java heideltime standalone version to get all dates
-        if platform.system() == 'Windows':
-            myCmd = subprocess.check_output(java_command)
-        else:
-            myCmd = os.popen(java_command).read()
-        # parsing the xml to get only the date value and the expression that originate the date
-        root = ET.fromstring(myCmd)
-
-        for i in range(len(root)):
-            # insert in list the date value and the expression that originate the date
-            if date_granularity != '':
-                if re.match('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value']):
-                    if date_granularity.lower() == 'year':
-                        years = re.findall('\w{4}', root[i].attrib['value'])
-                        list_dates.append((years[0], root[i].text))
-                    elif date_granularity.lower() == 'month':
-                        months = re.findall('\w{4}[-]\w{2}', root[i].attrib['value'])
-                        list_dates.append((months[0], root[i].text))
-                    elif date_granularity.lower() == 'day':
-                        days = re.findall('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value'])
-                        list_dates.append((days[0], root[i].text))
+        n=0
+        while n <= file_number:
+            if document_creation_time == '':
+                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
             else:
-                list_dates.append((root[i].attrib['value'], root[i].text))
+                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' +\
+                               document_creation_time + ' -t ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
+            # run java heideltime standalone version to get all dates
+            if platform.system() == 'Windows':
+                myCmd = subprocess.check_output(java_command)
+            else:
+                myCmd = os.popen(java_command).read()
 
+            # parsing the xml to get only the date value and the expression that originate the date
+
+            from lxml import etree
+            parser = etree.XMLParser(recover=True)
+            root = etree.fromstring(myCmd, parser=parser)
+            for i in range(len(root)):
+                # insert in list the date value and the expression that originate the date
+                if date_granularity != '':
+                    if re.match('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value']):
+                        if date_granularity.lower() == 'year':
+                            years = re.findall('\w{4}', root[i].attrib['value'])
+                            list_dates.append((years[0], root[i].text))
+                        elif date_granularity.lower() == 'month':
+                            months = re.findall('\w{4}[-]\w{2}', root[i].attrib['value'])
+                            list_dates.append((months[0], root[i].text))
+                        elif date_granularity.lower() == 'day':
+                            days = re.findall('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value'])
+                            list_dates.append((days[0], root[i].text))
+                else:
+                    list_dates.append((root[i].attrib['value'], root[i].text))
+            n += 1
         # write error message for linux users to advertise that should give execute java heideltime
         if list_dates == [] and platform.system() == 'Linux':
             print('Sorry, maybe something went wrong.')
             print('Please check if the format of values of variables are like the documentation or')
             print('run this command to give execution privileges to execute java heideltime')
-            print('sudo chmod 111 '+full_path+'/bin/*')
+            print('sudo chmod 111 ' + full_path + '/bin/*')
 
     return list_dates
-
-
