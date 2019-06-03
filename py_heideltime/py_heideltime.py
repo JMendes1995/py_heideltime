@@ -51,7 +51,7 @@ pos_model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/jvntextpro/models/j
 #####################################################
 model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/stanford-postagger-full-2014-01-04/models/arabic.tagger)
 # leave this unset if you do not need one (e.g., /home/jannik/stanford-postagger-full-2014-01-04/tagger.config)
-config_path = 
+config_path =
 ########################################
 ## paths to hunpos and its tagger files:
 ########################################
