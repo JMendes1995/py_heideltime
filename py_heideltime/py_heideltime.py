@@ -93,7 +93,6 @@ def create_txt_files(text):
     tests = text.split(". ")
     n = max(1, 100)
     merge_sentenses = [tests[i:i + n] for i in range(0, len(tests), n)]
-    print(merge_sentenses)
     num_files = 0
     for i in range(len(merge_sentenses)):
         te = " ".join(merge_sentenses[i])
@@ -102,8 +101,6 @@ def create_txt_files(text):
         text_file.write(te)
         text_file.close()
         num_files = i
-
-    print(num_files)
     return num_files
 
 
