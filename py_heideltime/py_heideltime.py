@@ -86,6 +86,7 @@ uimaVarTypeToProcess = Type
     f.close()
     num_files = create_txt_files(text)
     list_dates = exec_java_heideltime(num_files, path, full_path, language, document_type, document_creation_time, date_granularity)
+    remove_files(num_files)
     return list_dates
 
 
@@ -153,3 +154,14 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
             print('sudo chmod 111 ' + full_path + '/bin/*')
 
     return list_dates
+
+
+def remove_files(num_files):
+    import os
+    print(num_files)
+    os.remove('config.props')
+    i_files = 0
+    while i_files <= num_files:
+        print(i_files)
+        os.remove('text'+str(i_files)+'.txt')
+        i_files += 1
