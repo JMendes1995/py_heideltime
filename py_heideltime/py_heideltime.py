@@ -158,10 +158,8 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
 
 def remove_files(num_files):
     import os
-    print(num_files)
     os.remove('config.props')
     i_files = 0
     while i_files <= num_files:
-        print(i_files)
         os.remove('text'+str(i_files)+'.txt')
         i_files += 1
