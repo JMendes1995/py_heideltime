@@ -22,6 +22,10 @@ pip install git+https://github.com/JMendes1995/py_heideltime.git
     sudo chmod 111 /usr/local/lib/<YOUR PYTHON VERSION>/dist-packages/py_heideltime/HeidelTime/TreeTaggerLinux/bin/*
     
 ## How to use py_heideltime
+py_heideltime is Python wrapper of Heideltime Temporal Tagger (state-of-the-art in this kind of task). It is able to detect a huge number of different types of temporal expressions, yet, depending on the size of the text it may require a considerable amount of (linear) time to execute (approximately 4.5s for 600 tokens; 6s for 1,200 tokens; 15s for 2,600 tokens; 30s for 5k tokens; 60s para 10k tokens; 120s for 20k tokens).
+
+Please proceed as follows in order to import the py_heideltime package.
+
 ``` bash
 from py_heideltime import heideltime
 
