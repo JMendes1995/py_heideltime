@@ -82,7 +82,7 @@ Options:
   
   [not required] 
   -----------------------------------------------------------------------------------------------------------------------------------                      
-  -dg, --date_granularity TEXT          Date granularity
+  -dg, --date_granularity TEXT          Date granularity. Default is yyyy-mm-ddtHH:MM:SS, whenever one such expression is found.
                                         Options: 
                                                 "year" (means that for the date YYYY-MM-DD only the YYYY will be retrieved); 
                                                 "month" (means that for the date YYYY-MM-DD only the YYYY-MM will be retrieved); 
