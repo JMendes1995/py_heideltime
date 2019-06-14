@@ -59,7 +59,7 @@ py_heideltime --help
   All the Parameters: py_heideltime -t "August 31st" -l "English" -dg "day" -dt "News" -dct "1939-08-31"
 
 Options:
-  [partilally-required]: that is, need to specify one of the two options (text or input_file).
+  [partilally-required]: that is, the user needs to specify one of the two following options: text or input_file.
   ----------------------------------------------------------------------------------------------------------------------------------
   -t, --text TEXT                       Input text. 
                                         Example: “August 31st”.
