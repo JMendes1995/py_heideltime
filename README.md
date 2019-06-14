@@ -86,7 +86,8 @@ Options:
                                         Options: 
                                                 "year" (means that for the date YYYY-MM-DD only the YYYY will be retrieved); 
                                                 "month" (means that for the date YYYY-MM-DD only the YYYY-MM will be retrieved); 
-                                                "day" - (default param. Means that for the date YYYY-MM-DD it will retrieve YYYY-MM-DD).
+                                                "day" - (default param. Means that for the date YYYY-MM-DDtHH:MM:SS it will retrieve 
+                                                        YYYY-MM-DD).
                                   
   -dt, --document_type TEXT             Type of the document text.
                                         Options: 
