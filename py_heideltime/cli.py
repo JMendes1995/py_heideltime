@@ -1,7 +1,6 @@
 import click
 from py_heideltime import py_heideltime
 
-
 def dates():
     import sys
     arg = []
@@ -67,20 +66,17 @@ Options:
         print(output)
 
     if sys.argv[1] == '--help':
-        print(t)
         exit(1)
 
     # make sure if was input text arugument
     elif '-t' in arg or '--text' in arg:
             position = verify_argument_pos(arg, '-t', '--text')
             text = arg[position+1]
-            print(text)
     elif '-i' in arg or '--input_file' in arg:
         position = verify_argument_pos(arg, '-t', '--text')
         path = arg[position+1]
         with open(path) as file:
             text = file.read()
-            print(text)
     else:
         print('Bad arguments [--help]')
         exit(1)
