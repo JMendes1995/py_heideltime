@@ -1,4 +1,3 @@
-import click
 from py_heideltime import py_heideltime
 
 def dates():
