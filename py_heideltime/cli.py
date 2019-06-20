@@ -66,6 +66,7 @@ Options:
         print(output)
 
     if sys.argv[1] == '--help':
+        print(t)
         exit(1)
 
     # make sure if was input text arugument
