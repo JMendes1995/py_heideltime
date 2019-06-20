@@ -65,16 +65,16 @@ Options:
 
         print(output)
 
-    if sys.argv[1] == '--help':
+    if '--help' in arg:
         print(t)
         exit(1)
 
     # make sure if was input text arugument
     elif '-t' in arg or '--text' in arg:
-            position = verify_argument_pos(arg, '-t', '--text')
-            text = arg[position+1]
-    elif '-i' in arg or '--input_file' in arg:
         position = verify_argument_pos(arg, '-t', '--text')
+        text = arg[position+1]
+    elif '-i' in arg or '--input_file' in arg:
+        position = verify_argument_pos(arg, '-i', '--input_file')
         path = arg[position+1]
         with open(path) as file:
             text = file.read()
