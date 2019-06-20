@@ -11,12 +11,10 @@ def py_heideltime(text, language,  date_granularity='', document_type='news', do
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
         full_path = path + "/Heideltime/TreeTaggerLinux"
-        print(full_path)
     else:
         path = imp.find_module('py_heideltime')[1]
         pp = path.replace('\\', '''\\\\''')
         full_path = str(pp) + '''\\\Heideltime\\\TreeTaggerWindows'''
-        print(full_path)
     conf = '''
 ################################
 ##           MAIN             ##
