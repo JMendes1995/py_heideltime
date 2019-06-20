@@ -96,7 +96,6 @@ def get_arguments_values(arg_list, argument, extense_argument, defaut_value):
             value = arg_list[position + 1]
     except:
         value = defaut_value
-    print(str(value))
     return str(value)
 
 
