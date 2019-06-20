@@ -112,7 +112,7 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
         n=0
         while n <= file_number:
             if document_creation_time == '':
-                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -t ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
+                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar   ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
             else:
                 java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' +\
                                document_creation_time + ' -t ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
