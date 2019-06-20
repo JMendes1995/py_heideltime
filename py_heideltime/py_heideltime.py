@@ -1,23 +1,22 @@
 import os
-import xml.etree.ElementTree as ET
 import codecs
 import imp
 import platform
 import subprocess
 import re
 
-import time
-import multiprocessing
 
-def heideltime(text, language, document_type='news', document_creation_time='', date_granularity=''):
+def py_heideltime(text, language,  date_granularity='', document_type='news', document_creation_time=''):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
         full_path = path + "/Heideltime/TreeTaggerLinux"
+        print(full_path)
     else:
         path = imp.find_module('py_heideltime')[1]
         pp = path.replace('\\', '''\\\\''')
         full_path = str(pp) + '''\\\Heideltime\\\TreeTaggerWindows'''
+        print(full_path)
     conf = '''
 ################################
 ##           MAIN             ##
@@ -91,8 +90,8 @@ uimaVarTypeToProcess = Type
 
 
 def create_txt_files(text):
-    tests = text.split(". ")
-    n = max(1, 100)
+    tests = text.split()
+    n = max(1, 7500)
     merge_sentenses = [tests[i:i + n] for i in range(0, len(tests), n)]
     num_files = 0
     for i in range(len(merge_sentenses)):
@@ -115,7 +114,7 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
         n=0
         while n <= file_number:
             if document_creation_time == '':
-                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
+                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -t ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
             else:
                 java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' +\
                                document_creation_time + ' -t ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'

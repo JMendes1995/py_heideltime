@@ -1,1 +1,1 @@
-from py_heideltime.py_heideltime import heideltime
+from py_heideltime.py_heideltime import py_heideltime

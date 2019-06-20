@@ -23,7 +23,7 @@ pip install git+https://github.com/JMendes1995/py_heideltime.git
     
 ## How to use py_heideltime
 ``` bash
-from py_heideltime import heideltime
+from py_heideltime import py_heideltime
 
 text = '''
 Thurs August 31st - News today that they are beginning to evacuate the London children tomorrow. Percy is a billeting officer. I can't see that they will be much safer here.
@@ -32,7 +32,7 @@ Thurs August 31st - News today that they are beginning to evacuate the London ch
 
 #### With the default parameters.
 ```` bash
-heideltime(text, language='English')
+py_heideltime(text, language='English')
 ````
 
 ##### Output
@@ -42,7 +42,7 @@ heideltime(text, language='English')
 
 #### With all the parameters.
 ```` bash
-heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
+py_heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
 ````
 ##### Output
 ```` bash
