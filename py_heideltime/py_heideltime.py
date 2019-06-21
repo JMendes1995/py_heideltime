@@ -141,7 +141,10 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
                             days = re.findall('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value'])
                             list_dates.append((days[0], root[i].text))
                 else:
-                    list_dates.append((root[i].attrib['value'], root[i].text))
+                    try:
+                        list_dates.append((root[i].attrib['value'], root[i].text))
+                    except:
+                        pass
             n += 1
         # write error message for linux users to advertise that should give execute java heideltime
         if list_dates == [] and platform.system() == 'Linux':
