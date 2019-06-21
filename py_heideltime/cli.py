@@ -7,18 +7,19 @@ def dates():
         opt = sys.argv[i].lower()
         arg.append(opt)
     t = '''
-  Usage_examples (make sure that the input parameters should be within quotes):
-  Default Parameters: py_heideltime -t "August 31st" -l "English"
-  All the Parameters: py_heideltime -t "August 31st" -l "English" -dg "day" -dt "News" -dct "1939-08-31"
+Usage_examples (make sure that the input parameters are within quotes):
+
+Default Parameters: py_heideltime -t "August 31st" -l "English"
+All the Parameters: py_heideltime -t "August 31st" -l "English" -dg "day" -dt "News" -dct "1939-08-31"
 
 Options:
-  [partilally-required]: that is, need to specify one of the two options (text or input_file).
+  [partilally-required]: either specify a text or an input_file path.
   ----------------------------------------------------------------------------------------------------------------------------------
   -t, --text TEXT                       Input text.
                                         Example: “August 31st”.
 
   -i, --input_file TEXT                 Text path.
-                                        Example: "text.txt"
+                                        Example: “C:\text.txt
 
 
   [required]
@@ -76,7 +77,14 @@ Options:
         position = verify_argument_pos(arg, '-i', '--input_file')
         path = arg[position+1]
         import codecs
-        text = codecs.open(path, "r+", "utf-8").read()
+        try:
+            file = open(path)
+            text = file.read()
+        except:
+            print('''Sorry something went wrong while reading from this file.
+Make sure that is a txt file and check his format.
+            ''')
+            exit(1)
     else:
         print('Bad arguments [--help]')
         exit(1)

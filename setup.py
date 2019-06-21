@@ -8,7 +8,6 @@ setup(name='py_heideltime',
       url='https://github.com/JMendes1995/py_heideltime.git',
       packages=find_packages(),
       include_package_data=True,
-      install_requires=['click'],
       py_modules=['py_heideltime'],
       entry_points={
             'console_scripts': [
