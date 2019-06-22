@@ -69,7 +69,7 @@ Options:
                                         Example: “August 31st”.
 
   -i, --input_file TEXT                 Text path.
-                                        Example: “C:\text.txt
+                                        Example: “C:\text.txt”.
 
 
   [required]
