@@ -54,58 +54,6 @@ py_heideltime(text, language='English', date_granularity="day", document_type='n
 ``` bash
 py_heideltime --help
 
-ge_examples (make sure that the input parameters are within quotes):
-
-Default Parameters: py_heideltime -t "August 31st" -l "English"
-
-All the Parameters: py_heideltime -t "August 31st" -l "English" -dg "day" -dt "News" -dct "1939-08-31"
-
-Options:
-  [partilally-required]: either specify a text or an input_file path.
-  ----------------------------------------------------------------------------------------------------------------------------------
-  -t, --text TEXT                       Input text.
-                                        Example: “August 31st”.
-
-  -i, --input_file TEXT                 Text path.
-                                        Example: “C:\text.txt
-
-
-  [required]
-  ----------------------------------------------------------------------------------------------------------------------------------
-  -l, --language TEXT                   Language of the text.
-                                        Options:
-                                                "English";
-                                                "Portuguese";
-                                                "Spanish";
-                                                "Germany";
-                                                "Dutch";
-                                                "Italian";
-                                                "French".
-
-  [not required]
-  -----------------------------------------------------------------------------------------------------------------------------------
-  -dg, --date_granularity TEXT          Date granularity
-                                        Options:
-                                                "year" (means that for the date YYYY-MM-DD only the YYYY will be retrieved);
-                                                "month" (means that for the date YYYY-MM-DD only the YYYY-MM will be retrieved);
-                                                "day" - (default param. Means that for the date YYYY-MM-DD it will retrieve YYYY-MM-DD).
-
-  -dt, --document_type TEXT             Type of the document text.
-                                        Options:
-                                                "News" for news-style documents - default param;
-                                                "Narrative" for narrative-style documents (e.g., Wikipedia articles);
-                                                "Colloquial" for English colloquial (e.g., Tweets and SMS);
-                                                "Scientific" for scientific articles (e.g., clinical trails).
-
-  -dct, --document_creation_time TEXT   Document creation date in the format YYYY-MM-DD. Taken into account when "News" or "Colloquial"
-                                        texts are specified.
-                                        Example: "2019-05-30".
-
-  --help                                Show this message and exit.
-
-
-C:\Users\JMendes\Desktop\py_heideltime\py_heideltime>python cli.py --help
-
 Usage_examples (make sure that the input parameters are within quotes):
 
   Default Parameters: py_heideltime -t "August 31st" -l "English"
