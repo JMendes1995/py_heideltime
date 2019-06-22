@@ -122,7 +122,7 @@ To use py_heideltime with other languages proceed as follows:
 
 If you use HeidelTime (either through this package or another one) please cite the appropriate paper. In general, this would be:
 
-Strötgen, Gertz: Multilingual and Cross-domain Temporal Tagging. Language Resources and Evaluation, 2013. [pdf](https://link.springer.com/article/10.1007%2Fs10579-012-9179-y) [bibtex](https://dbs.ifi.uni-heidelberg.de/files/Team/jannik/publications/stroetgen_bib.html#LREjournal2013)
+Strötgen, J., and Gertz, M. (2013). Multilingual and Cross-domain Temporal Tagging. In: Language Resources and Evaluation, 47(3), pp. 269-298. [pdf](https://link.springer.com/article/10.1007%2Fs10579-012-9179-y)
 
  
 Other related papers may be found here:
