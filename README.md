@@ -57,10 +57,10 @@ py_heideltime --help
 Usage_examples (make sure that the input parameters are within quotes):
 
   Default Parameters: py_heideltime -t "August 31st" -l "English"
-
   All the Parameters: py_heideltime -t "August 31st" -l "English" -dg "day" -dt "News" -dct "1939-08-31"
 
-  Output: the output will be a list of temporal expressions (TE) in the format [(normalized TE; TE as it is found in the text),….] or an empty list [] if no temporal expression is found in the text.
+  Output: the output will be a list of temporal expressions (TE) in the format [(normalized TE; TE as it is found in the text),….] or an 
+          empty list [] if no temporal expression is found in the text.
 
 Options:
   [partilally-required]: either specify a text or an input_file path.
