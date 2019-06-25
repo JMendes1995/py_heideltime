@@ -30,21 +30,21 @@ Thurs August 31st - News today that they are beginning to evacuate the London ch
 '''
 ```
 
-#### With the default parameters.
+#### _With the default parameters_
 ```` bash
 py_heideltime(text, language='English')
 ````
 
-##### Output
+###### Output
 ```` bash
 [('XXXX-08-31', 'August 31st'), ('PRESENT_REF', 'today'), ('XXXX-XX-XX', 'tomorrow')]
 ````
 
-#### With all the parameters.
+#### _With all the parameters_
 ```` bash
 py_heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
 ````
-##### Output
+###### Output
 ```` bash
 [('1939-08-31', 'August 31st'), ('1939-08-31', 'today'), ('1939-09-01', 'tomorrow')] 
 ````
