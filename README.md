@@ -31,9 +31,18 @@ Thurs August 31st - News today that they are beginning to evacuate the London ch
 ```
 
 #### _With the default parameters_
+Default language is "English" and document_type is "news" which means that having:
+
 ```` bash
-py_heideltime(text, language='English')
+py_heideltime(text)
 ````
+
+or:
+
+```` bash
+py_heideltime(text, language='English',  document_type='news')
+````
+is exactly the same thing and produces the same results.
 
 ###### Output
 ```` bash
