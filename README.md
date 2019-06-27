@@ -45,6 +45,7 @@ py_heideltime(text, language='English',  document_type='news')
 is exactly the same thing and produces the same results.
 
 ###### Output
+The output will be a list of temporal expressions (TE) in the format [(normalized TE; TE as it is found in the text),….] or an empty list [] if no temporal expression is found in the text.
 ```` bash
 [('XXXX-08-31', 'August 31st'), ('PRESENT_REF', 'today'), ('XXXX-XX-XX', 'tomorrow')]
 ````
