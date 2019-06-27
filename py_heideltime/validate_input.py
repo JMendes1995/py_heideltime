@@ -10,7 +10,7 @@ def verify_temporal_tagger(language,date_granularity, document_type, document_cr
               '     month:\n'
               '     day;')
         return exit(1)
-    elif document_type.lower() != 'news'and document_type.lower() != 'narrative' and document_type.lower() != 'colloquial' and document_type.lower() != 'scientific' and document_type.lower() != '':
+    elif document_type.lower() != 'news'and document_type.lower() != 'narrative' and document_type.lower() != 'colloquial' and document_type.lower() != 'scientific' and document_type.lower() == '':
         print('You must select a valid document_type.\n'
               'options:\n'
               '     news;\n'
