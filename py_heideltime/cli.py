@@ -40,10 +40,12 @@ Options:
   [not required]
   -----------------------------------------------------------------------------------------------------------------------------------
   -dg, --date_granularity TEXT          Date granularity
+                                        Default: "full"
                                         Options:
-                                                "year" (means that for the date YYYY-MM-DD only the YYYY will be retrieved);
-                                                "month" (means that for the date YYYY-MM-DD only the YYYY-MM will be retrieved);
-                                                "day" - (default param. Means that for the date YYYY-MM-DD it will retrieve YYYY-MM-DD).
+                                                "full" - (means that all types of granularity will be retrieved, from the coarsest to the finest-granularity).
+                                                "day" - (means that for the date YYYY-MM-DD-HH:MM:SS it will retrieve YYYY-MM-DD).
+                                                "month" (means that for the date YYYY-MM-DD-HH:MM:SS only the YYYY-MM will be retrieved);
+                                                "year" (means that for the date YYYY-MM-DD-HH:MM:SS only the YYYY will be retrieved);
 
   -dt, --document_type TEXT             Type of the document text.
                                         Options:
@@ -84,6 +86,7 @@ Options:
             file = open(path)
             text = file.read()
         except:
+
             print('''Sorry something went wrong while reading from this file.
 Make sure that is a txt file and check his format.
             ''')

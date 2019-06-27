@@ -4,10 +4,11 @@ import imp
 import platform
 import subprocess
 import re
+from py_heideltime.validate_input import verify_temporal_tagger
 
-
-def py_heideltime(text, language='English',  date_granularity='', document_type='news', document_creation_time=''):
+def py_heideltime(text, language='English',  date_granularity='full', document_type='news', document_creation_time=''):
     full_path = ''
+    verify_temporal_tagger(language, date_granularity, document_type, document_creation_time)
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
         full_path = path + "/Heideltime/TreeTaggerLinux"
@@ -129,7 +130,7 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
             root = etree.fromstring(myCmd, parser=parser)
             for i in range(len(root)):
                 # insert in list the date value and the expression that originate the date
-                if date_granularity != '':
+                if date_granularity != 'full':
                     if re.match('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value']):
                         if date_granularity.lower() == 'year':
                             years = re.findall('\w{4}', root[i].attrib['value'])
