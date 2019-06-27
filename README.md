@@ -67,7 +67,7 @@ The output will be a list of temporal expressions (TE) in the format [(normalize
 ````
 
 
-### Python CLI -  Command Line Interface
+### Python CLI (Command Line Interface)
 #### Help
 ``` bash
 py_heideltime --help
@@ -82,12 +82,12 @@ py_heideltime -t "August 31st"
 
 All the Parameters:
 ``` bash
-py_heideltime -t "August 31st" -l "English" -dg "day" -dt "News" -dct "1939-08-31"
+py_heideltime -t "August 31st" -l "English" -dg "full" -dt "News" -dct "1939-08-31"
 ```
 
 #### Options
 ``` bash
-  [partilally-required]: either specify a text or an input_file path.
+  [required]: either specify a text or an input_file path.
   ----------------------------------------------------------------------------------------------------------------------------------
   -t, --text                        - Input text.
                                       Example: “August 31st”.
@@ -118,19 +118,19 @@ py_heideltime -t "August 31st" -l "English" -dg "day" -dt "News" -dct "1939-08-3
   -dg, --date_granularity           - Date granularity
                                       Default: "full" 
                                       Options:
-                                              "full" (means that all types of granularity will be retrieved, from the coarsest to 
-                                                      the finest-granularity).
-                                              "day" (means that for the date YYYY-MM-DD-HH:MM:SS it will retrieve YYYY-MM-DD);
-                                              "month" (means that for the date YYYY-MM-DD-HH:MM:SS only the YYYY-MM will be retrieved);
-                                              "year" (means that for the date YYYY-MM-DD-HH:MM:SS only the YYYY will be retrieved);
+                                              "full": means that all types of granularity will be retrieved, from the coarsest to 
+                                                      the finest-granularity.
+                                              "day": means that for the date YYYY-MM-DD-HH:MM:SS it will retrieve YYYY-MM-DD;
+                                              "month": means that for the date YYYY-MM-DD-HH:MM:SS only the YYYY-MM will be retrieved;
+                                              "year": means that for the date YYYY-MM-DD-HH:MM:SS only the YYYY will be retrieved;
 
   -dt, --document_type             - Type of the document text.
                                      Default: "News", 
                                      Options:
-                                             "News" for news-style documents - default param;
-                                             "Narrative" for narrative-style documents (e.g., Wikipedia articles);
-                                             "Colloquial" for English colloquial (e.g., Tweets and SMS);
-                                             "Scientific" for scientific articles (e.g., clinical trails).
+                                             "News": for news-style documents - default param;
+                                             "Narrative": for narrative-style documents (e.g., Wikipedia articles);
+                                             "Colloquial": for English colloquial (e.g., Tweets and SMS);
+                                             "Scientific": for scientific articles (e.g., clinical trails).
 
   -dct, --document_creation_time   - Document creation date in the format YYYY-MM-DD. Taken into account when "News" or
                                      "Colloquial" texts are specified.
