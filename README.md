@@ -50,6 +50,11 @@ is exactly the same thing and produces the same results.
 ````
 
 #### _With all the parameters_
+Other options include the specification of the: 
+- `date granularity`: <b>""</b> (Highest possible granularity detected will be retrieved); <b>"year"</b> (YYYY will be retrieved); <b>"month"</b> (YYYY-MM will be retrieved); <b>"day"</b> (YYYY-MM-DD will be retrieved)
+- `document type` <b>"news"</b> (news-style documents); <b>"narrative"</b> (narrative-style documents (e.g., Wikipedia articles)); <b>"colloquial"</b> (English colloquial (e.g., Tweets and SMS)); <b>"scientific"</b> (scientific articles (e.g., clinical trails))
+- `document creation time`: in the format <b>YYYY-MM-DD</b>
+
 ```` bash
 py_heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
 ````
@@ -69,7 +74,9 @@ Usage_examples (make sure that the input parameters are within quotes):
   All the Parameters: py_heideltime -t "August 31st" -l "English" -dg "day" -dt "News" -dct "1939-08-31"
 
   Output: the output will be a list of temporal expressions (TE) in the format [(normalized TE; TE as it is found in the text),….] or an empty list [] if no temporal expression is found in the text.
+```
 
+``` bash
 Options:
   [partilally-required]: either specify a text or an input_file path.
   ----------------------------------------------------------------------------------------------------------------------------------
