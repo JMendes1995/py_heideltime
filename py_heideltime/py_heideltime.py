@@ -6,7 +6,7 @@ import subprocess
 import re
 
 
-def py_heideltime(text, language='english',  date_granularity='', document_type='news', document_creation_time=''):
+def py_heideltime(text, language='English',  date_granularity='', document_type='news', document_creation_time=''):
     full_path = ''
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
