@@ -89,52 +89,54 @@ py_heideltime -t "August 31st" -l "English" -dg "day" -dt "News" -dct "1939-08-3
 ``` bash
   [partilally-required]: either specify a text or an input_file path.
   ----------------------------------------------------------------------------------------------------------------------------------
-  -t, --text TEXT                       - Input text.
-                                          Example: “August 31st”.
+  -t, --text                        - Input text.
+                                      Example: “August 31st”.
 
-  -i, --input_file TEXT                 - Text file path.
-                                          Example: “c:\text.txt”.
+  -i, --input_file                  - Text file path.
+                                      Example: “c:\text.txt”.
 
 ```
 
 ``` bash
   [required]
   ----------------------------------------------------------------------------------------------------------------------------------
-  -l, --language TEXT                   - Language of the text.
-                                          Default: "English"
-                                          Options:
-                                                  - "English";
-                                                  - "Portuguese";
-                                                  - "Spanish";
-                                                  - "Germany";
-                                                  - "Dutch";
-                                                  - "Italian";
-                                                  - "French".
+  -l, --language                    - Language of the text.
+                                      Default: "English"
+                                      Options:
+                                              "English";
+                                              "Portuguese";
+                                              "Spanish";
+                                              "Germany";
+                                              "Dutch";
+                                              "Italian";
+                                              "French".
 ```
 
 ``` bash
   [not required]
   -----------------------------------------------------------------------------------------------------------------------------------
-  -dg, --date_granularity TEXT          - Date granularity
-                                          Default: "", meaning that it will consider the highest possible granularity 
-                                          Filter Options:
-                                                - "year" (means that for the date YYYY-MM-DD only the YYYY will be retrieved);
-                                                - "month" (means that for the date YYYY-MM-DD only the YYYY-MM will be retrieved);
-                                                - "day" - (means that for the date YYYY-MM-DD it will retrieve YYYY-MM-DD).
+  -dg, --date_granularity           - Date granularity
+                                      Default: "full" 
+                                      Options:
+                                              "full" (means that all types of granularity will be retrieved, from the coarsest to 
+                                                      the finest-granularity).
+                                              "day" (means that for the date YYYY-MM-DD-HH:MM:SS it will retrieve YYYY-MM-DD);
+                                              "month" (means that for the date YYYY-MM-DD-HH:MM:SS only the YYYY-MM will be retrieved);
+                                              "year" (means that for the date YYYY-MM-DD-HH:MM:SS only the YYYY will be retrieved);
 
-  -dt, --document_type TEXT             - Type of the document text.
-                                          Default: "News", 
-                                          Options:
-                                                - "News" for news-style documents - default param;
-                                                - "Narrative" for narrative-style documents (e.g., Wikipedia articles);
-                                                - "Colloquial" for English colloquial (e.g., Tweets and SMS);
-                                                - "Scientific" for scientific articles (e.g., clinical trails).
+  -dt, --document_type             - Type of the document text.
+                                     Default: "News", 
+                                     Options:
+                                             "News" for news-style documents - default param;
+                                             "Narrative" for narrative-style documents (e.g., Wikipedia articles);
+                                             "Colloquial" for English colloquial (e.g., Tweets and SMS);
+                                             "Scientific" for scientific articles (e.g., clinical trails).
 
-  -dct, --document_creation_time TEXT   - Document creation date in the format YYYY-MM-DD. Taken into account when "News" or
-                                          "Colloquial" texts are specified.
-                                          Example: "2019-05-30".
+  -dct, --document_creation_time   - Document creation date in the format YYYY-MM-DD. Taken into account when "News" or
+                                     "Colloquial" texts are specified.
+                                      Example: "2019-05-30".
 
-  --help                                - Show this message and exit.
+  --help                           - Show this message and exit.
 
 ```
 
