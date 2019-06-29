@@ -2,7 +2,7 @@ def verify_temporal_tagger(language,date_granularity, document_type, document_cr
     if language == '':
         print('You must select a valid language.\n')
         return exit(1)
-    elif date_granularity != 'full' and date_granularity != 'day'and date_granularity != 'month' and date_granularity != 'year':
+    elif date_granularity != 'full' and date_granularity != 'day'and date_granularity != 'month' and date_granularity != 'year' and date_granularity !='':
         print('You must select a valid date_granularity.\n'
               'options:\n'
               '     full;\n'
