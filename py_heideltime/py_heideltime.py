@@ -6,9 +6,11 @@ import subprocess
 import re
 from py_heideltime.validate_input import verify_temporal_tagger
 
-def py_heideltime(text, language='English',  date_granularity='full', document_type='news', document_creation_time=''):
+def py_heideltime(text, language='English',  date_granularity='full', document_type='news', document_creation_time='yyyy-mm-dd'):
     full_path = ''
-    verify_temporal_tagger(language, date_granularity, document_type, document_creation_time)
+    result = verify_temporal_tagger(language, date_granularity, document_type, document_creation_time)
+    if result == {}:
+        return result
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
         full_path = path + "/Heideltime/TreeTaggerLinux"
@@ -107,12 +109,13 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
     list_dates=[]
     match = re.findall('\d{4}[-]\d{2}[-]\d{2}', document_creation_time)
 
-    if match == [] and document_creation_time != '':
-        print('Bad document_creation_time format you must specify da date in YYYY-MM-DD format.')
+    if match == []:
+        print('Bad document_creation_time format you must specify date in the following format: YYYY-MM-DD.')
+        return {}
     else:
         n=0
         while n <= file_number:
-            if document_creation_time == '':
+            if document_creation_time == 'yyyy-mm-dd':
                 java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar   ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
             else:
                 java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' +\
