@@ -52,7 +52,7 @@ The output will be a list of temporal expressions (TE) in the format [(normalize
 
 #### _With all the parameters_
 Other options include the specification of the: 
-- `date granularity`: <b>""</b> (Highest possible granularity detected will be retrieved); <b>"year"</b> (YYYY will be retrieved); <b>"month"</b> (YYYY-MM will be retrieved); <b>"day"</b> (YYYY-MM-DD will be retrieved)
+- `date granularity`: <b>"full"</b> (Highest possible granularity detected will be retrieved); <b>"year"</b> (YYYY will be retrieved); <b>"month"</b> (YYYY-MM will be retrieved); <b>"day"</b> (YYYY-MM-DD will be retrieved)
 - `document type` <b>"news"</b> (news-style documents); <b>"narrative"</b> (narrative-style documents (e.g., Wikipedia articles)); <b>"colloquial"</b> (English colloquial (e.g., Tweets and SMS)); <b>"scientific"</b> (scientific articles (e.g., clinical trails))
 - `document creation time`: in the format <b>YYYY-MM-DD</b>
 
