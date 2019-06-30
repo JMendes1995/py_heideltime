@@ -1,5 +1,5 @@
 def verify_temporal_tagger(language,date_granularity, document_type, document_creation_time):
-    from lang import languages
+    from py_heideltime.lang import languages
     if language.lower() not in languages:
         print('You must select a valid language.\n')
         return {}
