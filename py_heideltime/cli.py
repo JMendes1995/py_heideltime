@@ -63,9 +63,9 @@ Options:
 
     def run_py_heideltime(text):
         lang = get_arguments_values(arg, '-l', '--language', 'English')
-        date_granularity = get_arguments_values(arg, '-dg', '--date_granularity', '')
+        date_granularity = get_arguments_values(arg, '-dg', '--date_granularity', 'full')
         document_type = get_arguments_values(arg, '-dt', '--document_type', 'news')
-        document_creation_time = get_arguments_values(arg, '-dct', '--document_creation_time', '')
+        document_creation_time = get_arguments_values(arg, '-dct', '--document_creation_time', 'yyyy-mm-dd')
         output = py_heideltime(text, lang, date_granularity, document_type, document_creation_time)
 
         print(output)

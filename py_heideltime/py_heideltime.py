@@ -4,7 +4,7 @@ import imp
 import platform
 import subprocess
 import re
-from py_heideltime.validate_input import verify_temporal_tagger
+from validate_input import verify_temporal_tagger
 
 def py_heideltime(text, language='English',  date_granularity='full', document_type='news', document_creation_time='yyyy-mm-dd'):
     full_path = ''
