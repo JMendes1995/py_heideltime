@@ -110,7 +110,7 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
     match = re.findall('\d{4}[-]\d{2}[-]\d{2}', document_creation_time)
 
     if match == [] and document_creation_time !='yyyy-mm-dd':
-        print('Bad document_creation_time format you must specify date in the following format: YYYY-MM-DD.')
+        print('Please specify date in the following format: YYYY-MM-DD.')
         return {}
     else:
         n=0
