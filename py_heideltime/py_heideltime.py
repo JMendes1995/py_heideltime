@@ -107,7 +107,7 @@ def create_txt_files(text):
 
 def exec_java_heideltime(file_number, path, full_path,language, document_type, document_creation_time, date_granularity):
     list_dates=[]
-    match = re.findall('\d{4}[-]\d{2}[-]\d{2}', document_creation_time)
+    match = re.findall('^\d{4}[-]\d{2}[-]\d{2}$', document_creation_time)
 
     if match == [] and document_creation_time !='yyyy-mm-dd':
         print('Please specify date in the following format: YYYY-MM-DD.')
