@@ -6,9 +6,10 @@ import subprocess
 import re
 from py_heideltime.validate_input import verify_temporal_tagger
 
+
 def py_heideltime(text, language='English',  date_granularity='full', document_type='news', document_creation_time='yyyy-mm-dd'):
     full_path = ''
-    result = verify_temporal_tagger(language, date_granularity, document_type, document_creation_time)
+    result = verify_temporal_tagger(language, date_granularity, document_type)
     if result == {}:
         return result
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
@@ -153,8 +154,7 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
         # write error message for linux users to advertise that should give execute java heideltime
         if list_dates == [] and platform.system() == 'Linux':
             print('Sorry, maybe something went wrong.')
-            print('Please check if the format of values of variables are like the documentation or')
-            print('run this command to give execution privileges to execute java heideltime')
+            print('Please try to run this command to give execution privileges to execute java heideltime')
             print('sudo chmod 111 ' + full_path + '/bin/*')
 
     return list_dates
