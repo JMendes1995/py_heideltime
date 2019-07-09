@@ -136,7 +136,7 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
             for i in range(len(root)):
                 # insert in list the date value and the expression that originate the date
                 if date_granularity != 'full':
-                    if re.match('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value']):
+                    try:
                         if date_granularity.lower() == 'year':
                             years = re.findall('\w{4}', root[i].attrib['value'])
                             list_dates.append((years[0], root[i].text))
@@ -146,6 +146,8 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
                         elif date_granularity.lower() == 'day':
                             days = re.findall('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value'])
                             list_dates.append((days[0], root[i].text))
+                    except:
+                        pass
                 else:
                     try:
                         list_dates.append((root[i].attrib['value'], root[i].text))
