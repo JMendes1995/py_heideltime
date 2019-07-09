@@ -11,7 +11,8 @@ def py_heideltime(text, language='English',  date_granularity='full', document_t
     full_path = ''
     result = verify_temporal_tagger(language, date_granularity, document_type)
     if result == {}:
-        return result
+        return {}
+    
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
         full_path = path + "/Heideltime/TreeTaggerLinux"
