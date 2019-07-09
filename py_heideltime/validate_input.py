@@ -1,6 +1,7 @@
 def verify_temporal_tagger(language,date_granularity, document_type):
     from py_heideltime.lang import languages
-    if language.lower() not in languages:
+    document_type_list = ['news', 'narrative', 'colloquial', 'scientific']
+    if not isinstance(languages, str) and language not in languages or language.lower() not in languages:
         print('Please specify a valid language.\n'
               'Options:\n'
               '      English;\n'
@@ -19,7 +20,7 @@ def verify_temporal_tagger(language,date_granularity, document_type):
               '     month:\n'
               '     day;')
         return {}
-    elif document_type.lower() != 'news'and document_type.lower() != 'narrative' and document_type.lower() != 'colloquial' and document_type.lower() != 'scientific' and (document_type.lower() != '' or document_type.lower() == ''):
+    elif not isinstance(document_type, str) and document_type not in document_type_list or document_type.lower() not in document_type_list:
         print('Please specify a valid document_type.\n'
               'options:\n'
               '     news;\n'
