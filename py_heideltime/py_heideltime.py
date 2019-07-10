@@ -138,13 +138,13 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
                 if date_granularity != 'full':
                     try:
                         if date_granularity.lower() == 'year':
-                            years = re.findall('\w{4}', root[i].attrib['value'])
+                            years = re.findall('\d{4}', root[i].attrib['value'])
                             list_dates.append((years[0], root[i].text))
                         elif date_granularity.lower() == 'month':
-                            months = re.findall('\w{4}[-]\w{2}', root[i].attrib['value'])
+                            months = re.findall('\d{4}[-]\d{2}', root[i].attrib['value'])
                             list_dates.append((months[0], root[i].text))
                         elif date_granularity.lower() == 'day':
-                            days = re.findall('\w{4}[-]\w{2}[-]\w{2}', root[i].attrib['value'])
+                            days = re.findall('\d{4}[-]\d{2}[-]\d{2}', root[i].attrib['value'])
                             list_dates.append((days[0], root[i].text))
                     except:
                         pass
