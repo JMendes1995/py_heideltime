@@ -109,6 +109,7 @@ def create_txt_files(text):
 
 def exec_java_heideltime(file_number, path, full_path,language, document_type, document_creation_time, date_granularity):
     list_dates=[]
+    normalized_dates = []
     nt = ''
     tt = ''
     match = re.findall('^\d{4}[-]\d{2}[-]\d{2}$', document_creation_time)
@@ -154,8 +155,9 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
                         list_dates.append((root[i].attrib['value'], root[i].text))
                     except:
                         pass
+                normalized_dates.append(root[i].attrib['value'])
             n += 1
-            new_text, tagged_text = refactor_text(myCmd, list_dates)
+            new_text, tagged_text = refactor_text(myCmd, normalized_dates)
             nt += new_text
             tt += tagged_text
         # write error message for linux users to advertise that should give execute java heideltime
@@ -167,9 +169,9 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
     return list_dates, nt, tt
 
 
-def refactor_text(myCmd, list_dates):
+def refactor_text(myCmd, normalized_dates):
     from bs4 import BeautifulSoup
-
+    print(normalized_dates)
     striped_text = str(myCmd.decode("utf-8")).split('\n')
 
     soup = BeautifulSoup(striped_text[3], "lxml")
@@ -178,7 +180,7 @@ def refactor_text(myCmd, list_dates):
 
     for i in range(len(ListOfTagContents)):
         x = re.findall(str(ListOfTagContents[i]), nt,  re.IGNORECASE)
-        nt = re.sub(x[0], list_dates[i][0], nt,  re.IGNORECASE)
+        nt = re.sub(x[0], normalized_dates[i], nt,  re.IGNORECASE)
 
     return nt, str(striped_text[3])
 
