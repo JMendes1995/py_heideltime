@@ -171,7 +171,6 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
 
 def refactor_text(myCmd, normalized_dates):
     from bs4 import BeautifulSoup
-    print(normalized_dates)
     striped_text = str(myCmd.decode("utf-8")).split('\n')
 
     soup = BeautifulSoup(striped_text[3], "lxml")
