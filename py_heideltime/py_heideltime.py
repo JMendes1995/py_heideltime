@@ -170,7 +170,7 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
 def refactor_text(myCmd, list_dates):
     from bs4 import BeautifulSoup
 
-    striped_text = str(myCmd).split('\\n')
+    striped_text = str(myCmd.decode("utf-8")).split('\n')
 
     soup = BeautifulSoup(striped_text[3], "lxml")
     ListOfTagContents = soup.find_all('timex3')
@@ -179,8 +179,6 @@ def refactor_text(myCmd, list_dates):
     for i in range(len(ListOfTagContents)):
         x = re.findall(str(ListOfTagContents[i]), nt,  re.IGNORECASE)
         nt = re.sub(x[0], list_dates[i][0], nt,  re.IGNORECASE)
-
-
 
     return nt, str(striped_text[3])
 
