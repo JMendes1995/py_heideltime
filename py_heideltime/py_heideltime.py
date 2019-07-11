@@ -87,9 +87,9 @@ uimaVarTypeToProcess = Type
     f.write(conf)
     f.close()
     num_files = create_txt_files(text)
-    list_dates = exec_java_heideltime(num_files, path, full_path, language, document_type, document_creation_time, date_granularity)
+    list_dates, new_text, tagged_text = exec_java_heideltime(num_files, path, full_path, language, document_type, document_creation_time, date_granularity)
     remove_files(num_files)
-    return list_dates
+    return list_dates, new_text, tagged_text
 
 
 def create_txt_files(text):
@@ -109,8 +109,9 @@ def create_txt_files(text):
 
 def exec_java_heideltime(file_number, path, full_path,language, document_type, document_creation_time, date_granularity):
     list_dates=[]
+    nt = ''
+    tt = ''
     match = re.findall('^\d{4}[-]\d{2}[-]\d{2}$', document_creation_time)
-
     if match == [] and document_creation_time !='yyyy-mm-dd':
         print('Please specify date in the following format: YYYY-MM-DD.')
         return {}
@@ -154,13 +155,34 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
                     except:
                         pass
             n += 1
+            new_text, tagged_text = refactor_text(myCmd, list_dates)
+            nt += new_text
+            tt += tagged_text
         # write error message for linux users to advertise that should give execute java heideltime
         if list_dates == [] and platform.system() == 'Linux':
             print('Sorry, maybe something went wrong.')
             print('Please try to run this command to give execution privileges to execute java heideltime')
             print('sudo chmod 111 ' + full_path + '/bin/*')
 
-    return list_dates
+    return list_dates, nt, tt
+
+
+def refactor_text(myCmd, list_dates):
+    from bs4 import BeautifulSoup
+
+    striped_text = str(myCmd).split('\\n')
+
+    soup = BeautifulSoup(striped_text[3], "lxml")
+    ListOfTagContents = soup.find_all('timex3')
+    nt = str(striped_text[3])
+
+    for i in range(len(ListOfTagContents)):
+        x = re.findall(str(ListOfTagContents[i]), nt,  re.IGNORECASE)
+        nt = re.sub(x[0], list_dates[i][0], nt,  re.IGNORECASE)
+
+
+
+    return nt, str(striped_text[3])
 
 
 def remove_files(num_files):
