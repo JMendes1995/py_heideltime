@@ -5,12 +5,14 @@ For more information about this temporal tagger, please visit the Heideltime Jav
 
 This wrapper has been developed by Jorge Mendes under the supervision of [Professor Ricardo Campos](http://www.ccc.ipt.pt/~ricardo/) in the scope of the Final Project of the Computer Science degree at the [Polytechnic Institute of Tomar](http://portal2.ipt.pt/), Portugal.
 
-Although there already exist some python models for Heideltime (in particular https://github.com/amineabdaoui/python-heideltime) all of them require a considerable intervention from the user side. In this project, we aim to overcome some of these limitations. Our aim was four-fold:
+Although there already exist some python packages for Heideltime (in particular https://github.com/amineabdaoui/python-heideltime) all of them require a considerable intervention from the user side. In this project, we aim to overcome some of these limitations. Our aim was six-fold:
 
  - To provide a multi-platform (windows, Linux, Mac Os);
- - To make it user friendly not only in terms of installation but also in its usage;
+ - To make it user-friendly not only in terms of installation but also in its usage;
  - To make it lightweight without compromising its behavior;
- - To give the user the chance to choose the granularity (e.g., year, month, etc) of the dates to be extracted.
+ - To give the user the chance to choose the granularity (e.g., year, month, etc) of the dates to be extracted;
+ - To retrieve to the user a normalized version of the text (where each temporal expression is replaced by the normalized Heideltime version); and
+ - To retrieve a Time-ML annotated version of the text (as done in the Heideltime demo).
 
 ## How to install py_heideltime
 In order to use py_heideltime you must have [java JDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) and [perl](https://www.perl.org/get.html) installed in your machine for heideltime dependencies.
@@ -34,36 +36,81 @@ Thurs August 31st - News today that they are beginning to evacuate the London ch
 Default language is "English" and document_type is "news" which means that having:
 
 ```` bash
-py_heideltime(text)
+TempExpressions, TextNormalized, TimeML = py_heideltime(text)
 ````
 
 or:
 
 ```` bash
-py_heideltime(text, language='English',  document_type='news')
+TempExpressions, TextNormalized, TimeML = py_heideltime(text, language='English',  document_type='news')
 ````
 is exactly the same thing and produces the same results.
 
 ###### Output
-The output will be a list of temporal expressions (TE) in the format [(normalized TE; TE as it is found in the text),….] or an empty list [] if no temporal expression is found in the text.
+The output will be a list of 3 elements or an empty list [] if no temporal expression is found in the text. The three elements are:
+
+- a list of tuples with two positions (e.g., ('XXXX-08-31', 'August 31st')). The first one is the detected temporal expression normalized by heideltime. The second is the temporal expression as it was found in the text;
+- a normalized version of the text, where each temporal expression is replaced by its normalized heideltime counterpart;
+- a TimeML-annotated version of the text.
+
 ```` bash
-[('XXXX-08-31', 'August 31st'), ('PRESENT_REF', 'today'), ('XXXX-XX-XX', 'tomorrow')]
+TempExpressions
+````
+```` bash
+[('XXXX-08-31', 'August 31st'),
+ ('PRESENT_REF', 'today'),
+ ('XXXX-XX-XX', 'tomorrow')]
 ````
 
-#### _With all the parameters_
-Other options include the specification of the: 
+```` bash
+TextNormalized
+````
+```` bash
+'Thurs XXXX-08-31 - News PRESENT_REF that they are beginning to evacuate the London children XXXX-XX-XX. Percy is a billeting officer. I can't see that they will be much safer here.'
+````
+
+```` bash
+TimeML
+````
+```` bash
+'Thurs <TIMEX3 tid="t2" type="DATE" value="XXXX-08-31">August 31st</TIMEX3> - News <TIMEX3 tid="t3" type="DATE" value="PRESENT_REF">today</TIMEX3> that they are beginning to evacuate the London children <TIMEX3 tid="t4" type="DATE" value="XXXX-XX-XX">tomorrow</TIMEX3>. Percy is a billeting officer. I can\'t see that they will be much safer here.'
+````
+
+#### _Optional parameters_
+Besides running py_heideltime with the default parameters, users can also specify more advanced options. These are:  
 - `date granularity`: <b>"full"</b> (Highest possible granularity detected will be retrieved); <b>"year"</b> (YYYY will be retrieved); <b>"month"</b> (YYYY-MM will be retrieved); <b>"day"</b> (YYYY-MM-DD will be retrieved)
 - `document type` <b>"news"</b> (news-style documents); <b>"narrative"</b> (narrative-style documents (e.g., Wikipedia articles)); <b>"colloquial"</b> (English colloquial (e.g., Tweets and SMS)); <b>"scientific"</b> (scientific articles (e.g., clinical trails))
 - `document creation time`: in the format <b>YYYY-MM-DD</b>
 
 ```` bash
-py_heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
+TempExpressions, TextNormalized, TimeML = py_heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
 ````
+
 ###### Output
-The output will be a list of temporal expressions (TE) in the format [(normalized TE; TE as it is found in the text),….] or an empty list [] if no temporal expression is found in the text.
+The output follows the same patterns as described above.
+
 
 ```` bash
-[('1939-08-31', 'August 31st'), ('1939-08-31', 'today'), ('1939-09-01', 'tomorrow')] 
+TempExpressions
+````
+```` bash
+[('1939-08-31', 'August 31st'),
+ ('1939-08-31', 'today'),
+ ('1939-09-01', 'tomorrow')]
+````
+
+```` bash
+TextNormalized
+````
+```` bash
+'Thurs 1939-08-31 - News 1939-08-31 that they are beginning to evacuate the London children 1939-09-01. Percy is a billeting officer. I can't see that they will be much safer here.'
+````
+
+```` bash
+TimeML
+````
+```` bash
+'Thurs <TIMEX3 tid="t2" type="DATE" value="1939-08-31">August 31st</TIMEX3> - News <TIMEX3 tid="t3" type="DATE" value="1939-08-31">today</TIMEX3> that they are beginning to evacuate the London children <TIMEX3 tid="t4" type="DATE" value="1939-09-01">tomorrow</TIMEX3>. Percy is a billeting officer. I can\'t see that they will be much safer here.'
 ````
 
 
