@@ -155,7 +155,10 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
                         list_dates.append((root[i].attrib['value'], root[i].text))
                     except:
                         pass
-                normalized_dates.append(root[i].attrib['value'])
+                try:
+                    normalized_dates.append(root[i].attrib['value'])
+                except:
+                    pass
             n += 1
             new_text, tagged_text = refactor_text(myCmd, normalized_dates)
             nt += new_text
@@ -170,19 +173,15 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
 
 
 def refactor_text(myCmd, normalized_dates):
-    from bs4 import BeautifulSoup
-    striped_text = str(myCmd.decode("utf-8")).split('\n')
 
-    soup = BeautifulSoup(striped_text[3], "lxml")
-    ListOfTagContents = soup.find_all('timex3')
+    striped_text = str(myCmd.decode("utf-8")).split('\n')
+    ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd.decode("utf-8")))
     nt = str(striped_text[3])
 
     for i in range(len(ListOfTagContents)):
-        x = re.findall(str(ListOfTagContents[i]), nt,  re.IGNORECASE)
-        nt = re.sub(x[0], normalized_dates[i], nt,  re.IGNORECASE)
+        nt = re.sub('<TIMEX3'+ListOfTagContents[i]+'</TIMEX3>', normalized_dates[i], nt, re.IGNORECASE)
 
     return nt, str(striped_text[3])
-
 
 def remove_files(num_files):
     import os
