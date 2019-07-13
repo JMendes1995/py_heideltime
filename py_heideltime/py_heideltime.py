@@ -193,7 +193,7 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
 def refactor_text(normalized_dates, ListOfTagContents, nt):
 
     for i in range(len(ListOfTagContents)):
-        nt = re.sub('<TIMEX3'+ListOfTagContents[i]+'</TIMEX3>', normalized_dates[i], nt, re.IGNORECASE)
+        nt = re.sub('<TIMEX3'+ListOfTagContents[i]+'</TIMEX3>', '<d>'+normalized_dates[i]+'</d>', nt, re.IGNORECASE)
     return nt
 
 def remove_files(num_files):
