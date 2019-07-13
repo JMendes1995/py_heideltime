@@ -87,6 +87,7 @@ uimaVarTypeToProcess = Type
     f.write(conf)
     f.close()
     num_files = create_txt_files(text)
+
     list_dates, new_text, tagged_text = exec_java_heideltime(num_files, path, full_path, language, document_type, document_creation_time, date_granularity)
     remove_files(num_files)
     return list_dates, new_text, tagged_text
@@ -109,7 +110,6 @@ def create_txt_files(text):
 
 def exec_java_heideltime(file_number, path, full_path,language, document_type, document_creation_time, date_granularity):
     list_dates=[]
-    normalized_dates = []
     nt = ''
     tt = ''
     match = re.findall('^\d{4}[-]\d{2}[-]\d{2}$', document_creation_time)
@@ -119,6 +119,7 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
     else:
         n=0
         while n <= file_number:
+            normalized_dates_list = []
             if document_creation_time == 'yyyy-mm-dd':
                 java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar   ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
             else:
@@ -130,39 +131,43 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
             else:
                 myCmd = os.popen(java_command).read()
 
-            # parsing the xml to get only the date value and the expression that originate the date
+            # Find tags from java output
+            striped_text = str(myCmd.decode("utf-8")).split('\n')
+            ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd.decode("utf-8")))
+            # tagged text from java output
+            tagged_text = str(striped_text[3])
 
-            from lxml import etree
-            parser = etree.XMLParser(recover=True)
-            root = etree.fromstring(myCmd, parser=parser)
-            for i in range(len(root)):
+            for i in range(len(ListOfTagContents)):
+                # normalized date
+                normalized_dates = re.findall('value="(.*?)"', ListOfTagContents[i], re.IGNORECASE)
+                # original fate
+                original_dates = re.findall('>(.+)', ListOfTagContents[i], re.IGNORECASE)
                 # insert in list the date value and the expression that originate the date
                 if date_granularity != 'full':
                     try:
                         if date_granularity.lower() == 'year':
-                            years = re.findall('\d{4}', root[i].attrib['value'])
-                            list_dates.append((years[0], root[i].text))
+                            years = re.findall('\d{4}', normalized_dates[0])
+                            list_dates.append((years[0], original_dates[0]))
                         elif date_granularity.lower() == 'month':
-                            months = re.findall('\d{4}[-]\d{2}', root[i].attrib['value'])
-                            list_dates.append((months[0], root[i].text))
+                            months = re.findall('\d{4}[-]\d{2}', normalized_dates[0])
+                            list_dates.append((months[0], original_dates[0]))
                         elif date_granularity.lower() == 'day':
-                            days = re.findall('\d{4}[-]\d{2}[-]\d{2}', root[i].attrib['value'])
-                            list_dates.append((days[0], root[i].text))
+                            days = re.findall('\d{4}[-]\d{2}[-]\d{2}', normalized_dates[0])
+                            list_dates.append((days[0], original_dates[0]))
                     except:
                         pass
                 else:
                     try:
-                        list_dates.append((root[i].attrib['value'], root[i].text))
+                        list_dates.append((normalized_dates[0], original_dates[0]))
                     except:
                         pass
-                try:
-                    normalized_dates.append(root[i].attrib['value'])
-                except:
-                    pass
+                normalized_dates_list.append(normalized_dates[0])
             n += 1
-            new_text, tagged_text = refactor_text(myCmd, normalized_dates)
+            new_text = refactor_text(normalized_dates_list, ListOfTagContents, tagged_text)
+
             nt += new_text
             tt += tagged_text
+
         # write error message for linux users to advertise that should give execute java heideltime
         if list_dates == [] and platform.system() == 'Linux':
             print('Sorry, maybe something went wrong.')
@@ -172,16 +177,11 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
     return list_dates, nt, tt
 
 
-def refactor_text(myCmd, normalized_dates):
-
-    striped_text = str(myCmd.decode("utf-8")).split('\n')
-    ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd.decode("utf-8")))
-    nt = str(striped_text[3])
+def refactor_text(normalized_dates, ListOfTagContents, nt):
 
     for i in range(len(ListOfTagContents)):
         nt = re.sub('<TIMEX3'+ListOfTagContents[i]+'</TIMEX3>', normalized_dates[i], nt, re.IGNORECASE)
-
-    return nt, str(striped_text[3])
+    return nt
 
 def remove_files(num_files):
     import os
