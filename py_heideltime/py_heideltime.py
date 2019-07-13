@@ -11,7 +11,8 @@ def py_heideltime(text, language='English',  date_granularity='full', document_t
     full_path = ''
     result = verify_temporal_tagger(language, date_granularity, document_type)
     if result == {}:
-        return {}
+        print([])
+        raise SystemExit
     
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
@@ -143,17 +144,30 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
                 # original fate
                 original_dates = re.findall('>(.+)', ListOfTagContents[i], re.IGNORECASE)
                 # insert in list the date value and the expression that originate the date
+                normalized_dates_list.append(normalized_dates[0])
+
                 if date_granularity != 'full':
                     try:
                         if date_granularity.lower() == 'year':
                             years = re.findall('\d{4}', normalized_dates[0])
                             list_dates.append((years[0], original_dates[0]))
+                            if re.match(years[0]+'(.*?)', normalized_dates[0]):
+                                normalized_dates_list[len(normalized_dates_list)-1] = years[0]
+
+
                         elif date_granularity.lower() == 'month':
                             months = re.findall('\d{4}[-]\d{2}', normalized_dates[0])
                             list_dates.append((months[0], original_dates[0]))
+                            if re.match(months[0]+'(.*?)', normalized_dates[0]):
+                                normalized_dates_list[len(normalized_dates_list)-1] = months[0]
+
+
                         elif date_granularity.lower() == 'day':
                             days = re.findall('\d{4}[-]\d{2}[-]\d{2}', normalized_dates[0])
                             list_dates.append((days[0], original_dates[0]))
+                            if re.match(days[0]+'(.*?)', normalized_dates[0]):
+                                normalized_dates_list[len(normalized_dates_list)-1] = days[0]
+
                     except:
                         pass
                 else:
@@ -161,10 +175,9 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
                         list_dates.append((normalized_dates[0], original_dates[0]))
                     except:
                         pass
-                normalized_dates_list.append(normalized_dates[0])
+
             n += 1
             new_text = refactor_text(normalized_dates_list, ListOfTagContents, tagged_text)
-
             nt += new_text
             tt += tagged_text
 
