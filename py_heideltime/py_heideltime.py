@@ -7,13 +7,14 @@ import re
 from py_heideltime.validate_input import verify_temporal_tagger
 
 
-def py_heideltime(text, language='English',  date_granularity='full', document_type='news', document_creation_time='yyyy-mm-dd'):
+def py_heideltime(text, language='English', date_granularity='full', document_type='news',
+                  document_creation_time='yyyy-mm-dd'):
     full_path = ''
     result = verify_temporal_tagger(language, date_granularity, document_type)
     if result == {}:
         print([])
         raise SystemExit
-    
+
     if platform.system() == 'Linux' or platform.system() == 'Darwin':
         path = imp.find_module('py_heideltime')[1]
         full_path = path + "/Heideltime/TreeTaggerLinux"
@@ -40,7 +41,7 @@ considerTemponym = false
 # Path to TreeTaggerLinux home directory
 ###################################
 # Ensure there is no white space in path (try to escape white spaces)
-treeTaggerHome = '''+full_path+'''
+treeTaggerHome = ''' + full_path + '''
 # This one is only necessary if you want to process chinese documents.
 chineseTokenizerPath = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/treetagger/chinese-tokenizer)
 ##################################
@@ -89,7 +90,8 @@ uimaVarTypeToProcess = Type
     f.close()
     num_files = create_txt_files(text)
 
-    list_dates, new_text, tagged_text = exec_java_heideltime(num_files, path, full_path, language, document_type, document_creation_time, date_granularity)
+    list_dates, new_text, tagged_text = exec_java_heideltime(num_files, path, full_path, language, document_type,
+                                                             document_creation_time, date_granularity)
     remove_files(num_files)
     return list_dates, new_text, tagged_text
 
@@ -101,7 +103,7 @@ def create_txt_files(text):
     num_files = 0
     for i in range(len(merge_sentenses)):
         te = " ".join(merge_sentenses[i])
-        text_file = codecs.open('text'+str(i)+'.txt', "w+", "utf-8")
+        text_file = codecs.open('text' + str(i) + '.txt', "w+", "utf-8")
         text_file.truncate()
         text_file.write(te)
         text_file.close()
@@ -109,32 +111,39 @@ def create_txt_files(text):
     return num_files
 
 
-def exec_java_heideltime(file_number, path, full_path,language, document_type, document_creation_time, date_granularity):
-    list_dates=[]
+def exec_java_heideltime(file_number, path, full_path, language, document_type, document_creation_time,
+                         date_granularity):
+    list_dates = []
     nt = ''
     tt = ''
     match = re.findall('^\d{4}[-]\d{2}[-]\d{2}$', document_creation_time)
-    if match == [] and document_creation_time !='yyyy-mm-dd':
+    if match == [] and document_creation_time != 'yyyy-mm-dd':
         print('Please specify date in the following format: YYYY-MM-DD.')
         return {}
     else:
-        n=0
+        n = 0
         while n <= file_number:
             normalized_dates_list = []
             if document_creation_time == 'yyyy-mm-dd':
-                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar   ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
+                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar   ' + document_type + ' -l ' + language + ' text' + str(
+                    n) + '.txt'
             else:
-                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' +\
-                               document_creation_time + ' -t ' + document_type + ' -l ' + language + ' text'+str(n)+'.txt'
+                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' + \
+                               document_creation_time + ' -t ' + document_type + ' -l ' + language + ' text' + str(
+                    n) + '.txt'
             # run java heideltime standalone version to get all dates
             if platform.system() == 'Windows':
                 myCmd = subprocess.check_output(java_command)
+                # Find tags from java output
+                striped_text = str(myCmd.decode("utf-8")).split('\n')
+                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd.decode("utf-8")))
             else:
                 myCmd = os.popen(java_command).read()
+                # Find tags from java output
+                striped_text = str(myCmd.encode('utf-8').decode("utf-8")).split('\n')
+                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd.encode('utf-8').decode("utf-8")))
 
-            # Find tags from java output
-            striped_text = str(myCmd.decode("utf-8")).split('\n')
-            ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd.decode("utf-8")))
+
             # tagged text from java output
             tagged_text = str(striped_text[3])
 
@@ -151,22 +160,22 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
                         if date_granularity.lower() == 'year':
                             years = re.findall('\d{4}', normalized_dates[0])
                             list_dates.append((years[0], original_dates[0]))
-                            if re.match(years[0]+'(.*?)', normalized_dates[0]):
-                                normalized_dates_list[len(normalized_dates_list)-1] = years[0]
+                            if re.match(years[0] + '(.*?)', normalized_dates[0]):
+                                normalized_dates_list[len(normalized_dates_list) - 1] = years[0]
 
 
                         elif date_granularity.lower() == 'month':
                             months = re.findall('\d{4}[-]\d{2}', normalized_dates[0])
                             list_dates.append((months[0], original_dates[0]))
-                            if re.match(months[0]+'(.*?)', normalized_dates[0]):
-                                normalized_dates_list[len(normalized_dates_list)-1] = months[0]
+                            if re.match(months[0] + '(.*?)', normalized_dates[0]):
+                                normalized_dates_list[len(normalized_dates_list) - 1] = months[0]
 
 
                         elif date_granularity.lower() == 'day':
                             days = re.findall('\d{4}[-]\d{2}[-]\d{2}', normalized_dates[0])
                             list_dates.append((days[0], original_dates[0]))
-                            if re.match(days[0]+'(.*?)', normalized_dates[0]):
-                                normalized_dates_list[len(normalized_dates_list)-1] = days[0]
+                            if re.match(days[0] + '(.*?)', normalized_dates[0]):
+                                normalized_dates_list[len(normalized_dates_list) - 1] = days[0]
 
                     except:
                         pass
@@ -191,15 +200,16 @@ def exec_java_heideltime(file_number, path, full_path,language, document_type, d
 
 
 def refactor_text(normalized_dates, ListOfTagContents, nt):
-
     for i in range(len(ListOfTagContents)):
-        nt = re.sub('<TIMEX3'+ListOfTagContents[i]+'</TIMEX3>', '<d>'+normalized_dates[i]+'</d>', nt, re.IGNORECASE)
+        nt = re.sub('<TIMEX3' + ListOfTagContents[i] + '</TIMEX3>', '<d>' + normalized_dates[i] + '</d>', nt,
+                    re.IGNORECASE)
     return nt
+
 
 def remove_files(num_files):
     import os
     os.remove('config.props')
     i_files = 0
     while i_files <= num_files:
-        os.remove('text'+str(i_files)+'.txt')
+        os.remove('text' + str(i_files) + '.txt')
         i_files += 1
