@@ -66,9 +66,16 @@ Options:
         date_granularity = get_arguments_values(arg, '-dg', '--date_granularity', 'full')
         document_type = get_arguments_values(arg, '-dt', '--document_type', 'news')
         document_creation_time = get_arguments_values(arg, '-dct', '--document_creation_time', 'yyyy-mm-dd')
-        output = py_heideltime(text, lang, date_granularity, document_type, document_creation_time)
-
-        print(output)
+        TempExpressions, TextNormalized, TimeML  = py_heideltime(text, lang, date_granularity, document_type, document_creation_time)
+        print('============================= Temporal Expressions ================================\n')
+        print(TempExpressions)
+        print('\n')
+        print('================================== Text Normalized ================================\n')
+        print(TextNormalized)
+        print('\n')
+        print('====================================== TimeML =====================================\n')
+        print(TempExpressions)
+        print('\n')
 
     if '--help' in arg:
         print(t)
