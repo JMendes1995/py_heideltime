@@ -74,7 +74,7 @@ Options:
         print(TextNormalized)
         print('\n')
         print('====================================== TimeML =====================================\n')
-        print(TempExpressions)
+        print(TimeML)
         print('\n')
 
     if '--help' in arg:
