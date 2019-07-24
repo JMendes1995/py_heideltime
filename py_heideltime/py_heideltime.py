@@ -204,7 +204,7 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
             print('Sorry, maybe something went wrong.')
             print('Please try to run this command to give execution privileges to execute java heideltime')
             print('sudo chmod 111 ' + full_path + '/bin/*')
-    ExecTimeDictionary['py_heideltime'] = exec_time_date_extractor
+    ExecTimeDictionary['DateExtraction'] = exec_time_date_extractor
     ExecTimeDictionary['TextFormat'] = exec_time_text_labeling
     return list_dates, nt, tt, ExecTimeDictionary
 
