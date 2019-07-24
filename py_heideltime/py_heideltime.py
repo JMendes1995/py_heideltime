@@ -5,7 +5,7 @@ import platform
 import subprocess
 import re
 from py_heideltime.validate_input import verify_temporal_tagger
-
+import time
 
 def py_heideltime(text, language='English', date_granularity='full', document_type='news',
                   document_creation_time='yyyy-mm-dd'):
@@ -90,10 +90,10 @@ uimaVarTypeToProcess = Type
     f.close()
     num_files = create_txt_files(text)
 
-    list_dates, new_text, tagged_text = exec_java_heideltime(num_files, path, full_path, language, document_type,
+    list_dates, new_text, tagged_text, ExecTimeDictionary = exec_java_heideltime(num_files, path, full_path, language, document_type,
                                                              document_creation_time, date_granularity)
     remove_files(num_files)
-    return list_dates, new_text, tagged_text
+    return list_dates, new_text, tagged_text, ExecTimeDictionary
 
 
 def create_txt_files(text):
@@ -116,6 +116,9 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
     list_dates = []
     nt = ''
     tt = ''
+    ExecTimeDictionary = {}
+    exec_time_date_extractor = 0
+    exec_time_text_labeling = 0
     match = re.findall('^\d{4}[-]\d{2}[-]\d{2}$', document_creation_time)
     if match == [] and document_creation_time != 'yyyy-mm-dd':
         print('Please specify date in the following format: YYYY-MM-DD.')
@@ -124,6 +127,7 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
         n = 0
         while n <= file_number:
             normalized_dates_list = []
+            extractor_start_time = time.time()
             if document_creation_time == 'yyyy-mm-dd':
                 java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar   ' + document_type + ' -l ' + language + ' text' + str(
                     n) + '.txt'
@@ -184,19 +188,25 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
                         list_dates.append((normalized_dates[0], original_dates[0]))
                     except:
                         pass
+            tt_exec_time = (time.time() - extractor_start_time)
+            exec_time_date_extractor += tt_exec_time
 
+            labeling_start_time = time.time()
             n += 1
             new_text = refactor_text(normalized_dates_list, ListOfTagContents, tagged_text)
             nt += new_text
             tt += tagged_text
 
+            label_text_exec_time = (time.time() - labeling_start_time)
+            exec_time_text_labeling += label_text_exec_time
         # write error message for linux users to advertise that should give execute java heideltime
         if list_dates == [] and platform.system() == 'Linux':
             print('Sorry, maybe something went wrong.')
             print('Please try to run this command to give execution privileges to execute java heideltime')
             print('sudo chmod 111 ' + full_path + '/bin/*')
-
-    return list_dates, nt, tt
+    ExecTimeDictionary['py_heideltime'] = exec_time_date_extractor
+    ExecTimeDictionary['TextFormat'] = exec_time_text_labeling
+    return list_dates, nt, tt, ExecTimeDictionary
 
 
 def refactor_text(normalized_dates, ListOfTagContents, nt):
