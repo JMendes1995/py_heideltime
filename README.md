@@ -36,22 +36,23 @@ Thurs August 31st - News today that they are beginning to evacuate the London ch
 Default language is "English" and document_type is "news" which means that having:
 
 ```` bash
-TempExpressions, TextNormalized, TimeML = py_heideltime(text)
+TempExpressions, TextNormalized, TimeML, ExecutionTime = py_heideltime(text)
 ````
 
 or:
 
 ```` bash
-TempExpressions, TextNormalized, TimeML = py_heideltime(text, language='English',  document_type='news')
+TempExpressions, TextNormalized, TimeML, ExecutionTime = py_heideltime(text, language='English',  document_type='news')
 ````
 is exactly the same thing and produces the same results.
 
 ###### Output
-The output will be a list of 3 elements or an empty list [] if no temporal expression is found in the text. The three elements are:
+The output will be a list of 4 elements or an empty list [] if no temporal expression is found in the text. The three elements are:
 
 - a list of tuples with two positions (e.g., ('XXXX-08-31', 'August 31st')). The first one is the detected temporal expression normalized by heideltime. The second is the temporal expression as it was found in the text;
 - a normalized version of the text, where each temporal expression is replaced by its normalized heideltime counterpart;
 - a TimeML-annotated version of the text.
+- the execution time of the algorithm, divided into `heideltime_processing` (i.e., the time spent by the heideltime algorithm in extracting temporal expressions) and `text_normalization` (the time spent by the program in labelling the temporal expressions found in the text with a tag <d>).
 
 ```` bash
 TempExpressions
@@ -76,6 +77,13 @@ TimeML
 'Thurs <TIMEX3 tid="t2" type="DATE" value="XXXX-08-31">August 31st</TIMEX3> - News <TIMEX3 tid="t3" type="DATE" value="PRESENT_REF">today</TIMEX3> that they are beginning to evacuate the London children <TIMEX3 tid="t4" type="DATE" value="XXXX-XX-XX">tomorrow</TIMEX3>. Percy is a billeting officer. I can\'t see that they will be much safer here.'
 ````
 
+```` bash
+ExecutionTime
+````
+```` bash
+{'heideltime_processing': 4.341801404953003, 'text_normalization': 0.0}
+````
+
 #### _Optional parameters_
 Besides running py_heideltime with the default parameters, users can also specify more advanced options. These are:  
 - `date granularity`: <b>"full"</b> (Highest possible granularity detected will be retrieved); <b>"year"</b> (YYYY will be retrieved); <b>"month"</b> (YYYY-MM will be retrieved); <b>"day"</b> (YYYY-MM-DD will be retrieved)
@@ -83,7 +91,7 @@ Besides running py_heideltime with the default parameters, users can also specif
 - `document creation time`: in the format <b>YYYY-MM-DD</b>
 
 ```` bash
-TempExpressions, TextNormalized, TimeML = py_heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
+TempExpressions, TextNormalized, TimeML, ExecutionTime = py_heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
 ````
 
 ###### Output
@@ -113,6 +121,12 @@ TimeML
 'Thurs <TIMEX3 tid="t2" type="DATE" value="1939-08-31">August 31st</TIMEX3> - News <TIMEX3 tid="t3" type="DATE" value="1939-08-31">today</TIMEX3> that they are beginning to evacuate the London children <TIMEX3 tid="t4" type="DATE" value="1939-09-01">tomorrow</TIMEX3>. Percy is a billeting officer. I can\'t see that they will be much safer here.'
 ````
 
+```` bash
+ExecutionTime
+````
+```` bash
+{'heideltime_processing': 4.341801404953003, 'text_normalization': 0.0}
+````
 
 ### Python CLI (Command Line Interface)
 #### Help
