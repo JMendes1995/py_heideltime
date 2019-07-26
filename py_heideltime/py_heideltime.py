@@ -167,13 +167,11 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
                             if re.match(years[0] + '(.*?)', normalized_dates[0]):
                                 normalized_dates_list[len(normalized_dates_list) - 1] = years[0]
 
-
                         elif date_granularity.lower() == 'month':
                             months = re.findall('\d{4}[-]\d{2}', normalized_dates[0])
                             list_dates.append((months[0], original_dates[0]))
                             if re.match(months[0] + '(.*?)', normalized_dates[0]):
                                 normalized_dates_list[len(normalized_dates_list) - 1] = months[0]
-
 
                         elif date_granularity.lower() == 'day':
                             days = re.findall('\d{4}[-]\d{2}[-]\d{2}', normalized_dates[0])
