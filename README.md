@@ -81,7 +81,7 @@ TimeML
 ExecutionTime
 ````
 ```` bash
-{'heideltime_processing': 4.341801404953003, 'text_normalization': 0.0}
+{'heideltime_processing': 4.341801404953003, 'py_heideltime_text_normalization': 0.0}
 ````
 
 #### _Optional parameters_
