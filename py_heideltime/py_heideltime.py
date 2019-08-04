@@ -93,7 +93,7 @@ uimaVarTypeToProcess = Type
     list_dates, new_text, tagged_text, ExecTimeDictionary = exec_java_heideltime(num_files, path, full_path, language, document_type,
                                                              document_creation_time, date_granularity)
     remove_files(num_files)
-    return list_dates, new_text, tagged_text, ExecTimeDictionary
+    return [list_dates, new_text, tagged_text, ExecTimeDictionary]
 
 
 def create_txt_files(text):
