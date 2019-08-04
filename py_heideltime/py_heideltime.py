@@ -203,7 +203,7 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
             print('Please try to run this command to give execution privileges to execute java heideltime')
             print('sudo chmod 111 ' + full_path + '/bin/*')
     ExecTimeDictionary['heideltime_processing'] = exec_time_date_extractor
-    ExecTimeDictionary['text_normalization'] = exec_time_text_labeling
+    ExecTimeDictionary['py_heideltime_text_normalization'] = exec_time_text_labeling
     return list_dates, nt, tt, ExecTimeDictionary
 
 
