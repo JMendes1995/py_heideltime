@@ -68,11 +68,10 @@ uimaVarTemponym = Temponym
 # ...for type to process
 uimaVarTypeToProcess = Type
 '''
-
-    f = codecs.open("config.props", "w+", "utf-8")
-    f.truncate()
-    f.write(conf)
-    f.close()
+    with open("config.props", "w+") as f:
+        f.truncate()
+        f.write(conf)
+        f.close()
     num_files = create_txt_files(text)
 
     list_dates, new_text, tagged_text, ExecTimeDictionary = exec_java_heideltime(num_files, path, full_path, language, document_type,
@@ -88,10 +87,10 @@ def create_txt_files(text):
     num_files = 0
     for i in range(len(merge_sentenses)):
         te = " ".join(merge_sentenses[i])
-        text_file = codecs.open('text' + str(i) + '.txt', "w+", "utf-8")
-        text_file.truncate()
-        text_file.write(te)
-        text_file.close()
+        with open('text' + str(i) + '.txt', 'w') as text_file:
+            text_file.truncate()
+            text_file.write(te)
+            text_file.close()
         num_files = i
     return num_files
 
@@ -121,16 +120,11 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
                                document_creation_time + ' -t ' + document_type + ' -l ' + language + ' text' + str(
                     n) + '.txt'
             # run java heideltime standalone version to get all dates
-            if platform.system() == 'Windows':
-                myCmd = os.popen(java_command).read()
-                # Find tags from java output
-                striped_text = str(myCmd).split('\n')
-                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
-            else:
-                myCmd = os.popen(java_command).read()
-                # Find tags from java output
-                striped_text = str(myCmd.encode('utf-8').decode("utf-8")).split('\n')
-                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd.encode('utf-8').decode("utf-8")))
+
+            myCmd = os.popen(java_command).read()
+            # Find tags from java output
+            striped_text = str(myCmd).split('\n')
+            ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
 
 
             # tagged text from java output
