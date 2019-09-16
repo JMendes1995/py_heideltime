@@ -121,11 +121,17 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
                     n) + '.txt'
             # run java heideltime standalone version to get all dates
 
-            myCmd = os.popen(java_command).read()
-            # Find tags from java output
-            striped_text = str(myCmd).split('\n')
-            ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
-
+            from subprocess import check_output
+            if platform.system() == 'Windows':
+                import subprocess
+                myCmd = subprocess.run(java_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8")
+                striped_text = str(myCmd).split('\n')
+                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
+            else:
+                myCmd = os.popen(java_command).read()
+                # Find tags from java output
+                striped_text = str(myCmd).split('\n')
+                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
 
             # tagged text from java output
             tagged_text = str(striped_text[3])
