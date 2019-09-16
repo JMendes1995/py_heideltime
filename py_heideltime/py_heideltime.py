@@ -7,6 +7,7 @@ import re
 from py_heideltime.validate_input import verify_temporal_tagger
 import time
 
+
 def py_heideltime(text, language='English', date_granularity='full', document_type='news',
                   document_creation_time='yyyy-mm-dd'):
     full_path = ''
@@ -38,29 +39,13 @@ considerTime = true
 # Temponyms (make sure you know what you do if you set this to "true")
 considerTemponym = false
 ###################################
-# Path to TreeTaggerLinux home directory
+# Path to TreeTagger home directory
 ###################################
 # Ensure there is no white space in path (try to escape white spaces)
 treeTaggerHome = ''' + full_path + '''
 # This one is only necessary if you want to process chinese documents.
 chineseTokenizerPath = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/treetagger/chinese-tokenizer)
-##################################
-# paths to JVnTextPro model paths:
-##################################
-sent_model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/jvntextpro/models/jvnsensegmenter)
-word_model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/jvntextpro/models/jvnsegmenter)
-pos_model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/jvntextpro/models/jvnpostag/maxent)
-#####################################################
-# paths to Stanford POS Tagger model or config files:
-#####################################################
-model_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/stanford-postagger-full-2014-01-04/models/arabic.tagger)
-# leave this unset if you do not need one (e.g., /home/jannik/stanford-postagger-full-2014-01-04/tagger.config)
 config_path =
-########################################
-## paths to hunpos and its tagger files:
-########################################
-hunpos_path = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/hunpos)
-hunpos_model_name = SET ME IN CONFIG.PROPS! (e.g., model.hunpos.mte5.defnpout)
 # DO NOT CHANGE THE FOLLOWING
 ################################
 # Relative path of type system in HeidelTime home directory
@@ -137,10 +122,10 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
                     n) + '.txt'
             # run java heideltime standalone version to get all dates
             if platform.system() == 'Windows':
-                myCmd = subprocess.check_output(java_command)
+                myCmd = os.popen(java_command).read()
                 # Find tags from java output
-                striped_text = str(myCmd.decode("utf-8")).split('\n')
-                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd.decode("utf-8")))
+                striped_text = str(myCmd).split('\n')
+                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
             else:
                 myCmd = os.popen(java_command).read()
                 # Find tags from java output
