@@ -233,7 +233,7 @@ To use py_heideltime with other languages proceed as follows:
   - Copy the extracted file to the module folder /py_heideltime/HeidelTime/TreeTagger< your system >/lib/
 
 ## Python Notebook 
-We highly recommend you to use this [python notebook](notebook-py-heldeltime) if you are interested in playing with py_heideltime.
+We highly recommend you to use this [python notebook](notebook-py-heldeltime.ipynb) if you are interested in playing with py_heideltime.
 
 ## Related Projects
 
