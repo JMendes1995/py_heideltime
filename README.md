@@ -30,7 +30,10 @@ Note that perl doesn't need to be installed if you are using Anaconda instead of
 ##### Linux users
 Perl usually comes with Linux, thus you don't need to install it.
 
-If your user does not have permission executions on python lib folder, you should execute the following command:
+To install JAVA:
+sudo apt install default-jdk
+
+In addition, if your user does not have permission executions on python lib folder, you should execute the following command:
 sudo chmod 111 /usr/local/lib/<YOUR PYTHON VERSION>/dist-packages/py_heideltime/HeidelTime/TreeTaggerLinux/bin/*
     
 ## How to use py_heideltime
