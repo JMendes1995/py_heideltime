@@ -146,7 +146,7 @@ ExecutionTime
 {'heideltime_processing': 4.341801404953003, 'text_normalization': 0.0}
 ````
 
-### Python CLI (Command Line Interface)
+### Python_CLI
 #### Help
 ``` bash
 py_heideltime --help
@@ -229,6 +229,8 @@ To use py_heideltime with other languages proceed as follows:
   - gunzip < Downloaded file >
   - Copy the extracted file to the module folder /py_heideltime/HeidelTime/TreeTagger< your system >/lib/
 
+## Python Notebook 
+We highly recommend you to use this [python notebook](notebook-py-heldeltime) if you are interested in playing with py_heideltime.
 
 ## Publications 
 
