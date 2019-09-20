@@ -232,6 +232,12 @@ To use py_heideltime with other languages proceed as follows:
 ## Python Notebook 
 We highly recommend you to use this [python notebook](notebook-py-heldeltime) if you are interested in playing with py_heideltime.
 
+## Related Projects
+
+Please check [py_rule_based](https://github.com/JMendes1995/py_rule_based) if you are interested in extracting dates by means of a rule-based model solution.
+
+Please check [Time-Matters](https://github.com/LIAAD/Time-Matters) if you are interested in detecting the relevance (score) of dates in a text.
+
 ## Publications 
 
 If you use HeidelTime (either through this package or another one) please cite the appropriate paper. In general, this would be:
@@ -242,5 +248,3 @@ Strötgen, Gertz: Multilingual and Cross-domain Temporal Tagging. Language Resou
 Other related papers may be found here:
 
 https://github.com/HeidelTime/heideltime#Publications
-
-Please check [Time-Matters](https://github.com/LIAAD/Time-Matters) if you are interested in detecting the relevance (score) of dates in a text.
