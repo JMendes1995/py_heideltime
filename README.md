@@ -14,10 +14,88 @@ Although there already exist some python packages for Heideltime (in particular 
  - To retrieve to the user a normalized version of the text (where each temporal expression is replaced by the normalized Heideltime version); and
  - To retrieve a Time-ML annotated version of the text (as done in the Heideltime demo).
 
-## How to install py_heideltime
-```bash
+## Installing py_heideltime
+### Option 1: Docker
+
+#### Install Docker
+
+##### Windows
+Docker for Windows requires 64bit Windows 10 Pro with Hyper-V available. 
+If you have this, then proceed to download here: (https://docs.docker.com/docker-for-windows/install/#download-docker-for-windows) and click on Get Docker for Windows (Stable)
+<br><br>
+If your system does not meet the requirements to run Docker for Windows (e.g., 64bit Windows 10 Home), you can install Docker Toolbox, which uses Oracle Virtual Box instead of Hyper-V. In that case proceed to download here: (https://docs.docker.com/toolbox/overview/#ready-to-get-started) and click on Get Docker Toolbox for Windows
+<br><br>
+
+##### MAC
+Docker for Mac will launch only if all of these requirements (https://docs.docker.com/docker-for-mac/install/#what-to-know-before-you-install) are met.
+If you have this, then proceed to download here: (https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac) and click on Get Docker for Mac (Stable)
+<br><br>
+If your system does not meet the requirements to run Docker for Mac, you can install Docker Toolbox, which uses Oracle Virtual Box instead of Hyper-V. In that case proceed to download here: (https://docs.docker.com/toolbox/overview/#ready-to-get-started) and click on Get Docker Toolbox for Mac
+<br><br>
+
+##### Linux
+Proceed to download here: (https://docs.docker.com/engine/installation/#server)
+<br><br>
+
+#### Pull Image
+Execute the following command on your docker machine: 
+``` bash
+docker pull liaad/py_heideltime
+```
+
+#### Run Image
+On your docker machine run the following to launch the image: 
+``` bash
+docker run -p 9999:8888 --user root liaad/keep
+```
+
+Then go to your browser and type in the following url: 
+``` bash
+http://<DOCKER-MACHINE-IP>:9999
+```
+
+where the IP may be the localhost or 192.168.99.100 if you are using a Docker Machine VM.
+  
+You will be required a token which you can find on your docker machine prompt. It will be something similar to this: http://eac214218126:8888/?token=ce459c2f581a5f56b90256aaa52a96e7e4b1705113a657e8. Copy paste the token (in this example, that would be: ce459c2f581a5f56b90256aaa52a96e7e4b1705113a657e8) to the browser, and voila, you will have py_heideltime package ready to run. Keep this token (for future references) or define a password.
+
+#### Run Jupyter notebooks
+Once you logged in, proceed by running the notebook that we have prepared for you.
+
+#### Shutdown
+Once you are done go to File - Shutdown.
+
+#### Subsequent Logins
+If later on you decide to play with the same container, you should proceed as follows. The first thing to do is to get the container id:
+``` bash
+docker ps -a
+```
+
+Next run the following commands:
+``` bash
+docker start ContainerId
+docker attach ContainerId (attach to a running container)
+```
+
+Nothing happens in your docker machine, but you are now ready to open your browser as you did before:
+``` bash
+http://<DOCKER-MACHINE-IP>:9999
+```
+
+Hopefully, you have saved the token or defined a password. If that is not the case, then you should run the following command (before doing start/attach) to have access to your token:
+``` bash
+docker exec -it <docker_container_name> jupyter notebook list
+```
+<hr>
+
+### Option 2: Standalone Installation
+#### Install py_heideltime library
+
+``` bash
 pip install git+https://github.com/JMendes1995/py_heideltime.git
 ```
+<br>
+
+#### Install External Resources
 In order to use py_heideltime you must have java JDK and perl installed in your machine for heideltime dependencies.
 
 ##### Windows users
@@ -224,7 +302,11 @@ py_heideltime -t "August 31st" -l "English" -dg "full" -dt "News" -dct "1939-08-
 
 ## Supported languages
 
-This module is prepared to work with the following languages: English, Portuguese, Spanish, Germany, Dutch, Italian, French.
+### Docker
+Docker image is prepared to work with the following languages: English, German, Dutch, Vietnamese, Arabic, Spanish, Italian, French, Chinese, Russian, Croatian, Estonian and Portuguese.
+
+### Standalone
+This github package is prepared to work with the following languages: English, Portuguese, Spanish, Germany, Dutch, Italian, French.
 
 To use py_heideltime with other languages proceed as follows:
   
@@ -239,11 +321,11 @@ We highly recommend you to use this [python notebook](notebook-py-heldeltime.ipy
 
 Please check [py_rule_based](https://github.com/JMendes1995/py_rule_based) if you are interested in extracting dates by means of a rule-based model solution.
 
-Please check [Time-Matters](https://github.com/LIAAD/Time-Matters) if you are interested in detecting the relevance (score) of dates in a text.
+Please check Time-Matters [docker image](https://hub.docker.com/r/liaad/time-matters) or [github](https://github.com/LIAAD/Time-Matters) if you are interested in detecting the relevance (score) of dates in a text.
 
 ## Publications 
 
-If you use HeidelTime (either through this package or another one) please cite the appropriate paper. In general, this would be:
+Please cite the appropriate paper when using py_heideltime. In general, this would be:
 
 Strötgen, Gertz: Multilingual and Cross-domain Temporal Tagging. Language Resources and Evaluation, 2013. [pdf](https://link.springer.com/article/10.1007%2Fs10579-012-9179-y) [bibtex](https://dbs.ifi.uni-heidelberg.de/files/Team/jannik/publications/stroetgen_bib.html#LREjournal2013)
 
