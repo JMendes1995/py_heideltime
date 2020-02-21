@@ -113,7 +113,10 @@ sudo apt install default-jdk
 
 In addition, if your user does not have permission executions on python lib folder, you should execute the following command:
 sudo chmod 111 /usr/local/lib/<YOUR PYTHON VERSION>/dist-packages/py_heideltime/HeidelTime/TreeTaggerLinux/bin/*
-    
+
+#### Python Notebook 
+We highly recommend you to use this [python notebook](notebook-py-heldeltime.ipynb) if you are interested in playing with py_heideltime  when using the standalone version.
+
 ## How to use py_heideltime
 ``` bash
 from py_heideltime import py_heideltime
@@ -313,9 +316,6 @@ To use py_heideltime with other languages proceed as follows:
   - Download from [TreeTagger](https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/) the parameter files
   - gunzip < Downloaded file >
   - Copy the extracted file to the module folder /py_heideltime/HeidelTime/TreeTagger< your system >/lib/
-
-## Python Notebook 
-We highly recommend you to use this [python notebook](notebook-py-heldeltime.ipynb) if you are interested in playing with py_heideltime.
 
 ## Related Projects
 
