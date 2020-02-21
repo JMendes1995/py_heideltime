@@ -46,7 +46,7 @@ docker pull liaad/py_heideltime
 #### Run Image
 On your docker machine run the following to launch the image: 
 ``` bash
-docker run -p 9999:8888 --user root liaad/keep
+docker run -p 9999:8888 --user root liaad/py_heideltime
 ```
 
 Then go to your browser and type in the following url: 
