@@ -46,7 +46,7 @@ docker pull liaad/py_heideltime
 #### Run Image
 On your docker machine run the following to launch the image: 
 ``` bash
-docker run -p 9999:8888 --user root liaad/py_heideltime
+docker run -p 9999:8888 liaad/py_heideltime
 ```
 
 Then go to your browser and type in the following url: 
@@ -85,6 +85,19 @@ Hopefully, you have saved the token or defined a password. If that is not the ca
 ``` bash
 docker exec -it <docker_container_name> jupyter notebook list
 ```
+
+#### Run Image - background mode
+On your docker machine run the following to launch the image in background mode: 
+``` bash
+docker run -p 9999:8888 -d liaad/py_heideltime
+```
+
+You can then execute py_heideltime in the prompt. An example is given below:
+``` bash
+docker run -p 9999:8888 -d liaad/py_heideltime
+```
+py_heideltime -t "August 31st ..." -l "English"
+
 <hr>
 
 ### Option 2: Standalone Installation
