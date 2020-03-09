@@ -322,7 +322,7 @@ py_heideltime -t "August 31st" -l "English" -dg "full" -dt "News" -dct "1939-08-
 Docker image is prepared to work with the following languages: English, German, Dutch, Vietnamese, Arabic, Spanish, Italian, French, Chinese, Russian, Croatian, Estonian and Portuguese.
 
 ### Standalone
-This github package is prepared to work with the following languages: English, Portuguese, Spanish, Germany, Dutch, Italian, French.
+This github package is prepared to work with the following languages: English, Portuguese, Spanish, German, Dutch, Italian, French.
 
 To use py_heideltime with other languages proceed as follows:
   
