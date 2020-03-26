@@ -124,7 +124,7 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
             from subprocess import check_output
             if platform.system() == 'Windows':
                 import subprocess
-                myCmd = subprocess.run(java_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.encode("utf-8").decode("utf-8")
+                myCmd = subprocess.run(java_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
                 striped_text = str(myCmd).split('\n')
                 ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
             else:
