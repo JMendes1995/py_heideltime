@@ -9,6 +9,7 @@ setup(name='py_heideltime',
       packages=find_packages(),
       include_package_data=True,
       py_modules=['py_heideltime'],
+      install_requires='emoji',
       entry_points={
             'console_scripts': [
                   'py_heideltime=py_heideltime.cli:dates'

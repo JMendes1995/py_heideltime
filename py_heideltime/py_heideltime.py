@@ -11,6 +11,7 @@ import time
 def py_heideltime(text, language='English', date_granularity='full', document_type='news',
                   document_creation_time='yyyy-mm-dd'):
     full_path = ''
+    processed_text=pre_process_text(text)
     result = verify_temporal_tagger(language, date_granularity, document_type)
     if result == {}:
         print([])
@@ -72,7 +73,7 @@ uimaVarTypeToProcess = Type
         f.truncate()
         f.write(conf)
         f.close()
-    num_files = create_txt_files(text)
+    num_files = create_txt_files(processed_text)
 
     list_dates, new_text, tagged_text, ExecTimeDictionary = exec_java_heideltime(num_files, path, full_path, language, document_type,
                                                              document_creation_time, date_granularity)
@@ -124,7 +125,7 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
             from subprocess import check_output
             if platform.system() == 'Windows':
                 import subprocess
-                myCmd = os.popen(java_command).read()
+                myCmd = subprocess.run(java_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8")
                 striped_text = str(myCmd).split('\n')
                 ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
             else:
@@ -202,3 +203,23 @@ def remove_files(num_files):
     while i_files <= num_files:
         os.remove('text' + str(i_files) + '.txt')
         i_files += 1
+
+
+import emoji
+
+def remove_emoji(text):
+    return emoji.get_emoji_regexp().sub(u'', text)
+
+def text_has_emoji(text):
+    for character in text:
+        if character in emoji.UNICODE_EMOJI:
+            return True
+    return False
+
+
+def pre_process_text(text):
+    if text_has_emoji(text):
+        return remove_emoji(text)
+    else:
+        return text
+
