@@ -11,6 +11,7 @@ Although there already exist some python packages for Heideltime (in particular 
  - To make it user-friendly not only in terms of installation but also in its usage;
  - To make it lightweight without compromising its behavior;
  - To give the user the chance to choose the granularity (e.g., year, month, etc) of the dates to be extracted;
+ - To handle texts with emojis (note: heideltime demo and existing packages throw an exception when a text has an emoji);
  - To retrieve to the user a normalized version of the text (where each temporal expression is replaced by the normalized Heideltime version); and
  - To retrieve a Time-ML annotated version of the text (as done in the Heideltime demo).
 
