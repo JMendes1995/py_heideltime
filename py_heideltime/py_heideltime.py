@@ -88,7 +88,7 @@ def create_txt_files(text):
     num_files = 0
     for i in range(len(merge_sentenses)):
         te = " ".join(merge_sentenses[i])
-        with open('text' + str(i) + '.txt', 'w') as text_file:
+        with open('text' + str(i) + '.txt', 'w', encoding="utf8") as text_file:
             text_file.truncate()
             text_file.write(te)
             text_file.close()
