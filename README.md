@@ -44,6 +44,8 @@ Execute the following command on your docker machine:
 docker pull liaad/py_heideltime
 ```
 
+This will retrieve the image from the following repository: https://hub.docker.com/r/liaad/py_heideltime
+
 #### Run Image
 On your docker machine run the following to launch the image: 
 ``` bash
