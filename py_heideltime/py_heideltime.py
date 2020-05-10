@@ -102,7 +102,7 @@ uimaVarTypeToProcess = Type
     new_text = ' '.join(new_text_list)
     tagged_text = ' '.join(tagged_text_list)
     ExecTimeDictionary={'heideltime_processing': heideltime_processing_time-sum(py_heideltime_text_normalization), 'py_heideltime_text_normalization': sum(py_heideltime_text_normalization)}
-
+    remove_files(num_files)
     return [dates_results, new_text, tagged_text, ExecTimeDictionary]
 
 
