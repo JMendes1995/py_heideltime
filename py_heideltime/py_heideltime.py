@@ -77,39 +77,33 @@ uimaVarTypeToProcess = Type
         f.write(conf)
         f.close()
     num_files = create_txt_files(processed_text)
-    print(list(range(num_files+1)))
 
+    start_time = time.time( )
     with Pool(processes=multiprocessing.cpu_count( )) as pool:
-        dates_result = pool.starmap(exec_java_heideltime,
+        result = pool.starmap(exec_java_heideltime,
                                           zip(list(range(num_files+1)), repeat(path), repeat(language),
                                               repeat(document_type), repeat(document_creation_time),repeat(date_granularity)))
-    #list_dates, new_text, tagged_text, ExecTimeDictionary = exec_java_heideltime(num_files, path, language, document_type,
-    #                                                         document_creation_time, date_granularity)
 
+    heideltime_processing_time = time.time( ) - start_time
     dates_list=[]
     new_text_list=[]
     tagged_text_list=[]
     heideltime_processing_list=[]
     py_heideltime_text_normalization=[]
-    #list_dates, nt, tt, ExecTimeDictionary
-    for d in dates_result:
+
+    for d in result:
         dates_list.append(d[0])
         new_text_list.append(d[1])
         tagged_text_list.append(d[2])
         heideltime_processing_list.append(d[3]['heideltime_processing'])
         py_heideltime_text_normalization.append(d[3]['py_heideltime_text_normalization'])
-    import statistics
-    print(dates_list)
-    dates_results = list(chain.from_iterable(dates_list))
-    print(heideltime_processing_list)
-    print(statistics.median(heideltime_processing_list))
-    print(py_heideltime_text_normalization)
-    print(statistics.median(py_heideltime_text_normalization))
-    #x = statistics.mean(data1)
 
-    #remove_files(num_files)
-    #return dates_result
-    #return [list_dates, new_text, tagged_text, ExecTimeDictionary]
+    dates_results = list(chain.from_iterable(dates_list))
+    new_text = ' '.join(new_text_list)
+    tagged_text = ' '.join(tagged_text_list)
+    ExecTimeDictionary={'heideltime_processing': heideltime_processing_time-sum(py_heideltime_text_normalization), 'py_heideltime_text_normalization': sum(py_heideltime_text_normalization)}
+
+    return [dates_results, new_text, tagged_text, ExecTimeDictionary]
 
 
 def create_txt_files(text):
@@ -129,7 +123,6 @@ def create_txt_files(text):
 
 def exec_java_heideltime(file_number, path, language, document_type, document_creation_time,
                          date_granularity):
-    print(file_number)
     list_dates = []
     nt = ''
     tt = ''
@@ -236,7 +229,6 @@ def remove_files(num_files):
 
 
 import emoji
-
 def remove_emoji(text):
     return emoji.get_emoji_regexp().sub(u'', text)
 
