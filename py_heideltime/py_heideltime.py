@@ -224,7 +224,7 @@ def remove_files(num_files):
     os.remove('config.props')
     i_files = 0
     while i_files <= num_files:
-        #os.remove('text' + str(i_files) + '.txt')
+        os.remove('text' + str(i_files) + '.txt')
         i_files += 1
 
 
