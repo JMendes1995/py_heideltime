@@ -6,7 +6,10 @@ import subprocess
 import re
 from py_heideltime.validate_input import verify_temporal_tagger
 import time
-
+from multiprocessing import Pool
+from itertools import repeat
+import multiprocessing
+from itertools import chain
 
 def py_heideltime(text, language='English', date_granularity='full', document_type='news',
                   document_creation_time='yyyy-mm-dd'):
@@ -75,10 +78,32 @@ uimaVarTypeToProcess = Type
         f.close()
     num_files = create_txt_files(processed_text)
 
-    list_dates, new_text, tagged_text, ExecTimeDictionary = exec_java_heideltime(num_files, path, full_path, language, document_type,
-                                                             document_creation_time, date_granularity)
-    remove_files(num_files)
-    return [list_dates, new_text, tagged_text, ExecTimeDictionary]
+    start_time = time.time( )
+    with Pool(processes=multiprocessing.cpu_count( )) as pool:
+        result = pool.starmap(exec_java_heideltime,
+                                          zip(list(range(num_files+1)), repeat(path), repeat(language),
+                                              repeat(document_type), repeat(document_creation_time),repeat(date_granularity)))
+
+    heideltime_processing_time = time.time( ) - start_time
+    dates_list=[]
+    new_text_list=[]
+    tagged_text_list=[]
+    heideltime_processing_list=[]
+    py_heideltime_text_normalization=[]
+
+    for d in result:
+        dates_list.append(d[0])
+        new_text_list.append(d[1])
+        tagged_text_list.append(d[2])
+        heideltime_processing_list.append(d[3]['heideltime_processing'])
+        py_heideltime_text_normalization.append(d[3]['py_heideltime_text_normalization'])
+
+    dates_results = list(chain.from_iterable(dates_list))
+    new_text = ' '.join(new_text_list)
+    tagged_text = ' '.join(tagged_text_list)
+    ExecTimeDictionary={'heideltime_processing': heideltime_processing_time-sum(py_heideltime_text_normalization), 'py_heideltime_text_normalization': sum(py_heideltime_text_normalization)}
+
+    return [dates_results, new_text, tagged_text, ExecTimeDictionary]
 
 
 def create_txt_files(text):
@@ -96,7 +121,7 @@ def create_txt_files(text):
     return num_files
 
 
-def exec_java_heideltime(file_number, path, full_path, language, document_type, document_creation_time,
+def exec_java_heideltime(file_number, path, language, document_type, document_creation_time,
                          date_granularity):
     list_dates = []
     nt = ''
@@ -109,80 +134,78 @@ def exec_java_heideltime(file_number, path, full_path, language, document_type, 
         print('Please specify date in the following format: YYYY-MM-DD.')
         return {}
     else:
-        n = 0
-        while n <= file_number:
-            normalized_dates_list = []
-            extractor_start_time = time.time()
-            if document_creation_time == 'yyyy-mm-dd':
-                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar   ' + document_type + ' -l ' + language + ' text' + str(
-                    n) + '.txt'
-            else:
-                java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' + \
+
+        normalized_dates_list = []
+        extractor_start_time = time.time()
+        if document_creation_time == 'yyyy-mm-dd':
+            java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar   ' + document_type + ' -l ' + language + ' text' + str(
+                    file_number) + '.txt'
+        else:
+            java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' + \
                                document_creation_time + ' -t ' + document_type + ' -l ' + language + ' text' + str(
-                    n) + '.txt'
+                file_number) + '.txt'
             # run java heideltime standalone version to get all dates
 
-            from subprocess import check_output
-            if platform.system() == 'Windows':
-                import subprocess
-                myCmd = subprocess.run(java_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8")
-                striped_text = str(myCmd).split('\n')
-                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
-            else:
-                myCmd = os.popen(java_command).read()
-                # Find tags from java output
-                striped_text = str(myCmd).split('\n')
-                ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
+
+        if platform.system() == 'Windows':
+            import subprocess
+            myCmd = subprocess.run(java_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8")
+            striped_text = str(myCmd).split('\n')
+            ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
+        else:
+            myCmd = os.popen(java_command).read()
+            # Find tags from java output
+            striped_text = str(myCmd).split('\n')
+            ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
 
             # tagged text from java output
-            tagged_text = str(striped_text[3])
+        tagged_text = str(striped_text[3])
 
-            for i in range(len(ListOfTagContents)):
+        for i in range(len(ListOfTagContents)):
                 # normalized date
-                normalized_dates = re.findall('value="(.*?)"', ListOfTagContents[i], re.IGNORECASE)
+            normalized_dates = re.findall('value="(.*?)"', ListOfTagContents[i], re.IGNORECASE)
                 # original fate
-                original_dates = re.findall('>(.+)', ListOfTagContents[i], re.IGNORECASE)
+            original_dates = re.findall('>(.+)', ListOfTagContents[i], re.IGNORECASE)
                 # insert in list the date value and the expression that originate the date
-                normalized_dates_list.append(normalized_dates[0])
+            normalized_dates_list.append(normalized_dates[0])
 
-                if date_granularity != 'full':
-                    try:
-                        if date_granularity.lower() == 'year':
-                            years = re.findall('\d{4}', normalized_dates[0])
-                            list_dates.append((years[0], original_dates[0]))
-                            if re.match(years[0] + '(.*?)', normalized_dates[0]):
-                                normalized_dates_list[len(normalized_dates_list) - 1] = years[0]
+            if date_granularity != 'full':
+                try:
+                    if date_granularity.lower() == 'year':
+                        years = re.findall('\d{4}', normalized_dates[0])
+                        list_dates.append((years[0], original_dates[0]))
+                        if re.match(years[0] + '(.*?)', normalized_dates[0]):
+                            normalized_dates_list[len(normalized_dates_list) - 1] = years[0]
 
-                        elif date_granularity.lower() == 'month':
-                            months = re.findall('\d{4}[-]\d{2}', normalized_dates[0])
-                            list_dates.append((months[0], original_dates[0]))
-                            if re.match(months[0] + '(.*?)', normalized_dates[0]):
-                                normalized_dates_list[len(normalized_dates_list) - 1] = months[0]
+                    elif date_granularity.lower() == 'month':
+                        months = re.findall('\d{4}[-]\d{2}', normalized_dates[0])
+                        list_dates.append((months[0], original_dates[0]))
+                        if re.match(months[0] + '(.*?)', normalized_dates[0]):
+                            normalized_dates_list[len(normalized_dates_list) - 1] = months[0]
 
-                        elif date_granularity.lower() == 'day':
-                            days = re.findall('\d{4}[-]\d{2}[-]\d{2}', normalized_dates[0])
-                            list_dates.append((days[0], original_dates[0]))
-                            if re.match(days[0] + '(.*?)', normalized_dates[0]):
-                                normalized_dates_list[len(normalized_dates_list) - 1] = days[0]
+                    elif date_granularity.lower() == 'day':
+                        days = re.findall('\d{4}[-]\d{2}[-]\d{2}', normalized_dates[0])
+                        list_dates.append((days[0], original_dates[0]))
+                        if re.match(days[0] + '(.*?)', normalized_dates[0]):
+                            normalized_dates_list[len(normalized_dates_list) - 1] = days[0]
 
-                    except:
-                        pass
-                else:
-                    try:
-                        list_dates.append((normalized_dates[0], original_dates[0]))
-                    except:
-                        pass
-            tt_exec_time = (time.time() - extractor_start_time)
-            exec_time_date_extractor += tt_exec_time
+                except:
+                    pass
+            else:
+                try:
+                    list_dates.append((normalized_dates[0], original_dates[0]))
+                except:
+                    pass
+        tt_exec_time = (time.time() - extractor_start_time)
+        exec_time_date_extractor += tt_exec_time
 
-            labeling_start_time = time.time()
-            n += 1
-            new_text = refactor_text(normalized_dates_list, ListOfTagContents, tagged_text)
-            nt += new_text
-            tt += tagged_text
+        labeling_start_time = time.time()
+        new_text = refactor_text(normalized_dates_list, ListOfTagContents, tagged_text)
+        nt += new_text
+        tt += tagged_text
 
-            label_text_exec_time = (time.time() - labeling_start_time)
-            exec_time_text_labeling += label_text_exec_time
+        label_text_exec_time = (time.time() - labeling_start_time)
+        exec_time_text_labeling += label_text_exec_time
 
     ExecTimeDictionary['heideltime_processing'] = exec_time_date_extractor
     ExecTimeDictionary['py_heideltime_text_normalization'] = exec_time_text_labeling
@@ -201,12 +224,11 @@ def remove_files(num_files):
     os.remove('config.props')
     i_files = 0
     while i_files <= num_files:
-        os.remove('text' + str(i_files) + '.txt')
+        #os.remove('text' + str(i_files) + '.txt')
         i_files += 1
 
 
 import emoji
-
 def remove_emoji(text):
     return emoji.get_emoji_regexp().sub(u'', text)
 
