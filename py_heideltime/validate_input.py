@@ -7,7 +7,7 @@ def verify_temporal_tagger(language,date_granularity, document_type):
               '      English;\n'
               '      Portuguese;\n'
               '      Spanish;\n'
-              '      Germany;\n'
+              '      German;\n'
               '      Dutch;\n'
               '      Italian;\n'
               '      French.')
