@@ -156,6 +156,13 @@ results = py_heideltime(text, language='English',  document_type='news')
 ````
 is exactly the same thing and produces the same results.
 
+Please note that running this on windows may require using the following code instead:
+
+```` bash
+if __name__ == '__main__':
+   results = py_heideltime(text)
+````
+
 ###### Output
 The output will be a list of 4 elements or an empty list [] if no temporal expression is found in the text. The four elements are:
 
@@ -206,6 +213,13 @@ Besides running py_heideltime with the default parameters, users can also specif
 
 ```` bash
 results = py_heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
+````
+
+Please note that running this on windows may require using the following code instead:
+
+```` bash
+if __name__ == '__main__':
+   results = py_heideltime(text, language='English', date_granularity="day", document_type='news', document_creation_time='1939-08-31')
 ````
 
 ###### Output
