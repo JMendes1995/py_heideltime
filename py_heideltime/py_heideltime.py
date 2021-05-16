@@ -108,7 +108,7 @@ uimaVarTypeToProcess = Type
 
 def create_txt_files(text):
     tests = text.split()
-    n = max(1, 15000)
+    n = max(1, 5000)
     merge_sentenses = [tests[i:i + n] for i in range(0, len(tests), n)]
     num_files = 0
     for i in range(len(merge_sentenses)):
