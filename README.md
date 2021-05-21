@@ -5,7 +5,7 @@ For more information about this temporal tagger, please visit the Heideltime Jav
 
 This wrapper has been developed by Jorge Mendes under the supervision of [Professor Ricardo Campos](http://www.ccc.ipt.pt/~ricardo/) in the scope of the Final Project of the Computer Science degree at the [Polytechnic Institute of Tomar](http://portal2.ipt.pt/), Portugal.
 
-Although there already exist some python packages for Heideltime (in particular https://github.com/amineabdaoui/python-heideltime) all of them require a considerable intervention from the user side. In this project, we aim to overcome some of these limitations. Our aim was seven-fold:
+Although there already exist some python packages for Heideltime (in particular https://github.com/amineabdaoui/python-heideltime or more recently https://github.com/PhilipEHausner/python_heideltime) all of them require a considerable intervention from the user side. In this project, we aim to overcome some of these limitations. Our aim was seven-fold:
 
  - To provide a multi-platform (windows, Linux, Mac Os);
  - To make it user-friendly not only in terms of installation but also in its usage;

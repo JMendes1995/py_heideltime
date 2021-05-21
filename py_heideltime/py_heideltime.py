@@ -10,125 +10,84 @@ from multiprocessing import Pool
 from itertools import repeat
 import multiprocessing
 from itertools import chain
+import tempfile
+import shutil
 
-def py_heideltime(text, language='English', date_granularity='full', document_type='news',
-                  document_creation_time='yyyy-mm-dd'):
-    full_path = ''
-    processed_text=pre_process_text(text)
-    result = verify_temporal_tagger(language, date_granularity, document_type)
-    if result == {}:
-        print([])
-        raise SystemExit
+def py_heideltime(text, language='English', date_granularity='full', document_type='news', document_creation_time='yyyy-mm-dd'):
+    try:
+        processed_text=pre_process_text(text)
+        result = verify_temporal_tagger(language, date_granularity, document_type)
+        if result == {}:
+            print([])
+            raise SystemExit
 
-    if platform.system() == 'Linux' or platform.system() == 'Darwin':
-        path = imp.find_module('py_heideltime')[1]
-        full_path = path + "/Heideltime/TreeTaggerLinux"
-    else:
-        path = imp.find_module('py_heideltime')[1]
-        pp = path.replace('\\', '''\\\\''')
-        full_path = str(pp) + '''\\\Heideltime\\\TreeTaggerWindows'''
-    conf = '''
-################################
-##           MAIN             ##
-################################
-# Consideration of different timex3-types
-# Date
-considerDate = true
-# Duration
-considerDuration = true
-# Set
-considerSet = true
-# Time
-considerTime = true
-# Temponyms (make sure you know what you do if you set this to "true")
-considerTemponym = false
-###################################
-# Path to TreeTagger home directory
-###################################
-# Ensure there is no white space in path (try to escape white spaces)
-treeTaggerHome = ''' + full_path + '''
-# This one is only necessary if you want to process chinese documents.
-chineseTokenizerPath = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/treetagger/chinese-tokenizer)
-config_path =
-# DO NOT CHANGE THE FOLLOWING
-################################
-# Relative path of type system in HeidelTime home directory
-typeSystemHome = desc/type/HeidelTime_TypeSystem.xml
-# Relative path of dkpro type system in HeidelTime home directory
-typeSystemHome_DKPro = desc/type/DKPro_TypeSystem.xml
-# Name of uima-context variables...
-# ...for date-consideration
-uimaVarDate = Date
-# ...for duration-consideration
-uimaVarDuration = Duration
-# ...for language
-uimaVarLanguage = Language
-# ...for set-consideration
-uimaVarSet = Set
-# ...for time-consideration
-uimaVarTime = Time
-# ...for temponym-consideration
-uimaVarTemponym = Temponym
-# ...for type to process
-uimaVarTypeToProcess = Type
-'''
-    with open("config.props", "w+") as f:
-        f.truncate()
-        f.write(conf)
-        f.close()
-    num_files = create_txt_files(processed_text)
+        path, full_path = get_Path()
+        configProps(full_path)
 
-    start_time = time.time( )
-    with Pool(processes=multiprocessing.cpu_count( )) as pool:
-        result = pool.starmap(exec_java_heideltime,
-                                          zip(list(range(num_files+1)), repeat(path), repeat(language),
-                                              repeat(document_type), repeat(document_creation_time),repeat(date_granularity)))
+        directory_name = tempfile.mkdtemp(dir = path) #folder where the text to be passed to heideltime will be stored
+        listOfFiles = create_txt_files(processed_text, directory_name) #list with the files path to be processed by heideltime
 
-    heideltime_processing_time = time.time( ) - start_time
-    dates_list=[]
-    new_text_list=[]
-    tagged_text_list=[]
-    heideltime_processing_list=[]
-    py_heideltime_text_normalization=[]
+        start_time = time.time( )
 
-    for d in result:
-        dates_list.append(d[0])
-        new_text_list.append(d[1])
-        tagged_text_list.append(d[2])
-        heideltime_processing_list.append(d[3]['heideltime_processing'])
-        py_heideltime_text_normalization.append(d[3]['py_heideltime_text_normalization'])
+        result = []
+        if len(listOfFiles) == 1:
+            result_temp = exec_java_heideltime(listOfFiles[0], path, language, document_type, document_creation_time, date_granularity)
+            result.append(result_temp)
+        else:
+            with Pool(processes=multiprocessing.cpu_count( )) as pool:
+                result = pool.starmap(exec_java_heideltime,
+                                                  zip(listOfFiles, repeat(path), repeat(language),
+                                                      repeat(document_type), repeat(document_creation_time),repeat(date_granularity)))
+                a = type(result)
 
-    dates_results = list(chain.from_iterable(dates_list))
-    new_text = ' '.join(new_text_list)
-    tagged_text = ' '.join(tagged_text_list)
-    ExecTimeDictionary={'heideltime_processing': heideltime_processing_time-sum(py_heideltime_text_normalization), 'py_heideltime_text_normalization': sum(py_heideltime_text_normalization)}
-    remove_files(num_files)
-    return [dates_results, new_text, tagged_text, ExecTimeDictionary]
+        heideltime_processing_time = time.time( ) - start_time
+
+        dates_list=[]
+        new_text_list=[]
+        tagged_text_list=[]
+        heideltime_processing_list=[]
+        py_heideltime_text_normalization=[]
+
+        for d in result:
+            dates_list.append(d[0])
+            new_text_list.append(d[1])
+            tagged_text_list.append(d[2])
+            heideltime_processing_list.append(d[3]['heideltime_processing'])
+            py_heideltime_text_normalization.append(d[3]['py_heideltime_text_normalization'])
+
+        dates_results = list(chain.from_iterable(dates_list))
+        new_text = ' '.join(new_text_list)
+        tagged_text = ' '.join(tagged_text_list)
+        ExecTimeDictionary={'heideltime_processing': heideltime_processing_time-sum(py_heideltime_text_normalization), 'py_heideltime_text_normalization': sum(py_heideltime_text_normalization)}
+        return [dates_results, new_text, tagged_text, ExecTimeDictionary]
+    finally:
+        shutil.rmtree(directory_name) #remove folder and files that were processed by heideltime
+        os.remove('config.props')   #remove config.props files
 
 
-def create_txt_files(text):
-    tests = text.split()
-    n = max(1, 5000)
-    merge_sentenses = [tests[i:i + n] for i in range(0, len(tests), n)]
-    num_files = 0
-    for i in range(len(merge_sentenses)):
-        te = " ".join(merge_sentenses[i])
-        with open('text' + str(i) + '.txt', 'w', encoding="utf8") as text_file:
-            text_file.truncate()
-            text_file.write(te)
-            text_file.close()
-        num_files = i
-    return num_files
+def create_txt_files(text, directory_name):
+    chunkSize = 30000 #30000 chars
+    listOfFiles = []
+
+    if len(text) < chunkSize:
+        temp = tempfile.NamedTemporaryFile(prefix="text_", dir = directory_name, delete=False)
+        temp.write(text.encode('utf-8'))
+        temp.close()
+        listOfFiles.append(temp.name.replace(os.sep, '/'))
+    else:   
+        listOfChuncks = [text[i:i + chunkSize] for i in range(0, len(text), chunkSize)]
+        for i in range(len(listOfChuncks)):
+            temp = tempfile.NamedTemporaryFile(prefix="text_", dir = directory_name, delete=False)
+            temp.write(listOfChuncks[i].encode('utf-8'))
+            temp.close()
+            listOfFiles.append(temp.name.replace(os.sep, '/'))
+
+    return listOfFiles
 
 
-def exec_java_heideltime(file_number, path, language, document_type, document_creation_time,
-                         date_granularity):
+def exec_java_heideltime(filename, path, language, document_type, document_creation_time, date_granularity):
     list_dates = []
-    nt = ''
-    tt = ''
     ExecTimeDictionary = {}
-    exec_time_date_extractor = 0
-    exec_time_text_labeling = 0
     match = re.findall('^\d{4}[-]\d{2}[-]\d{2}$', document_creation_time)
     if match == [] and document_creation_time != 'yyyy-mm-dd':
         print('Please specify date in the following format: YYYY-MM-DD.')
@@ -138,35 +97,33 @@ def exec_java_heideltime(file_number, path, language, document_type, document_cr
         normalized_dates_list = []
         extractor_start_time = time.time()
         if document_creation_time == 'yyyy-mm-dd':
-            java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar   ' + document_type + ' -l ' + language + ' text' + str(
-                    file_number) + '.txt'
+            java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar ' + document_type + ' -l ' + language + ' ' + filename
         else:
             java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' + \
-                               document_creation_time + ' -t ' + document_type + ' -l ' + language + ' text' + str(
-                file_number) + '.txt'
+                               document_creation_time + ' -t ' + document_type + ' -l ' + language + ' ' + filename
             # run java heideltime standalone version to get all dates
 
 
         if platform.system() == 'Windows':
             import subprocess
             myCmd = subprocess.run(java_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8")
-            striped_text = str(myCmd).split('\n')
+            striped_text = str(myCmd).split('<TimeML>')
             ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
         else:
             myCmd = os.popen(java_command).read()
             # Find tags from java output
-            striped_text = str(myCmd).split('\n')
+            striped_text = str(myCmd).split('<TimeML>')
             ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
 
-            # tagged text from java output
-        tagged_text = str(striped_text[3])
+        # TimeML text from java output
+        timeML_text = str(striped_text[1])
 
         for i in range(len(ListOfTagContents)):
-                # normalized date
+            # normalized date
             normalized_dates = re.findall('value="(.*?)"', ListOfTagContents[i], re.IGNORECASE)
-                # original fate
+            # original fate
             original_dates = re.findall('>(.+)', ListOfTagContents[i], re.IGNORECASE)
-                # insert in list the date value and the expression that originate the date
+            # insert in list the date value and the expression that originate the date
             normalized_dates_list.append(normalized_dates[0])
 
             if date_granularity != 'full':
@@ -196,37 +153,34 @@ def exec_java_heideltime(file_number, path, language, document_type, document_cr
                     list_dates.append((normalized_dates[0], original_dates[0]))
                 except:
                     pass
-        tt_exec_time = (time.time() - extractor_start_time)
-        exec_time_date_extractor += tt_exec_time
+        heideltime_processing_time = (time.time() - extractor_start_time)
 
         labeling_start_time = time.time()
-        new_text = refactor_text(normalized_dates_list, ListOfTagContents, tagged_text)
-        nt += new_text
-        tt += tagged_text
+        text_normalized = refactor_text(normalized_dates_list, ListOfTagContents, timeML_text)
 
-        label_text_exec_time = (time.time() - labeling_start_time)
-        exec_time_text_labeling += label_text_exec_time
+        py_heideltime_text_normalization_time = (time.time() - labeling_start_time)
 
-    ExecTimeDictionary['heideltime_processing'] = exec_time_date_extractor
-    ExecTimeDictionary['py_heideltime_text_normalization'] = exec_time_text_labeling
-    return list_dates, nt, tt, ExecTimeDictionary
+    ExecTimeDictionary['heideltime_processing'] = heideltime_processing_time
+    ExecTimeDictionary['py_heideltime_text_normalization'] = py_heideltime_text_normalization_time
+
+    return list_dates, text_normalized, timeML_text, ExecTimeDictionary
 
 
-def refactor_text(normalized_dates, ListOfTagContents, nt):
+def refactor_text(normalized_dates, ListOfTagContents, tagged_text):
     for i in range(len(ListOfTagContents)):
-        nt = re.sub('<TIMEX3' + ListOfTagContents[i] + '</TIMEX3>', '<d>' + normalized_dates[i] + '</d>', nt,
-                    re.IGNORECASE)
-    return nt
+        tagged_text = re.sub('<TIMEX3' + ListOfTagContents[i] + '</TIMEX3>', '<d>' + normalized_dates[i] + '</d>', tagged_text,
+                             re.IGNORECASE)
+    return tagged_text
 
-
-def remove_files(num_files):
-    import os
-    os.remove('config.props')
-    i_files = 0
-    while i_files <= num_files:
-        os.remove('text' + str(i_files) + '.txt')
-        i_files += 1
-
+def get_Path():
+    if platform.system() == 'Linux' or platform.system() == 'Darwin':
+        path = imp.find_module('py_heideltime')[1]
+        full_path = path + "/Heideltime/TreeTaggerLinux"
+    else:
+        path = imp.find_module('py_heideltime')[1]
+        pp = path.replace('\\', '''\\\\''')
+        full_path = str(pp) + '''\\\Heideltime\\\TreeTaggerWindows'''
+    return path, full_path
 
 import emoji
 def remove_emoji(text):
@@ -245,3 +199,53 @@ def pre_process_text(text):
     else:
         return text
 
+def configProps(full_path):
+    conf = '''
+        ################################
+        ##           MAIN             ##
+        ################################
+        # Consideration of different timex3-types
+        # Date
+        considerDate = true
+        # Duration
+        considerDuration = true
+        # Set
+        considerSet = true
+        # Time
+        considerTime = true
+        # Temponyms (make sure you know what you do if you set this to "true")
+        considerTemponym = false
+        ###################################
+        # Path to TreeTagger home directory
+        ###################################
+        # Ensure there is no white space in path (try to escape white spaces)
+        treeTaggerHome = ''' + full_path + '''
+        # This one is only necessary if you want to process chinese documents.
+        chineseTokenizerPath = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/treetagger/chinese-tokenizer)
+        config_path =
+        # DO NOT CHANGE THE FOLLOWING
+        ################################
+        # Relative path of type system in HeidelTime home directory
+        typeSystemHome = desc/type/HeidelTime_TypeSystem.xml
+        # Relative path of dkpro type system in HeidelTime home directory
+        typeSystemHome_DKPro = desc/type/DKPro_TypeSystem.xml
+        # Name of uima-context variables...
+        # ...for date-consideration
+        uimaVarDate = Date
+        # ...for duration-consideration
+        uimaVarDuration = Duration
+        # ...for language
+        uimaVarLanguage = Language
+        # ...for set-consideration
+        uimaVarSet = Set
+        # ...for time-consideration
+        uimaVarTime = Time
+        # ...for temponym-consideration
+        uimaVarTemponym = Temponym
+        # ...for type to process
+        uimaVarTypeToProcess = Type
+        '''
+    with open("config.props", "w+") as f:
+        f.truncate()
+        f.write(conf)
+        f.close()
