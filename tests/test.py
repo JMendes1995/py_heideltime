@@ -33,24 +33,24 @@ if __name__ == '__main__':
         assert textNormalized in TextNormalized
         assert timeML in TimeML
 
-    test("pt_wikipedia_revolucao_francesa", "Portuguese") #54530 chars
-    test("pt_wikipedia_planeta", "Portuguese") # 51668 chars
-    test("pt_arquivo_jugular", "Portuguese") # 28746 chars
-    test("pt_wikipedia_25_de_abril", "Portuguese") # 18997 chars
-    test("pt_wikipedia_operacao_marques", "Portuguese") # 17029 chars
-    test("pt_dilma", "Portuguese") # 2835 chars
+    #test("pt_wikipedia_revolucao_francesa", "Portuguese") #54530 chars
+    #test("pt_wikipedia_planeta", "Portuguese") # 51668 chars
+    #test("pt_arquivo_jugular", "Portuguese") # 28746 chars
+    #test("pt_wikipedia_25_de_abril", "Portuguese") # 18997 chars
+    #test("pt_wikipedia_operacao_marques", "Portuguese") # 17029 chars
+    #test("pt_dilma", "Portuguese") # 2835 chars
 
-    test("en_boston_marathon", "English") # 58547 chars
-    test("en_neuroscience", "English") # 5647 chars
+    #test("en_boston_marathon", "English") # 58547 chars
+    #test("en_neuroscience", "English") # 5647 chars
     #res = timeit.timeit(f'{test("en_neuroscience", "English")}') # 5647 chars, timeit = 0.0107
 
     test("en_haiti_earthquake", "English") # 781 chars
     #res = timeit.timeit(f'{test("en_haiti_earthquake", "English")}') # 781 chars, timeit = 0.0113
 
-    test("en_london", "English")
+    #test("en_london", "English")
     #res = timeit.timeit(f'{test("en_london", "English")}') # 185 chars, timeit = 0.0121913
 
-    test("en_london_options", "English", date_granularity="day", document_type='news', document_creation_time='1939-08-31') # 185 chars
+    #test("en_london_options", "English", date_granularity="day", document_type='news', document_creation_time='1939-08-31') # 185 chars
 
-    test("fr_helmut", "French") # 543 chars
+    #test("fr_helmut", "French") # 543 chars
 
