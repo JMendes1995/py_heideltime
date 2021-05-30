@@ -38,7 +38,6 @@ def py_heideltime(text, language='English', date_granularity='full', document_ty
                 result = pool.starmap(exec_java_heideltime,
                                                   zip(listOfFiles, repeat(path), repeat(language),
                                                       repeat(document_type), repeat(document_creation_time),repeat(date_granularity)))
-                a = type(result)
 
         heideltime_processing_time = time.time( ) - start_time
 
@@ -56,8 +55,8 @@ def py_heideltime(text, language='English', date_granularity='full', document_ty
             py_heideltime_text_normalization.append(d[3]['py_heideltime_text_normalization'])
 
         dates_results = list(chain.from_iterable(dates_list))
-        new_text = ' '.join(new_text_list)
-        tagged_text = ' '.join(tagged_text_list)
+        new_text = ''.join(new_text_list)
+        tagged_text = ''.join(tagged_text_list)
         ExecTimeDictionary={'heideltime_processing': heideltime_processing_time-sum(py_heideltime_text_normalization), 'py_heideltime_text_normalization': sum(py_heideltime_text_normalization)}
         return [dates_results, new_text, tagged_text, ExecTimeDictionary]
     finally:
@@ -103,20 +102,21 @@ def exec_java_heideltime(filename, path, language, document_type, document_creat
                                document_creation_time + ' -t ' + document_type + ' -l ' + language + ' ' + filename
             # run java heideltime standalone version to get all dates
 
+        # TimeML text from java output
+        timeML_text = ""
 
         if platform.system() == 'Windows':
             import subprocess
             myCmd = subprocess.run(java_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8")
-            striped_text = str(myCmd).split('\n')
+            timeML_text = str(myCmd).split('<TimeML>')[1].split("</TimeML>")[0].lstrip("\n").rstrip("\n")
             ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
         else:
             myCmd = os.popen(java_command).read()
             # Find tags from java output
-            striped_text = str(myCmd).split('\n')
+            timeML_text = str(myCmd).split('<TimeML>')[1].split("</TimeML>")[0].lstrip("\n").rstrip("\n")
             ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
 
-        # TimeML text from java output
-        timeML_text = str(striped_text[4])
+
 
         for i in range(len(ListOfTagContents)):
             # normalized date

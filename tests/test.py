@@ -22,11 +22,11 @@ if __name__ == '__main__':
         print(f"#Total Chars = {len(text)}")
         results = py_heideltime(text, language=lang, date_granularity=date_granularity, document_type=document_type, document_creation_time=document_creation_time)
         Score = results[0]
-        #print(Score)
+        print(Score)
         TextNormalized = results[1]
-        #print(TextNormalized)
+        print(TextNormalized)
         TimeML = results[2]
-        #print(TimeML)
+        print(TimeML)
         print(datetime.now() - startTime)
 
         assert Score == score
