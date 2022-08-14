@@ -107,7 +107,7 @@ py_heideltime -t "August 31st ..." -l "English"
 #### Install py_heideltime library
 
 ``` bash
-pip install git+https://github.com/JMendes1995/py_heideltime.git
+pip install git+https://github.com/abhinav-TB/py_heideltime.git
 ```
 <br>
 
