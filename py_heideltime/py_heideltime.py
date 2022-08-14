@@ -1,4 +1,3 @@
-from genericpath import isdir
 import os
 import codecs
 import imp
@@ -13,7 +12,7 @@ import multiprocessing
 from itertools import chain
 import tempfile
 import shutil
-directory_name = ""
+
 def py_heideltime(text, language='English', date_granularity='full', document_type='news', document_creation_time='yyyy-mm-dd'):
     try:
         processed_text=pre_process_text(text)
@@ -59,10 +58,12 @@ def py_heideltime(text, language='English', date_granularity='full', document_ty
         new_text = ''.join(new_text_list)
         tagged_text = ''.join(tagged_text_list)
         ExecTimeDictionary={'heideltime_processing': heideltime_processing_time-sum(py_heideltime_text_normalization), 'py_heideltime_text_normalization': sum(py_heideltime_text_normalization)}
+        if os.path.exists(directory_name):
+            shutil.rmtree(directory_name) #remove folder and files that were processed by heideltime
+        os.remove('config.props')   #remove config.props files
         return [dates_results, new_text, tagged_text, ExecTimeDictionary]
-    finally:
-        os.remove('config.props')
-
+    except Exception as e:
+        print("Error: " + str(e))
 
 def create_txt_files(text, directory_name):
     chunkSize = 30000 #30000 chars
@@ -190,7 +191,6 @@ def text_has_emoji(text):
     if  emoji.distinct_emoji_list(text):
             return True
     return False
-
 
 def pre_process_text(text):
     if text_has_emoji(text):
