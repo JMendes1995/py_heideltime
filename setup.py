@@ -12,10 +12,6 @@ if os.path.isfile(requirementPath):
 
 here = abspath(dirname(__file__))
 
-# Get the long description from the README file
-with open(join(here, 'README.rst'), encoding='utf-8') as buff:
-      long_description = buff.read()
-
 setup(
       name="py_heideltime",
       version="2.0",
