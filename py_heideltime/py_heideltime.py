@@ -36,8 +36,8 @@ def py_heideltime(text, language='English', date_granularity='full', document_ty
         else:
             with Pool(processes=multiprocessing.cpu_count( )) as pool:
                 result = pool.starmap(exec_java_heideltime,
-                                                  zip(listOfFiles, repeat(path), repeat(language),
-                                                      repeat(document_type), repeat(document_creation_time),repeat(date_granularity)))
+                                      zip(listOfFiles, repeat(path), repeat(language),
+                                          repeat(document_type), repeat(document_creation_time),repeat(date_granularity)))
 
         heideltime_processing_time = time.time( ) - start_time
 
@@ -58,11 +58,12 @@ def py_heideltime(text, language='English', date_granularity='full', document_ty
         new_text = ''.join(new_text_list)
         tagged_text = ''.join(tagged_text_list)
         ExecTimeDictionary={'heideltime_processing': heideltime_processing_time-sum(py_heideltime_text_normalization), 'py_heideltime_text_normalization': sum(py_heideltime_text_normalization)}
-        return [dates_results, new_text, tagged_text, ExecTimeDictionary]
-    finally:
-        shutil.rmtree(directory_name) #remove folder and files that were processed by heideltime
+        if os.path.exists(directory_name):
+            shutil.rmtree(directory_name) #remove folder and files that were processed by heideltime
         os.remove('config.props')   #remove config.props files
-
+        return [dates_results, new_text, tagged_text, ExecTimeDictionary]
+    except Exception as e:
+        print("Error: " + str(e))
 
 def create_txt_files(text, directory_name):
     chunkSize = 30000 #30000 chars
@@ -73,7 +74,7 @@ def create_txt_files(text, directory_name):
         temp.write(text.encode('utf-8'))
         temp.close()
         listOfFiles.append(temp.name.replace(os.sep, '/'))
-    else:   
+    else:
         listOfChuncks = [text[i:i + chunkSize] for i in range(0, len(text), chunkSize)]
         for i in range(len(listOfChuncks)):
             temp = tempfile.NamedTemporaryFile(prefix="text_", dir = directory_name, delete=False)
@@ -99,7 +100,7 @@ def exec_java_heideltime(filename, path, language, document_type, document_creat
             java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar ' + document_type + ' -l ' + language + ' ' + filename
         else:
             java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' + \
-                               document_creation_time + ' -t ' + document_type + ' -l ' + language + ' ' + filename
+                           document_creation_time + ' -t ' + document_type + ' -l ' + language + ' ' + filename
             # run java heideltime standalone version to get all dates
 
         # TimeML text from java output
@@ -187,11 +188,9 @@ def remove_emoji(text):
     return emoji.get_emoji_regexp().sub(u'', text)
 
 def text_has_emoji(text):
-    for character in text:
-        if character in emoji.UNICODE_EMOJI:
-            return True
+    if  emoji.distinct_emoji_list(text):
+        return True
     return False
-
 
 def pre_process_text(text):
     if text_has_emoji(text):
