@@ -33,6 +33,7 @@ if __name__ == '__main__':
         assert textNormalized in TextNormalized
         assert timeML in TimeML
 
+    test("pt_emoji", "Portuguese")
     test("pt_wikipedia_revolucao_francesa", "Portuguese") #54530 chars
     test("pt_wikipedia_planeta", "Portuguese") # 51668 chars
     test("pt_arquivo_jugular", "Portuguese") # 28746 chars

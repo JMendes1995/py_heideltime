@@ -3,6 +3,7 @@ import codecs
 import imp
 import platform
 import subprocess
+import emoji
 import re
 from py_heideltime.validate_input import verify_temporal_tagger
 import time
@@ -183,9 +184,8 @@ def get_Path():
         full_path = str(pp) + '''\\\Heideltime\\\TreeTaggerWindows'''
     return path, full_path
 
-import emoji
 def remove_emoji(text):
-    return emoji.get_emoji_regexp().sub(u'', text)
+    return emoji.replace_emoji(text, replace='')
 
 def text_has_emoji(text):
     if  emoji.distinct_emoji_list(text):

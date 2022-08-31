@@ -1,5 +1,5 @@
 
-
+pt_emoji_text = 'texto com emoji 😀'
 
 pt_wikipedia_planeta_text = '''
 Nota: Para o deus da mitologia romana, consulte Para o deus da mitologia romana, consulte Mercúrio (mitologia) ; para demais casos, veja Mercúrio
@@ -931,6 +931,10 @@ Pour ces nombreux accomplissements ainsi que son remarquable engagement  dans le
     Cette distinction européenne est l'une des plus honorifiques car elle est décernée au nom de toute l'Union Européenne pour récompenser l'investissement des personnalités qui ont permis de mener à bien le projet européen. Seul 2 autres personnes ont été distinguées par cette décoration: Jean Monnet en 1976 et Jacques Delors en 2015.
 '''
 
+pt_emoji_score = []
+pt_emoji_timeML = 'texto com emoji'
+pt_emoji_textNormalized = 'texto com emoji'
+
 pt_wikipedia_planeta_score = [('19', 'do século XX'), ('FUTURE_REF', 'próximo'), ('1974', '1974'), ('1975', '1975'), ('2008-01-14', '14 de janeiro de 2008'), ('2009-09', 'setembro de 2009'), ('2011-03-18', '18 de março de 2011'), ('P1Y', 'um ano'), ('BC03', 'do século IV a.C.'), ('PXY', 'anos'), ('1975', '1975'), ('PXY', 'anos'), ('PXY', 'anos'), ('2008-10', 'outubro de 2008'), ('1990', '1990'), ('1014', '1014'), ('1015', '1015'), ('1016', '1016'), ('1980', '1980'), ('1990', '1990'), ('P59D', '59 dias'), ('2008-10-06', '6 de outubro de 2008'), ('P5D', 'cinco dias'), ('P1D', 'um dia'), ('P2Y', 'dois anos'), ('P176D', 'cerca de 176 dias'), ('P7Y', 'cada sete anos'), ('P4D', 'Quatro dias'), ('P116D', 'cada 116 dias'), ('P129D', '129 dias'), ('0028', 'ano 28'), ('FUTURE_REF', 'próxima'), ('2679', '2679'), ('P15D', '15 dias'), ('PXY', 'muitos anos'), ('1965', '1965'), ('P1D', 'um dia'), ('P176D', 'aproximadamente 176 dias'), ('P1D', 'Um dia'), ('PXY', 'anos'), ('FUTURE_REF', 'próximos'), ('PXY', 'anos'), ('1859', '1859'), ('19', 'início do século XX'), ('1566', '1566'), ('PXY', 'anos'), ('2006-11-08', '8 de novembro de 2006'), ('XXXX-03', 'março'), ('XXXX-04', 'abril'), ('XXXX-09', 'setembro'), ('XXXX-10', 'outubro'), ('XXXX-FA', 'do outono'), ('XXXX-FA', 'início do outono'), ('XXXX-WI', 'do inverno'), ('PTXH', 'várias horas'), ('PTXH', 'várias horas'), ('1974', '1974'), ('1975', '1975'), ('XXXX-XX-XX', 'A segunda'), ('2008', '2008'), ('2009', '2009'), ('2011-03-17', '17 de março de 2011'), ('BC13', 'do século XIV a.C.'), ('BC03', 'do século IV a.C.'), ('04', 'do século V'), ('PRESENT_REF', 'atualmente'), ('PT3M', '3 minutos'), ('15', 'do século XVI'), ('16', 'início do século XVII'), ('1631', '1631'), ('1639', '1639'), ('PXCE', 'alguns séculos'), ('1737-05-28', '28 de maio de 1737'), ('FUTURE_REF', 'próxima'), ('2133-12-03', '3 de dezembro de 2133'), ('1800', '1800'), ('P1D', '24 horas'), ('1880', '1880'), ('P88D', '88 dias'), ('1934', '1934'), ('1962-06', 'junho de 1962'), ('PXY', 'anos'), ('P59D', 'cerca de 59 dias'), ('2133-11-30', 'segunda'), ('2000', '2000'), ('FUTURE_REF', 'próximo'), ('1974', '1974'), ('FUTURE_REF', 'próximas'), ('1974-03-27', 'dia 27 de março de 1974'), ('P2D', 'dois dias'), ('FUTURE_REF', 'próximo'), ('FUTURE_REF', 'próxima'), ('1974-03-25', 'A segunda'), ('1975-03-24', '24 de março de 1975'), ('P8D', 'oito dias'), ('FUTURE_REF', 'próximo'), ('PXM', 'alguns meses'), ('1975-03-24', 'segunda'), ('2004-08-03', '3 de agosto de 2004'), ('2005-08', 'agosto de 2005'), ('2006-10', 'outubro de 2006'), ('2007-06', 'junho de 2007'), ('2008-01-14', 'dia 14 de janeiro de 2008'), ('2008-10-06', '6 de outubro de 2008'), ('2009-09-29', '29 de setembro de 2009'), ('2011-03-18', '18 de março de 2011'), ('2011-03-29', '29 de março de 2011'), ('P1Y', 'um ano'), ('PRESENT_REF', 'atualmente'), ('2013', '2013'), ('2012', '2012'), ('2015', '2015'), ('2017', '2017'), ('2024', '2024'), ('P1Y', 'um ano'), ('1597', '1597'), ('1597', '1597'), ('1750', '1750'), ('1886', '1886'), ('1893', '1893'), ('1965', '1965'), ('1934', '1934'), ('1936', '1936'), ('1950', '1950'), ('1956', '1956'), ('1956', '1956'), ('1963', '1963'), ('1964', '1964'), ('1965', '1965'), ('1975', '1975'), ('1980', '1980'), ('1994', '1994'), ('2000', '2000'), ('2005', '2005'), ('2006', '2006')]
 pt_wikipedia_planeta_timeML = '<TIMEX3 tid="t10" type="DATE" value="2008-01-14">14 de janeiro de 2008</TIMEX3>'
 pt_wikipedia_planeta_textNormalized = '<d>2008-01-14</d>'
@@ -979,7 +983,8 @@ fr_helmut_score = [('1998', '1998'), ('1976', '1976'), ('2015', '2015')]
 fr_helmut_timeML = '<TIMEX3 tid="t1" type="DATE" value="1998">1998</TIMEX3>'
 fr_helmut_textNormalized = "<d>1998</d>"
 
-dictTests = {'pt_wikipedia_planeta':[pt_wikipedia_planeta_text, pt_wikipedia_planeta_score, pt_wikipedia_planeta_textNormalized, pt_wikipedia_planeta_timeML],
+dictTests = {'pt_emoji':[pt_emoji_text, pt_emoji_score, pt_emoji_textNormalized, pt_emoji_timeML],
+             'pt_wikipedia_planeta':[pt_wikipedia_planeta_text, pt_wikipedia_planeta_score, pt_wikipedia_planeta_textNormalized, pt_wikipedia_planeta_timeML],
              'pt_wikipedia_revolucao_francesa':[pt_wikipedia_revolucao_francesa_text, pt_wikipedia_revolucao_francesa_score, pt_wikipedia_revolucao_francesa_textNormalized, pt_wikipedia_revolucao_francesa_timeML],
              'pt_wikipedia_operacao_marques':[pt_wikipedia_operacao_marques_text, pt_wikipedia_operacao_marques_score, pt_wikipedia_operacao_marques_textNormalized, pt_wikipedia_operacao_marques_timeML],
              'pt_wikipedia_25_de_abril':[pt_wikipedia_25_de_abril_text, pt_wikipedia_25_de_abril_score, pt_wikipedia_25_de_abril_textNormalized, pt_wikipedia_25_de_abril_timeML],
