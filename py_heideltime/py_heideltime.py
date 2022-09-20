@@ -169,9 +169,9 @@ def exec_java_heideltime(filename, path, language, document_type, document_creat
 
 
 def refactor_text(normalized_dates, ListOfTagContents, tagged_text):
-    for i in range(len(ListOfTagContents)):
-        tagged_text = re.sub('<TIMEX3' + ListOfTagContents[i] + '</TIMEX3>', '<d>' + normalized_dates[i] + '</d>', tagged_text,
-                             re.IGNORECASE)
+    """Replace the TIMEX3 tags with the normalized dates in the tagged text."""
+    for tag_content, date in zip(ListOfTagContents, normalized_dates):
+        tagged_text = tagged_text.replace(f"<TIMEX3{tag_content}</TIMEX3>", f"<d>{date}</d>", 1)
     return tagged_text
 
 def get_Path():
