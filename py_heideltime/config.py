@@ -5,13 +5,15 @@ The conf.props file is required to run the Jav implementation of HeidelTime.
 import platform
 from pathlib import Path
 
+LIBRARY_PATH = Path(__file__).parent
 
-def write_config_props(library_path: Path) -> None:
+
+def write_config_props(path: Path) -> None:
     if platform.system() == "Windows":
-        tagger_path = library_path / "Heideltime" / "TreeTaggerWindows"
+        tagger_path = path / "Heideltime" / "TreeTaggerWindows"
     else:
-        tagger_path = library_path / "Heideltime" / "TreeTaggerLinux"
+        tagger_path = path / "Heideltime" / "TreeTaggerLinux"
 
-    conf_template = (library_path / "config_props_template").open().read()
-    conf_content = conf_template.replace("{path}", str(tagger_path))
-    (library_path / "config.props").open("w").write(conf_content)
+    conf_template = (LIBRARY_PATH / "config_props_template").open().read()
+    conf_content = conf_template.replace("{path}", str(tagger_path.absolute()))
+    (path / "config.props").open("w").write(conf_content)
