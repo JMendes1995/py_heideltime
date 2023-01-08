@@ -1,31 +1,20 @@
-from codecs import open
-from os.path import join, abspath, dirname
-from setuptools import setup, find_packages
-import os
+import setuptools
 
-requirementPath = 'requirements.txt'
-install_requires = []
-
-if os.path.isfile(requirementPath):
-      with open(requirementPath) as f:
-            install_requires = f.read().splitlines()
-
-here = abspath(dirname(__file__))
-
-setup(
-      name="py_heideltime",
-      version="2.0",
-      description="python wrapper for Heideltime temporal tagger",
-      author='Jorge Alexandre Rocha Mendes',
-      author_email='mendesjorge49@gmail.com',
-      url='https://github.com/JMendes1995/py_heideltime.git',
-      packages=find_packages(),
-      include_package_data=True,
-      install_requires=install_requires,
-      entry_points={
-            'console_scripts': [
-                  'py_heideltime=py_heideltime.cli:dates'
-            ]
-      },
+setuptools.setup(
+    name="py_heideltime",
+    version="2.0.0",
+    description="Python wrapper for HeidelTime temporal tagger.",
+    author='Jorge Mendes, Ricardo Campos, and Hugo Sousa',
+    author_email='mendesjorge49@gmail.com',
+    url='https://github.com/JMendes1995/py_heideltime.git',
+    packages=setuptools.find_packages(),
+    include_package_data=True,
+    install_requires=[
+        "emoji==2.0.0"
+    ],
+    entry_points={
+        'console_scripts': [
+            'py_heideltime=py_heideltime.cli:dates'
+        ]
+    },
 )
-
