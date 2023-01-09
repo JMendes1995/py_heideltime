@@ -8,12 +8,12 @@ from pathlib import Path
 LIBRARY_PATH = Path(__file__).parent
 
 
-def write_config_props(path: Path) -> None:
+def write_config_props() -> None:
     if platform.system() == "Windows":
-        tagger_path = path / "Heideltime" / "TreeTaggerWindows"
+        tagger_path = LIBRARY_PATH / "Heideltime" / "TreeTaggerWindows"
     else:
-        tagger_path = path / "Heideltime" / "TreeTaggerLinux"
+        tagger_path = LIBRARY_PATH / "Heideltime" / "TreeTaggerLinux"
 
     conf_template = (LIBRARY_PATH / "config_props_template").open().read()
     conf_content = conf_template.replace("{path}", str(tagger_path.absolute()))
-    (path / "config.props").open("w").write(conf_content)
+    Path("config.props").open("w").write(conf_content)

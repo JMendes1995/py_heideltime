@@ -4,9 +4,9 @@ from py_heideltime.config import write_config_props
 
 
 def test_write_config_props():
-    path = Path(__file__).parent
-    write_config_props(path)
+    tagger_path = Path(__file__).parent.parent / "py_heideltime" / "Heideltime" / "TreeTagger"
+    write_config_props()
 
-    content = (path / "config.props").open().read()
-    assert str(path.absolute()) in content
-    (path / "config.props").unlink()
+    content = Path("config.props").open().read()
+    assert str(tagger_path.absolute()) in content
+    Path("config.props").unlink()
