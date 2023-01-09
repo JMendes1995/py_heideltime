@@ -2,10 +2,8 @@ import multiprocessing
 import os
 import platform
 import re
-import shutil
 import tempfile
 from itertools import repeat
-from multiprocessing import Pool
 from pathlib import Path
 from typing import List, Tuple
 
@@ -31,58 +29,52 @@ def heideltime(
 
     write_config_props()
 
-    directory_name = tempfile.mkdtemp(dir=LIBRARY_PATH)
-    list_of_files = create_txt_files(processed_text, directory_name)
+    with tempfile.TemporaryDirectory(dir=LIBRARY_PATH) as tempdir:
+        filepaths = create_text_files(processed_text, tempdir)
 
-    if len(list_of_files) == 1:
-        result = [exec_java_heideltime(
-            list_of_files[0],
-            language,
-            document_type,
-            dct,
-        )]
-    else:
-        with Pool(processes=multiprocessing.cpu_count()) as pool:
-            result = pool.starmap(
-                exec_java_heideltime,
-                zip(list_of_files, repeat(language), repeat(document_type), repeat(dct))
-            )
+        if len(filepaths) == 1:
+            result = [exec_java_heideltime(
+                filepaths[0],
+                language,
+                document_type,
+                dct,
+            )]
+        else:
+            processes = multiprocessing.cpu_count()
+            with multiprocessing.Pool(processes=processes) as pool:
+                result = pool.starmap(
+                    exec_java_heideltime,
+                    zip(filepaths, repeat(language), repeat(document_type), repeat(dct))
+                )
 
-    dates_list = []
-    new_text_list = []
-    tagged_text_list = []
+        dates_list = []
+        new_text_list = []
+        tagged_text_list = []
 
-    for d in result:
-        dates_list += d[0]
-        new_text_list.append(d[1])
-        tagged_text_list.append(d[2])
+        for d in result:
+            dates_list += d[0]
+            new_text_list.append(d[1])
+            tagged_text_list.append(d[2])
 
-    new_text = "".join(new_text_list)
-    tagged_text = "".join(tagged_text_list)
-    if os.path.exists(directory_name):
-        shutil.rmtree(directory_name)  # remove folder and files that were processed by heideltime
+        new_text = "".join(new_text_list)
+        tagged_text = "".join(tagged_text_list)
     os.remove("config.props")  # remove config.props files
     return dates_list, new_text, tagged_text
 
 
-def create_txt_files(text: str, directory_name: Path) -> List:
-    chunk_size = 30_000  # 30000 chars
-    list_of_files = []
+def create_text_files(text: str, dir_path: Path) -> List:
+    """Writes text files to be annotated by Java implementation of HeidelTime."""
+    max_n_characters = 30_000
+    n_characters = len(text)
+    chunks = [text[i:i + max_n_characters] for i in range(0, n_characters, max_n_characters)]
 
-    if len(text) < chunk_size:
-        temp = tempfile.NamedTemporaryFile(prefix="text_", dir=directory_name, delete=False)
-        temp.write(text.encode("utf-8"))
+    filepaths = []
+    for chunk in chunks:
+        temp = tempfile.NamedTemporaryFile(dir=dir_path, delete=False)
+        temp.write(chunk.encode("utf-8"))
         temp.close()
-        list_of_files.append(temp.name.replace(os.sep, "/"))
-    else:
-        list_of_chuncks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
-        for i in range(len(list_of_chuncks)):
-            temp = tempfile.NamedTemporaryFile(prefix="text_", dir=directory_name, delete=False)
-            temp.write(list_of_chuncks[i].encode("utf-8"))
-            temp.close()
-            list_of_files.append(temp.name.replace(os.sep, "/"))
-
-    return list_of_files
+        filepaths.append(Path(temp.name))
+    return filepaths
 
 
 def exec_java_heideltime(
