@@ -10,6 +10,8 @@ from pathlib import Path
 
 import emoji
 
+from py_heideltime.config import write_config_props
+
 LIBRARY_PATH = Path(__file__).parent
 if platform.system() == "Windows":
     TAGGER_PATH = LIBRARY_PATH / "Heideltime" / "TreeTaggerWindows"
@@ -26,7 +28,7 @@ def heideltime(
 ):
     processed_text = process_text(text)
 
-    config_props()
+    write_config_props()
 
     directory_name = tempfile.mkdtemp(dir=LIBRARY_PATH)
     list_of_files = create_txt_files(processed_text, directory_name)
@@ -136,55 +138,3 @@ def process_text(text):
         return remove_emoji(text)
     else:
         return text
-
-
-def config_props():
-    conf = f"""
-        ################################
-        ##           MAIN             ##
-        ################################
-        # Consideration of different timex3-types
-        # Date
-        considerDate = true
-        # Duration
-        considerDuration = true
-        # Set
-        considerSet = true
-        # Time
-        considerTime = true
-        # Temponyms (make sure you know what you do if you set this to "true")
-        considerTemponym = false
-        ###################################
-        # Path to TreeTagger home directory
-        ###################################
-        # Ensure there is no white space in path (try to escape white spaces)
-        treeTaggerHome = {str(TAGGER_PATH.absolute())}
-        # This one is only necessary if you want to process chinese documents.
-        chineseTokenizerPath = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/treetagger/chinese-tokenizer)
-        config_path =
-        # DO NOT CHANGE THE FOLLOWING
-        ################################
-        # Relative path of type system in HeidelTime home directory
-        typeSystemHome = desc/type/HeidelTime_TypeSystem.xml
-        # Relative path of dkpro type system in HeidelTime home directory
-        typeSystemHome_DKPro = desc/type/DKPro_TypeSystem.xml
-        # Name of uima-context variables...
-        # ...for date-consideration
-        uimaVarDate = Date
-        # ...for duration-consideration
-        uimaVarDuration = Duration
-        # ...for language
-        uimaVarLanguage = Language
-        # ...for set-consideration
-        uimaVarSet = Set
-        # ...for time-consideration
-        uimaVarTime = Time
-        # ...for temponym-consideration
-        uimaVarTemponym = Temponym
-        # ...for type to process
-        uimaVarTypeToProcess = Type
-        """
-    with open("config.props", "w+") as f:
-        f.truncate()
-        f.write(conf)
-        f.close()
