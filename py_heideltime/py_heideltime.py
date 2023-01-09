@@ -1,46 +1,49 @@
-import imp
 import multiprocessing
 import os
 import platform
 import re
 import shutil
 import tempfile
-import time
 from itertools import repeat
 from multiprocessing import Pool
+from pathlib import Path
 
 import emoji
+
+LIBRARY_PATH = Path(__file__).parent
+if platform.system() == "Windows":
+    TAGGER_PATH = LIBRARY_PATH / "Heideltime" / "TreeTaggerWindows"
+else:
+    TAGGER_PATH = LIBRARY_PATH / "Heideltime" / "TreeTaggerLinux"
+HEIDELTIME_PATH = LIBRARY_PATH / "Heideltime" / "de.unihd.dbs.heideltime.standalone.jar"
 
 
 def heideltime(
         text,
         language="English",
         document_type="news",
-        dct="yyyy-mm-dd"
+        dct=None
 ):
     processed_text = process_text(text)
 
-    library_path, tagger_path = get_Path()
-    configProps(tagger_path)
+    config_props()
 
-    directory_name = tempfile.mkdtemp(dir=library_path)
-    listOfFiles = create_txt_files(processed_text, directory_name)
+    directory_name = tempfile.mkdtemp(dir=LIBRARY_PATH)
+    list_of_files = create_txt_files(processed_text, directory_name)
 
-    result = []
-    if len(listOfFiles) == 1:
-        result_temp = exec_java_heideltime(
-            listOfFiles[0],
-            library_path,
+    if len(list_of_files) == 1:
+        result = [exec_java_heideltime(
+            list_of_files[0],
             language,
             document_type,
             dct,
-        )
-        result.append(result_temp)
+        )]
     else:
         with Pool(processes=multiprocessing.cpu_count()) as pool:
-            result = pool.starmap(exec_java_heideltime,
-                                  zip(list_of_files, repeat(library_path), repeat(language),
-                                      repeat(document_type), repeat(dct)))
+            result = pool.starmap(
+                exec_java_heideltime,
+                zip(list_of_files, repeat(language), repeat(document_type), repeat(dct))
+            )
 
     dates_list = []
     new_text_list = []
@@ -51,115 +54,75 @@ def heideltime(
         new_text_list.append(d[1])
         tagged_text_list.append(d[2])
 
-    new_text = ''.join(new_text_list)
-    tagged_text = ''.join(tagged_text_list)
+    new_text = "".join(new_text_list)
+    tagged_text = "".join(tagged_text_list)
     if os.path.exists(directory_name):
         shutil.rmtree(directory_name)  # remove folder and files that were processed by heideltime
-    os.remove('config.props')  # remove config.props files
+    os.remove("config.props")  # remove config.props files
     return dates_list, new_text, tagged_text
 
 
 def create_txt_files(text, directory_name):
-    chunkSize = 30_000  # 30000 chars
-    listOfFiles = []
+    chunk_size = 30_000  # 30000 chars
+    list_of_files = []
 
-    if len(text) < chunkSize:
+    if len(text) < chunk_size:
         temp = tempfile.NamedTemporaryFile(prefix="text_", dir=directory_name, delete=False)
-        temp.write(text.encode('utf-8'))
+        temp.write(text.encode("utf-8"))
         temp.close()
-        listOfFiles.append(temp.name.replace(os.sep, '/'))
+        list_of_files.append(temp.name.replace(os.sep, "/"))
     else:
-        listOfChuncks = [text[i:i + chunkSize] for i in range(0, len(text), chunkSize)]
-        for i in range(len(listOfChuncks)):
+        list_of_chuncks = [text[i:i + chunk_size] for i in range(0, len(text), chunk_size)]
+        for i in range(len(list_of_chuncks)):
             temp = tempfile.NamedTemporaryFile(prefix="text_", dir=directory_name, delete=False)
-            temp.write(listOfChuncks[i].encode('utf-8'))
+            temp.write(list_of_chuncks[i].encode("utf-8"))
             temp.close()
-            listOfFiles.append(temp.name.replace(os.sep, '/'))
+            list_of_files.append(temp.name.replace(os.sep, "/"))
 
-    return listOfFiles
+    return list_of_files
 
 
-def exec_java_heideltime(filename, path, language, document_type, dct):
+def exec_java_heideltime(filename, language, document_type, dct):
     dates = []
-    match = re.findall(r"^\d{4}-\d{2}-\d{2}$", dct)
-    if match == [] and dct != "yyyy-mm-dd":
-        print("Please specify date in the following format: YYYY-MM-DD.")
-        return {}
+    if dct is not None:
+        match = re.findall(r"^\d{4}-\d{2}-\d{2}$", dct)
+        if not match:
+            raise ValueError("Please specify date in the following format: YYYY-MM-DD.")
+        java_cmd = f"java -jar {HEIDELTIME_PATH} -dct {dct} -t {document_type} -l {language} {filename}"
     else:
+        java_cmd = f"java -jar {HEIDELTIME_PATH} {document_type} -l {language} {filename}"
 
-        normalized_dates_list = []
-        if dct == 'yyyy-mm-dd':
-            java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar ' + document_type + ' -l ' + language + ' ' + filename
-        else:
-            java_command = 'java -jar ' + path + '/Heideltime/de.unihd.dbs.heideltime.standalone.jar  -dct ' + \
-                           dct + ' -t ' + document_type + ' -l ' + language + ' ' + filename
-            # run java heideltime standalone version to get all dates
+    # TimeML text from java output
+    if platform.system() == "Windows":
+        import subprocess
+        xml_doc = subprocess.run(java_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8")
+    else:
+        xml_doc = os.popen(java_cmd).read()
 
-        # TimeML text from java output
-        if platform.system() == 'Windows':
-            import subprocess
-            myCmd = subprocess.run(java_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8")
-            timeML_text = str(myCmd).split('<TimeML>')[1].split("</TimeML>")[0].lstrip("\n").rstrip("\n")
-            ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
-        else:
-            myCmd = os.popen(java_command).read()
-            # Find tags from java output
-            timeML_text = str(myCmd).split('<TimeML>')[1].split("</TimeML>")[0].lstrip("\n").rstrip("\n")
-            ListOfTagContents = re.findall("<TIMEX3(.*?)</TIMEX3>", str(myCmd))
+    # Find tags from java output
+    time_ml_text = str(xml_doc).split("<TimeML>")[1].split("</TimeML>")[0].strip("\n")
+    tags = re.findall("<TIMEX3(.*?)</TIMEX3>", str(xml_doc))
 
-        for i in range(len(ListOfTagContents)):
-            # normalized date
-            normalized_dates = re.findall('value="(.*?)"', ListOfTagContents[i], re.IGNORECASE)
-            # original fate
-            original_dates = re.findall('>(.+)', ListOfTagContents[i], re.IGNORECASE)
-            # insert in list the date value and the expression that originate the date
-            normalized_dates_list.append(normalized_dates[0])
+    normalized_dates = []
+    for tag in tags:
+        [normalized_date] = re.findall("value=\"(.*?)\"", tag, re.IGNORECASE)
+        [original_date] = re.findall(">(.+)", tag)
+        normalized_dates.append(normalized_date)
+        dates.append((normalized_date, original_date))
 
-        normalized_dates = []
-        for tag in tags:
-            [normalized_date] = re.findall("value=\"(.*?)\"", tag, re.IGNORECASE)
-            [original_date] = re.findall(">(.+)", tag)
-            normalized_dates.append(normalized_date)
-            dates.append((normalized_date, original_date))
-
-        text_normalized = refactor_text(normalized_dates, tags, time_ml_text)
+    text_normalized = refactor_text(normalized_dates, tags, time_ml_text)
     return dates, text_normalized, time_ml_text
 
 
-                except:
-                    pass
-            else:
-                try:
-                    list_dates.append((normalized_dates[0], original_dates[0]))
-                except:
-                    pass
-
-        labeling_start_time = time.time()
-        text_normalized = refactor_text(normalized_dates_list, ListOfTagContents, timeML_text)
-
-    return list_dates, text_normalized, timeML_text
-
-
-def refactor_text(normalized_dates, ListOfTagContents, tagged_text):
+def refactor_text(normalized_dates, tags, tagged_text):
     """Replace the TIMEX3 tags with the normalized dates in the tagged text."""
-    for tag_content, date in zip(ListOfTagContents, normalized_dates):
+    for tag_content, date in zip(tags, normalized_dates):
         tagged_text = tagged_text.replace(f"<TIMEX3{tag_content}</TIMEX3>", f"<d>{date}</d>", 1)
     return tagged_text
 
 
-def get_Path():
-    if platform.system() == 'Linux' or platform.system() == 'Darwin':
-        path = imp.find_module('py_heideltime')[1]
-        full_path = path + "/Heideltime/TreeTaggerLinux"
-    else:
-        path = imp.find_module('py_heideltime')[1]
-        pp = path.replace('\\', '''\\\\''')
-        full_path = str(pp) + '''\\\Heideltime\\\TreeTaggerWindows'''
-    return path, full_path
-
-
 def remove_emoji(text):
-    return emoji.replace_emoji(text, replace='')
+    return emoji.replace_emoji(text, replace="")
 
 
 def text_has_emoji(text):
@@ -175,8 +138,8 @@ def process_text(text):
         return text
 
 
-def configProps(full_path):
-    conf = '''
+def config_props():
+    conf = f"""
         ################################
         ##           MAIN             ##
         ################################
@@ -195,7 +158,7 @@ def configProps(full_path):
         # Path to TreeTagger home directory
         ###################################
         # Ensure there is no white space in path (try to escape white spaces)
-        treeTaggerHome = ''' + full_path + '''
+        treeTaggerHome = {str(TAGGER_PATH.absolute())}
         # This one is only necessary if you want to process chinese documents.
         chineseTokenizerPath = SET ME IN CONFIG.PROPS! (e.g., /home/jannik/treetagger/chinese-tokenizer)
         config_path =
@@ -220,7 +183,7 @@ def configProps(full_path):
         uimaVarTemponym = Temponym
         # ...for type to process
         uimaVarTypeToProcess = Type
-        '''
+        """
     with open("config.props", "w+") as f:
         f.truncate()
         f.write(conf)
