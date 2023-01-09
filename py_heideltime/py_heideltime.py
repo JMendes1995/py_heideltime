@@ -84,7 +84,7 @@ def create_txt_files(text, directory_name):
 
 def exec_java_heideltime(filename, path, language, document_type, dct, date_type):
     list_dates = []
-    match = re.findall('^\d{4}[-]\d{2}[-]\d{2}$', dct)
+    match = re.findall(r'^\d{4}-\d{2}-\d{2}$', dct)
     if match == [] and dct != 'yyyy-mm-dd':
         print('Please specify date in the following format: YYYY-MM-DD.')
         return {}
@@ -121,19 +121,19 @@ def exec_java_heideltime(filename, path, language, document_type, dct, date_type
             if date_type != 'full':
                 try:
                     if date_type.lower() == 'year':
-                        years = re.findall('\d{4}', normalized_dates[0])
+                        years = re.findall(r'\d{4}', normalized_dates[0])
                         list_dates.append((years[0], original_dates[0]))
                         if re.match(years[0] + '(.*?)', normalized_dates[0]):
                             normalized_dates_list[len(normalized_dates_list) - 1] = years[0]
 
                     elif date_type.lower() == 'month':
-                        months = re.findall('\d{4}[-]\d{2}', normalized_dates[0])
+                        months = re.findall(r'\d{4}-\d{2}', normalized_dates[0])
                         list_dates.append((months[0], original_dates[0]))
                         if re.match(months[0] + '(.*?)', normalized_dates[0]):
                             normalized_dates_list[len(normalized_dates_list) - 1] = months[0]
 
                     elif date_type.lower() == 'day':
-                        days = re.findall('\d{4}[-]\d{2}[-]\d{2}', normalized_dates[0])
+                        days = re.findall(r'\d{4}-\d{2}-\d{2}', normalized_dates[0])
                         list_dates.append((days[0], original_dates[0]))
                         if re.match(days[0] + '(.*?)', normalized_dates[0]):
                             normalized_dates_list[len(normalized_dates_list) - 1] = days[0]
