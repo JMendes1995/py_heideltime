@@ -32,34 +32,22 @@ def heideltime(
     with tempfile.TemporaryDirectory(dir=LIBRARY_PATH) as tempdir:
         filepaths = create_text_files(processed_text, tempdir)
 
-        if len(filepaths) == 1:
-            result = [exec_java_heideltime(
-                filepaths[0],
-                language,
-                document_type,
-                dct,
-            )]
-        else:
-            processes = multiprocessing.cpu_count()
-            with multiprocessing.Pool(processes=processes) as pool:
-                result = pool.starmap(
-                    exec_java_heideltime,
-                    zip(filepaths, repeat(language), repeat(document_type), repeat(dct))
-                )
+        processes = multiprocessing.cpu_count()
+        with multiprocessing.Pool(processes=processes) as pool:
+            annotations = pool.starmap(
+                _exec_java_heideltime,
+                zip(filepaths, repeat(language), repeat(document_type), repeat(dct))
+            )
 
-        dates_list = []
-        new_text_list = []
-        tagged_text_list = []
+        dates = []
+        text_normalized, time_ml_text = "", ""
+        for annotation in annotations:
+            dates += annotation[0]
+            text_normalized += annotation[1]
+            time_ml_text += annotation[2]
 
-        for d in result:
-            dates_list += d[0]
-            new_text_list.append(d[1])
-            tagged_text_list.append(d[2])
-
-        new_text = "".join(new_text_list)
-        tagged_text = "".join(tagged_text_list)
     os.remove("config.props")  # remove config.props files
-    return dates_list, new_text, tagged_text
+    return dates, text_normalized, time_ml_text
 
 
 def create_text_files(text: str, dir_path: Path) -> List:
@@ -77,7 +65,7 @@ def create_text_files(text: str, dir_path: Path) -> List:
     return filepaths
 
 
-def exec_java_heideltime(
+def _exec_java_heideltime(
         filename: Path,
         language: str,
         document_type: str,
