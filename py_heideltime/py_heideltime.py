@@ -7,6 +7,7 @@ import tempfile
 from itertools import repeat
 from multiprocessing import Pool
 from pathlib import Path
+from typing import List, Tuple
 
 import emoji
 
@@ -21,10 +22,10 @@ HEIDELTIME_PATH = LIBRARY_PATH / "Heideltime" / "de.unihd.dbs.heideltime.standal
 
 
 def heideltime(
-        text,
-        language="English",
-        document_type="news",
-        dct=None
+        text: str,
+        language: str = "English",
+        document_type: str = "news",
+        dct: str = None
 ):
     processed_text = process_text(text)
 
@@ -64,7 +65,7 @@ def heideltime(
     return dates_list, new_text, tagged_text
 
 
-def create_txt_files(text, directory_name):
+def create_txt_files(text: str, directory_name: Path) -> List:
     chunk_size = 30_000  # 30000 chars
     list_of_files = []
 
@@ -84,7 +85,12 @@ def create_txt_files(text, directory_name):
     return list_of_files
 
 
-def exec_java_heideltime(filename, language, document_type, dct):
+def exec_java_heideltime(
+        filename: Path,
+        language: str,
+        document_type: str,
+        dct: str
+) -> Tuple:
     dates = []
     if dct is not None:
         match = re.findall(r"^\d{4}-\d{2}-\d{2}$", dct)
@@ -116,24 +122,28 @@ def exec_java_heideltime(filename, language, document_type, dct):
     return dates, text_normalized, time_ml_text
 
 
-def refactor_text(normalized_dates, tags, tagged_text):
+def refactor_text(
+        normalized_dates: List[str],
+        tags: List[str],
+        tagged_text: str
+) -> str:
     """Replace the TIMEX3 tags with the normalized dates in the tagged text."""
     for tag_content, date in zip(tags, normalized_dates):
         tagged_text = tagged_text.replace(f"<TIMEX3{tag_content}</TIMEX3>", f"<d>{date}</d>", 1)
     return tagged_text
 
 
-def remove_emoji(text):
+def remove_emoji(text: str) -> str:
     return emoji.replace_emoji(text, replace="")
 
 
-def text_has_emoji(text):
+def text_has_emoji(text: str) -> bool:
     if emoji.distinct_emoji_list(text):
         return True
     return False
 
 
-def process_text(text):
+def process_text(text: str) -> str:
     if text_has_emoji(text):
         return remove_emoji(text)
     else:
