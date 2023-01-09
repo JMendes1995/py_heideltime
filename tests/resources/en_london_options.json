@@ -1,19 +1,27 @@
 {
-    "text": "\nThurs August 31st - News today that they are beginning 1092-1107 to evacuate the London children tomorrow. Percy is a billeting officer. I can't see that they will be much safer here.\n",
-    "timexs": [
-        [
-            "1939-08-31",
-            "August 31st"
-        ],
-        [
-            "1939-08-31",
-            "today"
-        ],
-        [
-            "1939-09-01",
-            "tomorrow"
-        ]
+  "text": "\nThurs August 31st - News today that they are beginning 1092-1107 to evacuate the London children tomorrow. Percy is a billeting officer. I can't see that they will be much safer here.\n",
+  "timexs": [
+    [
+      "1939-08-31",
+      "August 31st"
     ],
-    "normalized_text": "<d>1939-08-31</d>",
-    "time_ml": "<TIMEX3 tid=\"t4\" type=\"DATE\" value=\"1939-08-31\">August 31st</TIMEX3>"
+    [
+      "1939-08-31",
+      "today"
+    ],
+    [
+      "1092",
+      "1092"
+    ],
+    [
+      "1107",
+      "1107"
+    ],
+    [
+      "1939-09-01",
+      "tomorrow"
+    ]
+  ],
+  "normalized_text": "<d>1939-08-31</d>",
+  "time_ml": "<TIMEX3 tid=\"t4\" type=\"DATE\" value=\"1939-08-31\">August 31st</TIMEX3>"
 }

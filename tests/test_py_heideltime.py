@@ -83,13 +83,7 @@ def test_heideltime_en_london():
 
 def test_heideltime_en_london_options():
     filepath = RESOURCES_PATH / "en_london_options.json"
-    _test_json(
-        filepath,
-        language="English",
-        date_type="day",
-        document_type='news',
-        dct='1939-08-31'
-    )
+    _test_json(filepath, language="English", dct='1939-08-31')
 
 
 def test_heideltime_fr_helmut():

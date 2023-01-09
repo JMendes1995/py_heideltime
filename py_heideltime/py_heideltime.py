@@ -14,10 +14,9 @@ import emoji
 
 def heideltime(
         text,
-        language='English',
-        date_type='full',
-        document_type='news',
-        dct='yyyy-mm-dd'
+        language="English",
+        document_type="news",
+        dct="yyyy-mm-dd"
 ):
     processed_text = process_text(text)
 
@@ -35,15 +34,13 @@ def heideltime(
             language,
             document_type,
             dct,
-            date_type
         )
         result.append(result_temp)
     else:
         with Pool(processes=multiprocessing.cpu_count()) as pool:
             result = pool.starmap(exec_java_heideltime,
-                                  zip(listOfFiles, repeat(library_path), repeat(language),
-                                      repeat(document_type), repeat(dct),
-                                      repeat(date_type)))
+                                  zip(list_of_files, repeat(library_path), repeat(language),
+                                      repeat(document_type), repeat(dct)))
 
     dates_list = []
     new_text_list = []
@@ -82,11 +79,11 @@ def create_txt_files(text, directory_name):
     return listOfFiles
 
 
-def exec_java_heideltime(filename, path, language, document_type, dct, date_type):
-    list_dates = []
-    match = re.findall(r'^\d{4}-\d{2}-\d{2}$', dct)
-    if match == [] and dct != 'yyyy-mm-dd':
-        print('Please specify date in the following format: YYYY-MM-DD.')
+def exec_java_heideltime(filename, path, language, document_type, dct):
+    dates = []
+    match = re.findall(r"^\d{4}-\d{2}-\d{2}$", dct)
+    if match == [] and dct != "yyyy-mm-dd":
+        print("Please specify date in the following format: YYYY-MM-DD.")
         return {}
     else:
 
@@ -118,25 +115,16 @@ def exec_java_heideltime(filename, path, language, document_type, dct, date_type
             # insert in list the date value and the expression that originate the date
             normalized_dates_list.append(normalized_dates[0])
 
-            if date_type != 'full':
-                try:
-                    if date_type.lower() == 'year':
-                        years = re.findall(r'\d{4}', normalized_dates[0])
-                        list_dates.append((years[0], original_dates[0]))
-                        if re.match(years[0] + '(.*?)', normalized_dates[0]):
-                            normalized_dates_list[len(normalized_dates_list) - 1] = years[0]
+        normalized_dates = []
+        for tag in tags:
+            [normalized_date] = re.findall("value=\"(.*?)\"", tag, re.IGNORECASE)
+            [original_date] = re.findall(">(.+)", tag)
+            normalized_dates.append(normalized_date)
+            dates.append((normalized_date, original_date))
 
-                    elif date_type.lower() == 'month':
-                        months = re.findall(r'\d{4}-\d{2}', normalized_dates[0])
-                        list_dates.append((months[0], original_dates[0]))
-                        if re.match(months[0] + '(.*?)', normalized_dates[0]):
-                            normalized_dates_list[len(normalized_dates_list) - 1] = months[0]
+        text_normalized = refactor_text(normalized_dates, tags, time_ml_text)
+    return dates, text_normalized, time_ml_text
 
-                    elif date_type.lower() == 'day':
-                        days = re.findall(r'\d{4}-\d{2}-\d{2}', normalized_dates[0])
-                        list_dates.append((days[0], original_dates[0]))
-                        if re.match(days[0] + '(.*?)', normalized_dates[0]):
-                            normalized_dates_list[len(normalized_dates_list) - 1] = days[0]
 
                 except:
                     pass
