@@ -13,8 +13,8 @@ from py_heideltime.config import write_config_props
 LIBRARY_PATH = Path(__file__).parent
 HEIDELTIME_PATH = LIBRARY_PATH / "Heideltime" / "de.unihd.dbs.heideltime.standalone.jar"
 
-if not (LIBRARY_PATH / "config.props").exists():
-    write_config_props(LIBRARY_PATH)
+# if not (LIBRARY_PATH / "config.props").exists():
+#     write_config_props(LIBRARY_PATH)
 
 LANGUAGES = [
     "english",
@@ -68,6 +68,7 @@ def py_heideltime(
         dct: str = None
 ):
     """HeidelTime temporal tagger."""
+    write_config_props(Path())
 
     _validate_inputs(language, date_type, document_type)
 

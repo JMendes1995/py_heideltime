@@ -1,12 +1,6 @@
-from py_heideltime import py_heideltime
+from py_heideltime import heideltime
 
-def dates():
-    import sys
-    arg = []
-    for i in range(len(sys.argv)):
-        opt = sys.argv[i].lower()
-        arg.append(opt)
-    t = '''
+CLI_MSG = '''
 Usage_examples (make sure that the input parameters are within quotes):
 
   Default Parameters: py_heideltime -t "August 31st" -l "English"
@@ -59,37 +53,39 @@ Options:
                                         Example: "2019-05-30".
 
   --help                                Show this message and exit.
-    '''
+'''
+
+
+def dates():
+    import sys
+    arg = []
+    for i in range(len(sys.argv)):
+        opt = sys.argv[i].lower()
+        arg.append(opt)
 
     def run_py_heideltime(text):
         lang = get_arguments_values(arg, '-l', '--language', 'English')
         date_granularity = get_arguments_values(arg, '-dg', '--date_granularity', 'full')
         document_type = get_arguments_values(arg, '-dt', '--document_type', 'news')
         document_creation_time = get_arguments_values(arg, '-dct', '--document_creation_time', 'yyyy-mm-dd')
-        result = py_heideltime(text, lang, date_granularity, document_type, document_creation_time)
+        result = heideltime(text, lang, date_granularity, document_type, document_creation_time)
         print(result)
 
     if '--help' in arg:
-        print(t)
+        print(CLI_MSG)
         exit(1)
 
-    # make sure if was input text arugument
-    elif '-t' in arg or '--text' in arg:
+    elif '-t' in arg or '--text' in arg:  # make sure if was input text argument
         position = verify_argument_pos(arg, '-t', '--text')
-        text = arg[position+1]
+        text = arg[position + 1]
+
     elif '-i' in arg or '--input_file' in arg:
         position = verify_argument_pos(arg, '-i', '--input_file')
-        path = arg[position+1]
-        import codecs
-        try:
-            file = open(path)
-            text = file.read()
-        except:
+        path = arg[position + 1]
 
-            print('''Sorry something went wrong while reading from this file.
-Make sure that is a txt file and check his format.
-            ''')
-            exit(1)
+        file = open(path)
+        text = file.read()
+
     else:
         print('Bad arguments [--help]')
         exit(1)
