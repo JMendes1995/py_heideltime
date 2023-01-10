@@ -7,36 +7,68 @@ from itertools import repeat
 from pathlib import Path
 from typing import List, Tuple
 
-import emoji
-
-from py_heideltime.config import write_config_props
+from py_heideltime.config import _write_config_props
+from py_heideltime.utils import process_text, execute_command
 
 LIBRARY_PATH = Path(__file__).parent
 if platform.system() == "Windows":
     TAGGER_PATH = LIBRARY_PATH / "Heideltime" / "TreeTaggerWindows"
 else:
     TAGGER_PATH = LIBRARY_PATH / "Heideltime" / "TreeTaggerLinux"
-HEIDELTIME_PATH = LIBRARY_PATH / "Heideltime" / "de.unihd.dbs.heideltime.standalone.jar"
+HEIDELTIME_JAR_PATH = LIBRARY_PATH / "Heideltime" / "de.unihd.dbs.heideltime.standalone.jar"
+
+LANGUAGES = [
+    "english",
+    "portuguese",
+    "spanish",
+    "german",
+    "dutch",
+    "italian",
+    "french"
+]
+
+DOC_TYPES = [
+    "news",
+    "narrative",
+    "colloquial",
+    "scientific"
+]
+
+
+def _validate_inputs(
+        language: str,
+        document_type: str
+) -> None:
+    """Check if the language and document type are valid. If not, the function will raise a value error."""
+    if language.lower() not in LANGUAGES:
+        msg = f"Invalid language. Language should be within the following values: {LANGUAGES}"
+        raise ValueError(msg)
+
+    if document_type.lower() not in DOC_TYPES:
+        msg = f"Invalid document type. Language should be within the following values: {LANGUAGES}"
+        raise ValueError(msg)
 
 
 def heideltime(
         text: str,
-        language: str = "English",
+        language: str = "english",
         document_type: str = "news",
         dct: str = None
 ):
-    processed_text = process_text(text)
-
-    write_config_props()
+    """Run HeidelTime temporal tagger."""
+    _validate_inputs(language, document_type)
+    _write_config_props()
 
     with tempfile.TemporaryDirectory(dir=LIBRARY_PATH) as tempdir:
+        processed_text = process_text(text)
         filepaths = create_text_files(processed_text, tempdir)
 
         processes = multiprocessing.cpu_count()
         with multiprocessing.Pool(processes=processes) as pool:
+            inputs_ = zip(filepaths, repeat(language), repeat(document_type), repeat(dct))
             annotations = pool.starmap(
                 _exec_java_heideltime,
-                zip(filepaths, repeat(language), repeat(document_type), repeat(dct))
+                inputs_
             )
 
         dates = []
@@ -71,25 +103,22 @@ def _exec_java_heideltime(
         document_type: str,
         dct: str
 ) -> Tuple:
+    """Execute Java implementation of HeidelTime."""
+
     dates = []
     if dct is not None:
         match = re.findall(r"^\d{4}-\d{2}-\d{2}$", dct)
         if not match:
             raise ValueError("Please specify date in the following format: YYYY-MM-DD.")
-        java_cmd = f"java -jar {HEIDELTIME_PATH} -dct {dct} -t {document_type} -l {language} {filename}"
+        java_cmd = f"java -jar {HEIDELTIME_JAR_PATH} -dct {dct} -t {document_type} -l {language} {filename}"
     else:
-        java_cmd = f"java -jar {HEIDELTIME_PATH} {document_type} -l {language} {filename}"
+        java_cmd = f"java -jar {HEIDELTIME_JAR_PATH} {document_type} -l {language} {filename}"
 
-    # TimeML text from java output
-    if platform.system() == "Windows":
-        import subprocess
-        xml_doc = subprocess.run(java_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8")
-    else:
-        xml_doc = os.popen(java_cmd).read()
+    time_ml = execute_command(java_cmd)  # TimeML text from java output
 
     # Find tags from java output
-    time_ml_text = str(xml_doc).split("<TimeML>")[1].split("</TimeML>")[0].strip("\n")
-    tags = re.findall("<TIMEX3(.*?)</TIMEX3>", str(xml_doc))
+    time_ml_text = str(time_ml).split("<TimeML>")[1].split("</TimeML>")[0].strip("\n")
+    tags = re.findall("<TIMEX3(.*?)</TIMEX3>", str(time_ml))
 
     normalized_dates = []
     for tag in tags:
@@ -111,20 +140,3 @@ def refactor_text(
     for tag_content, date in zip(tags, normalized_dates):
         tagged_text = tagged_text.replace(f"<TIMEX3{tag_content}</TIMEX3>", f"<d>{date}</d>", 1)
     return tagged_text
-
-
-def remove_emoji(text: str) -> str:
-    return emoji.replace_emoji(text, replace="")
-
-
-def text_has_emoji(text: str) -> bool:
-    if emoji.distinct_emoji_list(text):
-        return True
-    return False
-
-
-def process_text(text: str) -> str:
-    if text_has_emoji(text):
-        return remove_emoji(text)
-    else:
-        return text

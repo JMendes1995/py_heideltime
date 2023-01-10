@@ -8,7 +8,7 @@ from pathlib import Path
 LIBRARY_PATH = Path(__file__).parent
 
 
-def write_config_props() -> None:
+def _write_config_props() -> None:
     if platform.system() == "Windows":
         tagger_path = LIBRARY_PATH / "Heideltime" / "TreeTaggerWindows"
     else:
