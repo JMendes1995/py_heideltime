@@ -4,17 +4,20 @@ import platform
 import emoji
 
 
-def has_emoji(text: str) -> bool:
-    if emoji.distinct_emoji_list(text):
-        return True
-    return False
+def _replace_emojis(text: str, replace: str = " ") -> str:
+    """Replaces the emojis from the texts without changing the size of the original text.
+    The replacement is made so that the entire span taken by the emoji is replaced by the `replace` string."""
+    ltext = list(text)
+    matches = emoji.emoji_list(text)
+    for match in matches:
+        s, e = match["match_start"], match["match_end"]
+        ltext[s: e] = [replace] * (e - s)
+    return "".join(ltext)
 
 
 def process_text(text: str) -> str:
-    if has_emoji(text):
-        return emoji.replace_emoji(text, replace="")
-    else:
-        return text
+    ptext = _replace_emojis(text)
+    return ptext
 
 
 def execute_command(cmd: str) -> str:
