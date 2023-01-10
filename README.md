@@ -14,7 +14,7 @@ In order to use py_heideltime you must have java JDK and perl installed in your 
 ##### Windows users
 To install java JDK begin by downloading it [here](https://www.oracle.com/technetwork/java/javase/downloads/index.html). Once it is installed don't forget to add the path to the environment variables. On `user variables for Administrator` add the `JAVA_HOME` as the `Variable name:`, and the path (e.g., `C:\Program Files\Java\jdk-12.0.2\bin`) as the Variable value. Then on `System variables` edit the `Path` variable and add (e.g., `;C:\Program Files\Java\jdk-12.0.2\bin`) at the end of the `variable value`.
 
-For Perl we recomment you to download and install the following [distribution](http://strawberryperl.com/). Once it is installed don't forget to restart your PC. Note that perl doesn't need to be installed if you are using Anaconda instead of pure Python distribution.
+For Perl, we recommend to download and install the following [distribution](http://strawberryperl.com/). Once it is installed don't forget to restart your PC. Note that perl doesn't need to be installed if you are using Anaconda instead of pure Python distribution.
 
 ##### Linux users
 Perl usually comes with Linux, thus you don't need to install it.
@@ -29,7 +29,7 @@ sudo chmod 111 /usr/local/lib/<YOUR PYTHON VERSION>/dist-packages/py_heideltime/
 ```
 
 #### Python Notebook 
-We highly recommend you to use this [python notebook](notebooks/usage.ipynb) if you are interested in playing with py_heideltime  when using the standalone version.
+We highly recommend you to use this [python notebook](notebooks/usage.ipynb) if you are interested in playing with `py_heideltime`  when using the standalone version.
 
 ## How to use
 ```python
@@ -56,18 +56,18 @@ The output will be a list of 4 elements or an empty list [] if no temporal expre
 ## Supported languages
 
 ### Standalone
-This github package is prepared to work with the following languages: English, Portuguese, Spanish, German, Dutch, Italian, French.
+This GitHub package is prepared to work with the following languages: English, Portuguese, Spanish, German, Dutch, Italian, French.
 
-To use py_heideltime with other languages proceed as follows:
+To use `py_heideltime` with other languages proceed as follows:
   
   - Download from [TreeTagger](https://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/) the parameter files
-  - gunzip < Downloaded file >
-  - Copy the extracted file to the module folder /py_heideltime/HeidelTime/TreeTagger< your system >/lib/
+  - `gunzip <downloaded_file>`
+  - Copy the extracted file to the module folder `/py_heideltime/HeidelTime/TreeTagger<your_system>/lib/`
 
 
 ## Publications 
 
-Please cite the appropriate paper when using py_heideltime. In general, this would be:
+Please cite the appropriate paper when using `py_heideltime`. In general, this would be:
 
 Strötgen, Gertz: Multilingual and Cross-domain Temporal Tagging. Language Resources and Evaluation, 2013. [pdf](https://link.springer.com/article/10.1007%2Fs10579-012-9179-y) [bibtex](https://dbs.ifi.uni-heidelberg.de/files/Team/jannik/publications/stroetgen_bib.html#LREjournal2013)
 
