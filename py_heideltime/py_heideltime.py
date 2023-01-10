@@ -119,7 +119,7 @@ def _exec_java_heideltime(
 
 def _get_timexs(time_ml):
     # Find tags from java output
-    tags = re.findall("<TIMEX3 (.*?)>(.*?)</TIMEX3>", str(time_ml))
+    tags = re.findall("<TIMEX3 (.*?)>(.*?)</TIMEX3>", time_ml)
 
     # Get timexs with attributes.
     timexs = []
@@ -132,7 +132,7 @@ def _get_timexs(time_ml):
         timexs.append(timex)
 
     # Add spans to timexs.
-    text_blocks = re.split("<TIMEX3.*?>(.*?)</TIMEX3>", str(time_ml))
+    text_blocks = re.split("<TIMEX3.*?>(.*?)</TIMEX3>", time_ml)
     running_span = 0
     timexs_with_spans = []
     timex = timexs.pop(0)
