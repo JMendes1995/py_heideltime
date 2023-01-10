@@ -14,6 +14,6 @@ def _write_config_props() -> None:
     else:
         tagger_path = LIBRARY_PATH / "Heideltime" / "TreeTaggerLinux"
 
-    conf_template = (LIBRARY_PATH / "config_props_template").open().read()
+    conf_template = (LIBRARY_PATH / "resources" / "config_props_template").open().read()
     conf_content = conf_template.replace("{path}", str(tagger_path.absolute()))
     Path("config.props").open("w").write(conf_content)
