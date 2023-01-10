@@ -1,11 +1,10 @@
 import multiprocessing
-import os
 import platform
 import re
 import tempfile
 from itertools import repeat
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 
 from py_heideltime.config import _write_config_props
 from py_heideltime.utils import process_text, execute_command
@@ -61,28 +60,28 @@ def heideltime(
 
     with tempfile.TemporaryDirectory(dir=LIBRARY_PATH) as tempdir:
         processed_text = process_text(text)
-        filepaths = create_text_files(processed_text, tempdir)
+        filepaths = _create_text_files(processed_text, tempdir)
 
         processes = multiprocessing.cpu_count()
         with multiprocessing.Pool(processes=processes) as pool:
             inputs_ = zip(filepaths, repeat(language), repeat(document_type), repeat(dct))
-            annotations = pool.starmap(
+            tml_docs = pool.starmap(
                 _exec_java_heideltime,
                 inputs_
             )
 
-        dates = []
-        text_normalized, time_ml_text = "", ""
-        for annotation in annotations:
-            dates += annotation[0]
-            text_normalized += annotation[1]
-            time_ml_text += annotation[2]
+        tml_content = "".join(
+            re.findall(r"<TimeML>(.*)</TimeML>", tml_doc, re.DOTALL)[0].strip("\n")
+            for tml_doc in tml_docs
+        )
 
-    os.remove("config.props")  # remove config.props files
-    return dates, text_normalized, time_ml_text
+        timexs = _get_timexs(tml_content)
+
+    Path("config.props").unlink()
+    return timexs
 
 
-def create_text_files(text: str, dir_path: Path) -> List:
+def _create_text_files(text: str, dir_path: Path) -> List:
     """Writes text files to be annotated by Java implementation of HeidelTime."""
     max_n_characters = 30_000
     n_characters = len(text)
@@ -98,14 +97,13 @@ def create_text_files(text: str, dir_path: Path) -> List:
 
 
 def _exec_java_heideltime(
-        filename: Path,
+        filename: str,
         language: str,
         document_type: str,
         dct: str
-) -> Tuple:
+) -> str:
     """Execute Java implementation of HeidelTime."""
 
-    dates = []
     if dct is not None:
         match = re.findall(r"^\d{4}-\d{2}-\d{2}$", dct)
         if not match:
@@ -116,27 +114,36 @@ def _exec_java_heideltime(
 
     time_ml = execute_command(java_cmd)  # TimeML text from java output
 
+    return time_ml
+
+
+def _get_timexs(time_ml):
     # Find tags from java output
-    time_ml_text = str(time_ml).split("<TimeML>")[1].split("</TimeML>")[0].strip("\n")
-    tags = re.findall("<TIMEX3(.*?)</TIMEX3>", str(time_ml))
+    tags = re.findall("<TIMEX3 (.*?)>(.*?)</TIMEX3>", str(time_ml))
 
-    normalized_dates = []
-    for tag in tags:
-        [normalized_date] = re.findall("value=\"(.*?)\"", tag, re.IGNORECASE)
-        [original_date] = re.findall(">(.+)", tag)
-        normalized_dates.append(normalized_date)
-        dates.append((normalized_date, original_date))
+    # Get timexs with attributes.
+    timexs = []
+    for attribs, text in tags:
+        timex = {"text": text}
+        for attrib in attribs.split():
+            key, value = attrib.split("=")
+            value = value.strip("\"")
+            timex[key] = value
+        timexs.append(timex)
 
-    text_normalized = refactor_text(normalized_dates, tags, time_ml_text)
-    return dates, text_normalized, time_ml_text
+    # Add spans to timexs.
+    text_blocks = re.split("<TIMEX3.*?>(.*?)</TIMEX3>", str(time_ml))
+    running_span = 0
+    timexs_with_spans = []
+    timex = timexs.pop(0)
+    for block in text_blocks:
+        if block == timex["text"]:
+            timex["span"] = [running_span, running_span + len(block)]
+            timexs_with_spans.append(timex)
+            if timexs:
+                timex = timexs.pop(0)
+            else:
+                break
+        running_span += len(block)
 
-
-def refactor_text(
-        normalized_dates: List[str],
-        tags: List[str],
-        tagged_text: str
-) -> str:
-    """Replace the TIMEX3 tags with the normalized dates in the tagged text."""
-    for tag_content, date in zip(tags, normalized_dates):
-        tagged_text = tagged_text.replace(f"<TIMEX3{tag_content}</TIMEX3>", f"<d>{date}</d>", 1)
-    return tagged_text
+    return timexs_with_spans
