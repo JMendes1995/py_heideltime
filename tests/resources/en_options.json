@@ -1,0 +1,55 @@
+{
+  "text": "Thurs August 31st - News today that they are beginning 1092-1107 to evacuate the London children tomorrow. Percy is a billeting officer. I can't see that they will be much safer here.",
+  "timexs": [
+    {
+      "text": "August 31st",
+      "tid": "t4",
+      "type": "DATE",
+      "value": "1939-08-31",
+      "span": [
+        6,
+        17
+      ]
+    },
+    {
+      "text": "today",
+      "tid": "t5",
+      "type": "DATE",
+      "value": "1939-08-31",
+      "span": [
+        25,
+        30
+      ]
+    },
+    {
+      "text": "1092",
+      "tid": "t1",
+      "type": "DATE",
+      "value": "1092",
+      "span": [
+        55,
+        59
+      ]
+    },
+    {
+      "text": "1107",
+      "tid": "t2",
+      "type": "DATE",
+      "value": "1107",
+      "span": [
+        60,
+        64
+      ]
+    },
+    {
+      "text": "tomorrow",
+      "tid": "t6",
+      "type": "DATE",
+      "value": "1939-09-01",
+      "span": [
+        97,
+        105
+      ]
+    }
+  ]
+}
