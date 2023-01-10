@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import List
 
 from py_heideltime.config import _write_config_props
+from py_heideltime.meta import LANGUAGES, DOC_TYPES
 from py_heideltime.utils import process_text, execute_command
 
 LIBRARY_PATH = Path(__file__).parent
@@ -15,23 +16,6 @@ if platform.system() == "Windows":
 else:
     TAGGER_PATH = LIBRARY_PATH / "Heideltime" / "TreeTaggerLinux"
 HEIDELTIME_JAR_PATH = LIBRARY_PATH / "Heideltime" / "de.unihd.dbs.heideltime.standalone.jar"
-
-LANGUAGES = [
-    "english",
-    "portuguese",
-    "spanish",
-    "german",
-    "dutch",
-    "italian",
-    "french"
-]
-
-DOC_TYPES = [
-    "news",
-    "narrative",
-    "colloquial",
-    "scientific"
-]
 
 
 def _validate_inputs(
