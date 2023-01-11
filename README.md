@@ -7,7 +7,7 @@ function. Please do checkout the original [repo](https://github.com/JMendes1995/
 
 ## Installation
 
-``` bash
+```bash
 pip install py_heildetime
 ```
 
