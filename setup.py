@@ -5,7 +5,7 @@ long_description = Path("README.md").read_text()
 
 setuptools.setup(
     name="py_heideltime",
-    version="1.0.2",
+    version="1.0.3",
     description="Python wrapper for HeidelTime temporal tagger.",
     long_description=long_description,
     long_description_content_type="text/markdown",
