@@ -1,21 +1,21 @@
 # Python HeidelTime
 
 `py_heideltime` is a python wrapper for the multilingual temporal tagger HeidelTime originally developed
-by [Jorge Mendes](https://github.com/JMendes1995/py_heideltime) and [Ricardo Campos](http://www.ccc.ipt.pt/~ricardo/).
+by [Jorge Mendes](https://github.com/JMendes1995) and [Ricardo Campos](https://github.com/rncampos).
 This repo is a gross simplification of the original work that reduces the interface and the outputs of the `heideltime`
-function. Please do checkout the original repo which provides a much more comprehensive overview of the library.
+function. Please do checkout the original [repo](https://github.com/JMendes1995/py_heideltime) which provides a much more comprehensive overview of the library.
 
-### Installation
+## Installation
 
 ``` bash
-pip install git+https://github.com/JMendes1995/py_heideltime.git
+pip install py_heildetime
 ```
 
 ### Install External Resources
 
 In order to use py_heideltime you must have java JDK and perl installed in your machine for heideltime dependencies.
 
-##### Windows users
+#### Windows users
 
 To install java JDK begin by downloading it [here](https://www.oracle.com/technetwork/java/javase/downloads/index.html).
 Once it is installed don't forget to add the path to the environment variables. On `user variables for Administrator`
@@ -23,11 +23,11 @@ add the `JAVA_HOME` as the `Variable name:`, and the path (e.g., `C:\Program Fil
 value. Then on `System variables` edit the `Path` variable and add (e.g., `;C:\Program Files\Java\jdk-12.0.2\bin`) at
 the end of the `variable value`.
 
-For Perl, we recommend to download and install the following [distribution](http://strawberryperl.com/). Once it is
+For Perl, we recommend to download and install the following [distribution](https://strawberryperl.com/). Once it is
 installed don't forget to restart your PC. Note that perl doesn't need to be installed if you are using Anaconda instead
 of pure Python distribution.
 
-##### Linux users
+#### Linux users
 
 Perl usually comes with Linux, thus you don't need to install it.
 
@@ -43,11 +43,6 @@ command:
 ```bash
 sudo chmod 111 /usr/local/lib/<YOUR PYTHON VERSION>/dist-packages/py_heideltime/HeidelTime/TreeTaggerLinux/bin/*
 ```
-
-#### Python Notebook
-
-We highly recommend you to use this [python notebook](notebooks/usage.ipynb) if you are interested in playing
-with `py_heideltime`  when using the standalone version.
 
 ## How to use
 
@@ -94,9 +89,10 @@ print(timexs)
 ]
 ```
 
-## Supported languages
+We highly recommend you to use this [python notebook](notebooks/usage.ipynb) if you are interested in playing
+with `py_heideltime`  when using the standalone version.
 
-### Standalone
+## Supported languages
 
 This GitHub package is prepared to work with the following languages: English, Portuguese, Spanish, German, Dutch,
 Italian, French.
@@ -111,9 +107,6 @@ To use `py_heideltime` with other languages proceed as follows:
 
 Please cite the appropriate paper when using `py_heideltime`. In general, this would be:
 
-Strötgen, Gertz: Multilingual and Cross-domain Temporal Tagging. Language Resources and Evaluation,
-2013. [pdf](https://link.springer.com/article/10.1007%2Fs10579-012-9179-y) [bibtex](https://dbs.ifi.uni-heidelberg.de/files/Team/jannik/publications/stroetgen_bib.html#LREjournal2013)
+Strötgen, Gertz: Multilingual and Cross-domain Temporal Tagging. Language Resources and Evaluation, 2013. [pdf](https://link.springer.com/article/10.1007%2Fs10579-012-9179-y) [bibtex](https://dbs.ifi.uni-heidelberg.de/files/Team/jannik/publications/stroetgen_bib.html#LREjournal2013)
 
 Other related papers may be found [here](https://github.com/HeidelTime/heideltime#Publications).
-
-
