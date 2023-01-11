@@ -1,5 +1,8 @@
 # Python HeidelTime
 
+[![PyPI](https://img.shields.io/pypi/v/py_heideltime)](https://pypi.org/project/py-heideltime/)
+[![GitHub](https://img.shields.io/github/license/hmosousa/py_heideltime)](LICENSE)
+
 `py_heideltime` is a python wrapper for the multilingual temporal tagger HeidelTime originally developed
 by [Jorge Mendes](https://github.com/JMendes1995) and [Ricardo Campos](https://github.com/rncampos).
 This repo is a gross simplification of the original work that reduces the interface and the outputs of the `heideltime`
