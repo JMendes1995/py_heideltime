@@ -40,13 +40,6 @@ To install `JAVA`:
 sudo apt install default-jdk
 ```
 
-In addition, if your user does not have permission executions on python lib folder, you should execute the following
-command:
-
-```bash
-sudo chmod 111 /usr/local/lib/<YOUR PYTHON VERSION>/dist-packages/py_heideltime/HeidelTime/TreeTaggerLinux/bin/*
-```
-
 ## How to use
 
 ```python
