@@ -119,15 +119,19 @@ def _get_timexs(time_ml):
     text_blocks = re.split("<TIMEX3.*?>(.*?)</TIMEX3>", time_ml)
     running_span = 0
     timexs_with_spans = []
-    timex = timexs.pop(0)
-    for block in text_blocks:
-        if block == timex["text"]:
-            timex["span"] = [running_span, running_span + len(block)]
-            timexs_with_spans.append(timex)
-            if timexs:
-                timex = timexs.pop(0)
-            else:
-                break
-        running_span += len(block)
+    if not timexs:
+        return timexs_with_spans
+
+    else:
+        timex = timexs.pop(0)
+        for block in text_blocks:
+            if block == timex["text"]:
+                timex["span"] = [running_span, running_span + len(block)]
+                timexs_with_spans.append(timex)
+                if timexs:
+                    timex = timexs.pop(0)
+                else:
+                    break
+            running_span += len(block)
 
     return timexs_with_spans
