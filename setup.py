@@ -1,19 +1,12 @@
 import setuptools
 from pathlib import Path
 
-import subprocess
-
-version = (
-    subprocess.run(["git", "describe", "--tags"], stdout=subprocess.PIPE)
-    .stdout.decode("utf-8")
-    .strip()
-)
 
 long_description = Path("README.md").read_text()
 
 setuptools.setup(
     name="py_heideltime",
-    version=version,
+    version='{{VERSION_PLACEHOLDER}}',
     description="Python wrapper for HeidelTime temporal tagger.",
     long_description=long_description,
     long_description_content_type="text/markdown",
