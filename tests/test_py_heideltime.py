@@ -47,3 +47,15 @@ def test_heideltime_en_options():
 def test_heideltime_fr():
     filepath = RESOURCES_PATH / "fr.json"
     _test_json(filepath, language="French")
+
+
+def test_heideltime_empty_results():
+    filepath = RESOURCES_PATH / "no_timexs.txt"
+    text = filepath.open(encoding="utf-8").read()
+    timexs = heideltime(text=text)
+    assert not timexs
+
+
+def test_heideltime_empty_input():
+    timexs = heideltime(text="")
+    assert not timexs
