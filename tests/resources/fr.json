@@ -1,0 +1,35 @@
+{
+    "text": "Pour ces nombreux accomplissements ainsi que son remarquable engagement  dans le projet europ\u00e9en, Helmut Kohl a re\u00e7u en 1998, la prestigieuse distinction de citoyen d'honneur de l'Europe, par le Conseil Europ\u00e9en de Vienne.\n\n    Cette distinction europ\u00e9enne est l'une des plus honorifiques car elle est d\u00e9cern\u00e9e au nom de toute l'Union Europ\u00e9enne pour r\u00e9compenser l'investissement des personnalit\u00e9s qui ont permis de mener \u00e0 bien le projet europ\u00e9en. Seul 2 autres personnes ont \u00e9t\u00e9 distingu\u00e9es par cette d\u00e9coration: Jean Monnet en 1976 et Jacques Delors en 2015.",
+    "timexs": [
+  {
+    "text": "1998",
+    "tid": "t1",
+    "type": "DATE",
+    "value": "1998",
+    "span": [
+      120,
+      124
+    ]
+  },
+  {
+    "text": "1976",
+    "tid": "t2",
+    "type": "DATE",
+    "value": "1976",
+    "span": [
+      530,
+      534
+    ]
+  },
+  {
+    "text": "2015",
+    "tid": "t3",
+    "type": "DATE",
+    "value": "2015",
+    "span": [
+      556,
+      560
+    ]
+  }
+]
+}

@@ -5,3 +5,4 @@ include py_heideltime/Heideltime/TreeTaggerLinux/lib/*
 include py_heideltime/Heideltime/TreeTaggerWindows/bin/*
 include py_heideltime/Heideltime/TreeTaggerWindows/cmd/*
 include py_heideltime/Heideltime/TreeTaggerWindows/lib/*
+include py_heideltime/resources/config_props_template
